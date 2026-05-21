@@ -47,14 +47,48 @@
         }
 
         /* Header bertema Biru Navy & Kuning PUPR */
+        /* CSS Header Terbaru (Mendukung Tombol Kanan) */
         .header {
             background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
             color: white;
-            padding: 30px 40px;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between; /* Membuat logo di kiri, tombol di kanan */
+            align-items: center;
+            flex-wrap: wrap; /* Menjaga tampilan rapi saat dibuka di HP */
+            gap: 20px;
+            border-bottom: 5px solid #f5b016;
+        }
+
+        .header-left {
             display: flex;
             align-items: center;
             gap: 25px;
-            border-bottom: 5px solid #f5b016; /* Garis emas khas PUPR */
+        }
+
+        /* Desain Tombol Rekap Bertema Emas PUPR */
+        .btn-recap {
+            background: #f5b016; /* Kuning Emas PUPR */
+            color: #11223f; /* Tulisan Biru Gelap agar terbaca jelas */
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none; /* Menghilangkan garis bawah link */
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #f5b016;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+
+        .btn-recap:hover {
+            background: transparent;
+            color: #f5b016; /* Efek outline emas saat dihover */
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(245, 176, 22, 0.2);
         }
 
         .logo-container {
@@ -391,20 +425,157 @@
                 flex-direction: column;
             }
         }
+/* --- MODAL POP-UP LOADING & SUCCESS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(17, 34, 63, 0.85); /* Navy transparan PUPR */
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+
+        /* Loading State */
+        .modal-spinner {
+            border: 5px solid #f1f5f9;
+            border-top: 5px solid #f5b016; /* Emas PUPR */
+            border-radius: 50%;
+            width: 60px; height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .modal-loading-text {
+            color: #1d355e;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .modal-loading-sub {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Success State */
+        .modal-icon-success {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .btn-open-link {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .btn-open-link:hover { background: #219653; }
+
+        .btn-close-modal {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-close-modal:hover { background: #e2e8f0; }
     </style>
 </head>
 <body>
+<!-- MODAL POP-UP (Loading & Success) -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box">
+            
+            <!-- Tampilan Saat Loading -->
+            <div id="modalLoading">
+                <div class="modal-spinner"></div>
+                <div class="modal-loading-text">Sedang Memproses...</div>
+                <div class="modal-loading-sub" id="loadingDynamicText">Membuat struktur folder proyek...</div>
+            </div>
+
+            <!-- Tampilan Saat Sukses -->
+            <div id="modalSuccess" style="display: none;">
+                <span class="modal-icon-success">✅</span>
+                <div class="modal-loading-text">Notulensi Berhasil Dibuat!</div>
+                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server.</div>
+                
+                <!-- KOTAK SALIN WHATSAPP (BARU) -->
+                <div id="waShareContainer" style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <span style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN UNTUK SHARE WHATSAPP:</span>
+                    <div id="waTextTemplate" style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;"></div>
+                    <button type="button" id="btnCopyWA" class="btn-open-link" style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks WA</button>
+                </div>
+
+                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄 Buka File Notulensi</a>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Selesai</button>
+            </div>
+
+            <!-- Tampilan Saat Error -->
+            <div id="modalError" style="display: none;">
+                <span class="modal-icon-success">❌</span>
+                <div class="modal-loading-text" style="color:#e74c3c;">Proses Gagal</div>
+                <div class="modal-loading-sub" id="errorText">Terjadi kesalahan pada server.</div>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Kembali</button>
+            </div>
+
+        </div>
+    </div>
     <div class="container">
-        <!-- Header bertema PUPR -->
+        <!-- Header bertema PUPR dengan Tombol Rekap -->
         <div class="header">
-            <div class="logo-container">
-                <!-- Logo PU diletakkan di sini -->
-                <img src="logo-pu.png" alt="Logo PU">
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="logo-pu.png" alt="Logo PU">
+                </div>
+                <div class="header-content">
+                    <h1>Form Notulensi Subdit Wil 2 BPB</h1>
+                    <p>Kementerian Pekerjaan Umum</p>
+                </div>
             </div>
-            <div class="header-content">
-                <h1>Form Notulensi Subdit Wil 2 BPB</h1>
-                <p>Kementerian Pekerjaan Umum dan Perumahan Rakyat</p>
-            </div>
+            <!-- Masukkan URL link share Excel Rekap Anda di href di bawah ini -->
+            <a href="rekap.html" class="btn-recap">
+                📊 Lihat Rekap Data
+            </a>
         </div>
 
         <!-- Form Content -->
@@ -471,10 +642,10 @@
                     >
                 </div>
 
-                <!-- Instalasi Pengundang -->
+                <!-- Instansi Pengundang -->
                 <div class="form-group">
                     <label for="instansiPengundang">
-                        Instalasi Pengundang <span class="required">*</span>
+                        Instansi Pengundang <span class="required">*</span>
                     </label>
                     <input 
                         type="text" 
@@ -540,7 +711,7 @@
 
     <script>
         // ── CONFIGURATION ──
-        const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zpBFr9b0h9hhQg2Zs7lTGaj958T5sOOTm_B9osyy4hk';
+        const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
         const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b6b4896fdcac49f3880f8e9454f5c41a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zpBFr9b0h9hhQg2Zs7lTGaj958T5sOOTm_B9osyy4hk';
 
         // State — diisi dari database Power Automate / Excel
@@ -582,8 +753,13 @@
         async function loadDataFromExcel() {
             showMessage('Memuat database Excel...', 'info');
             try {
+                // Diubah kembali ke POST agar cocok dengan tanda tangan keamanan (sig) Power Automate
                 const response = await fetch(GET_DATA_FLOW_URL, {
-                    method: 'GET'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'getData' }) // Mengirimkan request body aman
                 });
 
                 if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
@@ -599,7 +775,7 @@
                 const masterProvinsiRaw = rawData.provinsi || rawData.Provinsi_Master || rawData.Category || [];
                 const rekapDataRaw = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];
 
-                // Populate Dropdown Provinsi
+                // 1. Populate Dropdown Provinsi
                 provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
                 const provinsiSet = new Set();
 
@@ -618,7 +794,7 @@
                     provinsiSelect.appendChild(opt);
                 });
 
-                // Map Nama Kegiatan berdasarkan Provinsi
+                // 2. Map Nama Kegiatan berdasarkan Provinsi
                 state.kegiatanByProvinsi = {};
 
                 rekapDataRaw.forEach(row => {
@@ -656,7 +832,7 @@
         function populateFallbackData() {
             state.kegiatanByProvinsi = {
                 '01. Sulawesi Utara': [],
-                '02. Sulawesi Tengah': ['02. Pembangunan Gedung Kantor Ombudsman Provinsi Sulawesi Tengah', '04. Pembangunan Gedung AMC Rumah Sakit Antapura'],
+                '02. Sulawesi Tengah': ['02. Pembangunan Gedung Kantor Ombudsman Provinsi Sulawesi Tengah', '04. Pembangunan Gedung AMC Rumah Sakit Anutapura'],
                 '03. Sulawesi Selatan': ['02. Rehabilitasi dan Rekonstruksi BGN dan Prasarana Publik Terdampak Aksi Demonstrasi Provinsi Sulawesi Selatan'],
                 '04. Sulawesi Tenggara': [],
                 '05. Gorontalo': [],
@@ -826,27 +1002,98 @@
         }
 
         // Form Submit
+        let loadingInterval; // Variabel untuk animasi teks loading
+
+        // --- FUNGSI KONTROL POP-UP (MODAL) ---
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+
+            // Animasi teks berjalan agar pengguna tidak bosan
+            const loadingTexts = [
+                "Mengecek ketersediaan folder...",
+                "Menyusun template struktur folder...",
+                "Mengunggah berkas Surat Undangan...",
+                "Menyusun Template Word Notulensi...",
+                "Menyelesaikan dan menyimpan data..."
+            ];
+            let i = 0;
+            loadingInterval = setInterval(() => {
+                document.getElementById('loadingDynamicText').textContent = loadingTexts[i];
+                i = (i + 1) % loadingTexts.length;
+            }, 3500); // Teks berganti setiap 3.5 detik
+        }
+
+        function showModalSuccess(link) {
+            clearInterval(loadingInterval);
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+            
+            // Ambil data Judul Rapat yang diinput oleh user
+            const judulRapat = document.getElementById('judulRapat').value;
+            const shortLink = link || 'Link tidak tersedia';
+
+            // Generate template teks WhatsApp otomatis
+            const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
+            
+            // Tampilkan teks di kotak halaman web
+            document.getElementById('waTextTemplate').innerHTML = `Berikut link notulensi Rapat <strong>"${judulRapat}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
+
+            // Atur tombol buka OneDrive
+            const btnLink = document.getElementById('btnLinkBerkas');
+            if (link) {
+                btnLink.href = link;
+                btnLink.style.display = 'inline-block';
+            } else {
+                btnLink.style.display = 'none';
+            }
+
+            // Logika Klik Tombol Salin ke Clipboard HP/Laptop
+            const btnCopy = document.getElementById('btnCopyWA');
+            btnCopy.onclick = function() {
+                navigator.clipboard.writeText(waText).then(() => {
+                    // Efek visual sukses disalin
+                    const originalText = btnCopy.innerHTML;
+                    btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
+                    btnCopy.style.background = "#219653";
+                    
+                    // Kembalikan teks asli tombol setelah 2.5 detik
+                    setTimeout(() => {
+                        btnCopy.innerHTML = originalText;
+                        btnCopy.style.background = "#27ae60";
+                    }, 2500);
+                }).catch(err => {
+                    console.error("Gagal menyalin teks: ", err);
+                });
+            };
+        }
+
+        function showModalError(errorMsg) {
+            clearInterval(loadingInterval);
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalError').style.display = 'block';
+            document.getElementById('errorText').textContent = errorMsg;
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // --- FORM SUBMIT UTAMA ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (!state.selectedProvinsi) {
-                showMessage('Silakan pilih Provinsi', 'error');
-                return;
-            }
-
-            if (!namaKegiatanSelect.value) {
-                showMessage('Silakan pilih Nama Kegiatan', 'error');
-                return;
-            }
+            if (!state.selectedProvinsi) return showMessage('Silakan pilih Provinsi', 'error');
+            if (!namaKegiatanSelect.value) return showMessage('Silakan pilih Nama Kegiatan', 'error');
 
             const file = fileInput.files[0];
-            if (!file) {
-                showMessage('Silakan upload Surat Undangan (PDF atau JPG)', 'error');
-                return;
-            }
+            if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG)', 'error');
 
             try {
-                showLoading();
+                // BUKA POP-UP LOADING MENGUNCI LAYAR
+                openModal();
 
                 const fileBase64 = await fileToBase64(file);
 
@@ -862,17 +1109,22 @@
                     timestamp: new Date().toISOString()
                 };
 
-                await submitToFlow(formData);
-                showMessage('Data berhasil dikirim! Folder dan dokumen akan dibuat secara otomatis.', 'success');
+                // Kirim ke Flow
+                const responseData = await submitToFlow(formData);
+                
+                // JIKA BERHASIL, TAMPILKAN POP-UP SUKSES & LINK
+                const documentLink = responseData.linkBerkas || '';
+                showModalSuccess(documentLink);
+
+                // Reset Form
                 form.reset();
                 removeFile();
                 state.selectedProvinsi = '';
 
             } catch (error) {
-                showMessage('Error submitting form: ' + error.message, 'error');
+                // JIKA GAGAL, TAMPILKAN POP-UP ERROR
+                showModalError(error.message);
                 console.error(error);
-            } finally {
-                hideLoading();
             }
         });
 

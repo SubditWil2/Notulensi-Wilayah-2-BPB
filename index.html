@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Notulensi Subdit Wil 2 BPB</title>
+    
+    <!-- PUSTAKA GRATIS UNTUK EKSTRAKSI DOKUMEN DI BROWSER (ZERO COST) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -47,7 +52,6 @@
         }
 
         /* Header bertema Biru Navy & Kuning PUPR */
-        /* CSS Header Terbaru (Mendukung Tombol Kanan) */
         .header {
             background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
             color: white;
@@ -425,7 +429,7 @@
                 flex-direction: column;
             }
         }
-/* --- MODAL POP-UP LOADING & SUCCESS --- */
+        /* --- MODAL POP-UP LOADING, SUCCESS, ERROR & AI TRANSCRIPT --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -448,7 +452,7 @@
         .modal-box {
             background: white;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             padding: 40px 30px;
             border-radius: 12px;
             text-align: center;
@@ -522,31 +526,65 @@
     </style>
 </head>
 <body>
-<!-- MODAL POP-UP (Loading & Success) -->
+<!-- MODAL POP-UP (Loading, Success, Error & AI Transcript) -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-box">
             
             <!-- Tampilan Saat Loading -->
-            <div id="modalLoading">
+            <div id="modalLoading" style="display: none;">
                 <div class="modal-spinner"></div>
                 <div class="modal-loading-text">Sedang Memproses...</div>
                 <div class="modal-loading-sub" id="loadingDynamicText">Membuat struktur folder proyek...</div>
+            </div>
+
+            <!-- Tampilan POP-UP INPUT/UPLOAD TRANSKRIP AI -->
+            <div id="modalAITranscript" style="display: none; text-align: left;">
+                <h3 style="color: #1d355e; margin-bottom: 10px; font-weight: 700; font-size: 16px;">⚡ Kirim Menggunakan Asisten AI</h3>
+                <p style="font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">
+                    Unggah berkas atau tempelkan teks transkrip rapat (Zoom/Tactiq/Teams) Anda di bawah ini.
+                </p>
+
+                <!-- AREA UNGGAH FILE TRANSKRIP -->
+                <div class="form-group">
+                    <label style="font-size: 13px;">Pilihan 1: Unggah Berkas Transkrip (.txt, .docx, .pdf, .csv)</label>
+                    <div class="upload-area" id="aiUploadArea" style="padding: 15px 10px; background: #f8fafc;" onclick="document.getElementById('aiTranscriptFile').click()">
+                        <div style="font-size: 20px; margin-bottom: 4px;">📂</div>
+                        <div style="font-size: 12px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini</div>
+                    </div>
+                    <input 
+                        type="file" 
+                        id="aiTranscriptFile" 
+                        accept=".txt,.csv,.docx,.pdf"
+                        style="display:none"
+                        onchange="bacaFileTranskrip(this.files[0])"
+                    >
+                    <div id="aiFileFeedback" style="display: none; font-size: 12px; color: #27ae60; margin-top: 5px; font-weight: 600;"></div>
+                </div>
+
+                <!-- INPUT COPAST MANUAL -->
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="transkripRapat" style="font-size: 13px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar Manual</label>
+                    <textarea id="transkripRapat" placeholder="Paste transkrip rapat Anda di sini..." style="min-height: 120px; font-size: 12px;"></textarea>
+                </div>
+
+                <button type="button" class="btn-open-link" style="background:#1d355e; margin-top:10px; text-align: center;" onclick="submitRapatDenganAI()">⚡ Mulai Proses & Kirim</button>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Batal</button>
             </div>
 
             <!-- Tampilan Saat Sukses -->
             <div id="modalSuccess" style="display: none;">
                 <span class="modal-icon-success">✅</span>
                 <div class="modal-loading-text">Notulensi Berhasil Dibuat!</div>
-                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server.</div>
+                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di dalam file Word.</div>
                 
-                <!-- KOTAK SALIN WHATSAPP (BARU) -->
+                <!-- KOTAK SALIN WHATSAPP -->
                 <div id="waShareContainer" style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
                     <span style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN UNTUK SHARE WHATSAPP:</span>
                     <div id="waTextTemplate" style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;"></div>
                     <button type="button" id="btnCopyWA" class="btn-open-link" style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks WA</button>
                 </div>
 
-                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄 Buka File Notulensi</a>
+                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄 Buka File Notulensi (Word)</a>
                 <button type="button" class="btn-close-modal" onclick="closeModal()">Selesai</button>
             </div>
 
@@ -623,6 +661,7 @@
                             <button type="button" id="btnConfirmKegiatan" class="btn-add">✓ Simpan</button>
                             <button type="button" id="btnCancelKegiatan" class="btn-cancel" style="padding:10px 14px;">✕</button>
                         </div>
+						<div id="aiWarningText" style="display:none; color:#d68010; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4;"></div>
                     </div>
                     <div class="help-text">Pilih dari daftar atau klik "+ Tambah" untuk kegiatan baru</div>
                 </div>
@@ -641,7 +680,9 @@
                         required
                     >
                 </div>
-
+				
+				<div id="meetingWarningText" style="display:none; color:#e74c3c; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4; background:#fee2e2; padding:8px 12px; border-radius:6px; border:1px solid #fca5a5;"></div>
+				
                 <!-- Instansi Pengundang -->
                 <div class="form-group">
                     <label for="instansiPengundang">
@@ -667,7 +708,34 @@
                         name="tanggalRapat"
                         required
                     >
-                    <div class="help-text">Format: DD/MM/YYYY</div>
+                    <div class="help-text">Pilih tanggal dari kalender</div>
+                </div>
+
+				<!-- Input Nama Notulis dengan Dropdown & Tambah Opsi -->
+                <div class="form-group">
+                    <label for="namaNotulis">
+                        Nama Notulis / Pengisi Form <span class="required">*</span>
+                    </label>
+                    <div class="input-with-add">
+                        <select id="namaNotulis" name="namaNotulis" required>
+                            <option value="">-- Pilih Nama Notulis --</option>
+                        </select>
+                        <button type="button" id="btnAddNotulis" class="btn-add">+ Tambah</button>
+                    </div>
+                    <!-- Hidden: hanya muncul saat + Tambah di klik -->
+                    <div id="newNotulisRow" style="display:none; margin-top:10px;">
+                        <div class="input-with-add">
+                            <input
+                                type="text"
+                                id="newNotulisInput"
+                                placeholder="Ketik nama notulis baru..."
+                                autocomplete="off"
+                            >
+                            <button type="button" id="btnConfirmNotulis" class="btn-add">✓ Simpan</button>
+                            <button type="button" id="btnCancelNotulis" class="btn-cancel" style="padding:10px 14px;">✕</button>
+                        </div>
+                    </div>
+                    <div class="help-text">Pilih nama Anda dari daftar, atau klik "+ Tambah" jika nama Anda belum terdaftar</div>
                 </div>
 
                 <!-- Surat Undangan Upload -->
@@ -701,8 +769,10 @@
 
                 <!-- Buttons -->
                 <div class="button-group">
-                    <button type="submit">Kirim</button>
-                    <button type="reset" class="btn-reset">Bersihkan</button>
+                    <button type="submit">Kirim Manual</button>
+                    <!-- TOMBOL PILOTING MODEL ASISTEN AI -->
+                    <button type="button" class="btn-reset" style="background: #27ae60; color: white;" onclick="openAITranscriptModal()">⚡ Kirim via AI</button>
+                    <button type="button" class="btn-reset" onclick="resetSeluruhForm()">Bersihkan</button>
                     <button type="button" class="btn-cancel" onclick="window.location.reload()">Batal</button>
                 </div>
             </form>
@@ -710,14 +780,33 @@
     </div>
 
     <script>
+        // Inisialisasi library pembaca PDF di sisi browser
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
         // ── CONFIGURATION ──
         const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
         const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b6b4896fdcac49f3880f8e9454f5c41a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zpBFr9b0h9hhQg2Zs7lTGaj958T5sOOTm_B9osyy4hk';
+        
+        // KUNCI KEY GEMINI FREE API (Menggunakan Gemini 3.5 Flash)
+        const GEMINI_API_KEY = 'AIzaSyCGtXXVNZyRWnFWhUTNDmrR8dVSFGjuZuA'; 
 
         // State — diisi dari database Power Automate / Excel
         const state = {
             kegiatanByProvinsi: {},
             selectedProvinsi: '',
+            allMeetings: [], // Menampung seluruh riwayat rapat untuk deteksi ganda
+            notulisList: [
+                "Teuku Zaqirul Haq",
+                "Muhamad Adryan Arif F.",
+                "Lundu Sihombing",
+                "Abdi Nagara",
+                "Muarif",
+                "Halimatusa'adiyah Anar",
+                "Ryngga Dedy Andyka",
+                "Kiki Adhi Prasetyo",
+                "Dian Puspitasari",
+                "M. Ammar Naufal"
+            ]
         };
 
         // Get elements
@@ -731,6 +820,287 @@
         const btnCancelKegiatan = document.getElementById('btnCancelKegiatan');
         const messageDiv = document.getElementById('message');
         const loadingDiv = document.getElementById('loading');
+
+        // Buka Pop-Up Khusus Input Transkrip AI
+        function openAITranscriptModal() {
+            if (!provinsiSelect.value || !namaKegiatanSelect.value || !document.getElementById('judulRapat').value || !document.getElementById('instansiPengundang').value || !document.getElementById('tanggalRapat').value || !document.getElementById('namaNotulis').value) {
+                alert("Silakan lengkapi semua kolom metadata di formulir utama sebelum memproses via AI.");
+                return;
+            }
+            if (!fileInput.files[0]) {
+                alert("Silakan unggah Surat Undangan terlebih dahulu.");
+                return;
+            }
+
+            // Reset modal unggah feedback berkas
+            document.getElementById('aiTranscriptFile').value = '';
+            document.getElementById('aiFileFeedback').style.display = 'none';
+            document.getElementById('transkripRapat').value = '';
+
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'block';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+        }
+
+        // ── BARU: FUNGSI MEMBACA DAN MENGEKSTRAK ISI FILE DOKUMEN ──
+        async function bacaFileTranskrip(file) {
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+            const feedback = document.getElementById('aiFileFeedback');
+            const textarea = document.getElementById('transkripRapat');
+
+            feedback.style.color = "#1d355e";
+            feedback.textContent = "Sedang mengekstrak berkas...";
+            feedback.style.display = "block";
+
+            try {
+                if (ext === 'txt' || ext === 'csv') {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        textarea.value = e.target.result;
+                        feedback.style.color = "#27ae60";
+                        feedback.textContent = `✓ Berhasil membaca ${file.name} (${e.target.result.length} karakter)`;
+                    };
+                    reader.readAsText(file);
+                } 
+                else if (ext === 'docx') {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const arrayBuffer = e.target.result;
+                        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                            .then(function(result) {
+                                textarea.value = result.value;
+                                feedback.style.color = "#27ae60";
+                                feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${result.value.length} karakter)`;
+                            })
+                            .catch(err => {
+                                throw new Error("Gagal membaca dokumen Word (.docx): " + err.message);
+                            });
+                    };
+                    reader.readAsArrayBuffer(file);
+                } 
+                else if (ext === 'pdf') {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        try {
+                            const typedarray = new Uint8Array(e.target.result);
+                            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                            let extractedText = "";
+                            
+                            for (let i = 1; i <= pdf.numPages; i++) {
+                                const page = await pdf.getPage(i);
+                                const textContent = await page.getTextContent();
+                                const pageText = textContent.items.map(item => item.str).join(" ");
+                                extractedText += pageText + "\n";
+                            }
+                            
+                            textarea.value = extractedText;
+                            feedback.style.color = "#27ae60";
+                            feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${extractedText.length} karakter)`;
+                        } catch (pdfErr) {
+                            feedback.style.color = "#e74c3c";
+                            feedback.textContent = "Gagal memproses file PDF: " + pdfErr.message;
+                        }
+                    };
+                    reader.readAsArrayBuffer(file);
+                } 
+                else {
+                    throw new Error("Format file tidak didukung. Harap pilih file .txt, .csv, .docx, atau .pdf.");
+                }
+            } catch (err) {
+                feedback.style.color = "#e74c3c";
+                feedback.textContent = err.message;
+            }
+        }
+
+        // Drag and drop untuk area berkas transkrip AI
+        const aiUploadArea = document.getElementById('aiUploadArea');
+        if (aiUploadArea) {
+            aiUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); aiUploadArea.style.borderColor = '#f5b016'; });
+            aiUploadArea.addEventListener('dragleave', () => { aiUploadArea.style.borderColor = '#cbd5e1'; });
+            aiUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                aiUploadArea.style.borderColor = '#cbd5e1';
+                if (e.dataTransfer.files[0]) {
+                    document.getElementById('aiTranscriptFile').files = e.dataTransfer.files;
+                    bacaFileTranskrip(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        // FUNGSI UTAMA PROSES AI GEMINI & LANGSUNG KIRIM KE SERVER
+        async function submitRapatDenganAI() {
+            const transkrip = document.getElementById('transkripRapat').value.trim();
+            if (!transkrip) {
+                alert("Silakan masukkan teks atau unggah berkas transkrip rapat terlebih dahulu!");
+                return;
+            }
+
+            if (GEMINI_API_KEY === 'MASUKKAN_API_KEY_GEMINI_ANDA_DISINI' || !GEMINI_API_KEY) {
+                alert("API Key Gemini belum diatur di dalam script. Silakan masukkan API Key valid Anda.");
+                return;
+            }
+
+            document.getElementById('modalAITranscript').style.display = 'none';
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('loadingDynamicText').textContent = "Asisten AI sedang menganalisis transkrip...";
+
+            const systemPrompt = `
+                Bertindaklah sebagai Notulis Eksekutif Pemerintahan yang Profesional.
+                Tugas Anda adalah membaca transkrip/catatan kasar rapat di bagian paling bawah, lalu menyusun draf dokumen Risalah Rapat dalam format JSON murni.
+
+                Anda WAJIB MUTLAK mengikuti aturan penulisan, gaya bahasa, dan skema JSON di bawah ini secara disiplin.
+
+                ATURAN KETAT PENULISAN & GAYA BAHASA (WAJIB DIIKUTI):
+                1. Pemisahan Pembicara: Pada bagian pembahasan, Anda WAJIB memisahkan poin secara spesifik berdasarkan Nama Pembicara dan Instansinya. JANGAN menggabung beberapa pembicara menjadi satu paragraf narasi.
+                
+                2. Hindari Nominalisasi Tindakan (KATA PEMBUKA POIN WAJIB BERSIFAT PENYAMPAIAN):
+                   - JANGAN memulai poin dengan kata benda tindakan seperti: Pemaparan, Penerimaan, Penegasan, Identifikasi, Hambatan, Penghindaran, Persetujuan, Perancangan, Penyelesaian, dsb.
+                   - WAJIB gunakan kata pembuka modalitas kebutuhan, keadaan aktual, rekomendasi, atau status. Contoh:
+                     * "Terdapat kebutuhan klarifikasi..." / "Terdapat kebutuhan penyesuaian..."
+                     * "Diperlukan..." / "Terdapat hambatan..." / "Direkomendasikan..."
+                     * "Diharapkan..." / "Telah dilaksanakan..." / "Kondisi saat ini..."
+                
+                3. Bahasa Formal - Pasif - Lugas:
+                   - HILANGKAN kata kerja pelaporan yang santai (mengingatkan, meminta, menanyakan). 
+                   - Ubah kalimat menjadi pernyataan pasif, lugas, dan birokratis.
+                
+                4. Nomenklatur Baku:
+                   - Selalu gunakan istilah "Kementerian PU" (bukan PUPR).
+                
+                5. Subtansi Teknis & Pengabaian Basa-Basi: Abaikan obrolan basa-basi (salam, sinyal). Fokus hanya pada kebijakan, teknis bangunan/proyek, regulasi, dan anggaran.
+                
+                6. Kedalaman Substansi (WAJIB DETAIL MAKSIMAL):
+                   - Buatlah notulensi sedetail mungkin. Pertahankan angka, dokumen spesifik, rincian teknis, linimasa, nominal, serta alur alasan.
+                   - Uraikan argumen panjang menjadi beberapa poin substantif terpisah.
+
+                =======================================
+                SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN (Hanya hasilkan JSON ini tanpa teks pembuka/penutup dan tanpa block markdown):
+
+                {
+                  "judulRapat": "[Tuliskan Judul Rapat yang formal dan ringkas tanpa karakter ilegal]",
+                  "tujuanRapat": "[Rangkum tujuan spesifik rapat dalam 1-2 kalimat formal]",
+                  "grupPembukaan": [
+                    {
+                      "namaPembicara": "[Nama Pimpinan Rapat] – [Instansi]",
+                      "teksPembukaan": "1. [Poin pembukaan detail 1]\\n2. [Poin pembukaan detail 2]"
+                    }
+                  ],
+                  "grupPembahasan": [
+                    {
+                      "namaPembicara": "[Nama Pembicara 1] – [Instansi]",
+                      "teksPembahasan": "a. [Pernyataan teknis detail 1]\\nb. [Pernyataan teknis detail 2]"
+                    },
+                    {
+                      "namaPembicara": "[Nama Pembicara 2] – [Instansi]",
+                      "teksPembahasan": "a. [Pernyataan teknis detail 1]"
+                    }
+                  ],
+                  "grupKesimpulan": [
+                    { "teksKesimpulan": "[Topik Tindak Lanjut 1]: [Penjelasan tindak lanjut]" },
+                    { "teksKesimpulan": "[Topik Tindak Lanjut 2]: [Penjelasan tindak lanjut]" }
+                  ]
+                }
+
+                =======================================
+                BERIKUT ADALAH TRANSKRIP/CATATAN RAPATNYA:
+            `;
+
+            try {
+                // 1. HIT KE GOOGLE GEMINI API (Menggunakan endpoint stabil v1)
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: systemPrompt + "\n" + transkrip }]
+                        }]
+                    })
+                });
+
+                // PERBAIKAN: Membaca detail pesan error asli dari Google
+                if (!response.ok) {
+                    let googleErrorMsg = response.statusText;
+                    try {
+                        const errJson = await response.json();
+                        if (errJson.error && errJson.error.message) {
+                            googleErrorMsg = errJson.error.message;
+                        }
+                    } catch (e) {
+                        // Gagal mem-parse JSON error, gunakan statusText bawaan
+                    }
+                    throw new Error(`Google Gemini API (Status ${response.status}): ${googleErrorMsg}`);
+                }
+
+                const resData = await response.json();
+                let rawText = resData.candidates[0].content.parts[0].text;
+                
+                // SANITISASI JSON SEBELUM PARSING (Menghilangkan blockwrap & backslash nakal)
+                let cleanText = rawText.replace(/```json|```/g, '').trim();
+                cleanText = cleanText.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+
+                // --- PARSE JSON DARI AI ---
+                let parsedAI;
+                try {
+                    parsedAI = JSON.parse(cleanText);
+                } catch (parseError) {
+                    console.error("Gagal melakukan parsing JSON. Raw Text:", rawText);
+                    throw new Error(`Gagal membaca struktur JSON hasil AI: ${parseError.message}. Silakan coba kirim ulang.`);
+                }
+
+                // --- LOG KONSOL (DIUPDATE UNTUK MEMBACA FORMAT ARRAY) ---
+                console.log("=== INI ADALAH HASIL GENERATE DARI GEMINI AI ===");
+                console.log("Judul Rapat :", parsedAI.judulRapat);
+                console.log("Tujuan Rapat:", parsedAI.tujuanRapat);
+                // Gunakan JSON.stringify agar array object terlihat jelas di konsol
+                console.log("Pembukaan   :\n", JSON.stringify(parsedAI.grupPembukaan, null, 2));
+                console.log("Pembahasan  :\n", JSON.stringify(parsedAI.grupPembahasan, null, 2));
+                console.log("Kesimpulan  :\n", JSON.stringify(parsedAI.grupKesimpulan, null, 2));
+                console.log("================================================");
+
+                // 2. KIRIM HASIL KE FLOW POWER AUTOMATE
+                document.getElementById('loadingDynamicText').textContent = "Mengunggah data rangkuman ke OneDrive...";
+                const file = fileInput.files[0];
+                const fileBase64 = await fileToBase64(file);
+
+                const formData = {
+                    provinsi: state.selectedProvinsi,
+                    namaKegiatan: namaKegiatanSelect.value,
+                    judulRapat: document.getElementById('judulRapat').value,
+                    instansiPengundang: document.getElementById('instansiPengundang').value,
+                    tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
+                    namaNotulis: document.getElementById('namaNotulis').value.trim(),
+                    
+		    // --- SELIPKAN BARIS BARU INI ---
+                    transkripTeks: transkrip,
+		    hasilAiJSON: cleanText,
+
+
+                    // --- MENGGUNAKAN NAMA VARIABEL BARU (ARRAY) ---
+                    tujuanRapat: parsedAI.tujuanRapat || '',
+                    grupPembukaan: parsedAI.grupPembukaan || [],    // Diubah menjadi Array
+                    grupPembahasan: parsedAI.grupPembahasan || [],  // Diubah menjadi Array
+                    grupKesimpulan: parsedAI.grupKesimpulan || [],  // Diubah menjadi Array
+
+                    suratUndanganBase64: fileBase64,
+                    suratUndanganNama: file.name,
+                    suratUndanganTipe: file.type,
+                    timestamp: new Date().toISOString()
+                };
+
+                const responseData = await submitToFlow(formData);
+                const documentLink = responseData.linkBerkas || '';
+                
+                showModalSuccess(documentLink);
+                resetSeluruhForm();
+
+            } catch (err) {
+                showModalError(err.message);
+                console.error(err);
+            }
+        } // <--- KURUNG TUTUP SINTAKS SUDAH AMAN & BERFUNGSI SEMPURNA
 
         // ── FUNGSI PINTAR DETEKSI NAMA KOLOM EXCEL ──
         function dapatkanNilaiKolom(row, targetNames) {
@@ -753,13 +1123,12 @@
         async function loadDataFromExcel() {
             showMessage('Memuat database Excel...', 'info');
             try {
-                // Diubah kembali ke POST agar cocok dengan tanda tangan keamanan (sig) Power Automate
                 const response = await fetch(GET_DATA_FLOW_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ action: 'getData' }) // Mengirimkan request body aman
+                    body: JSON.stringify({ action: 'getData' })
                 });
 
                 if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
@@ -770,15 +1139,14 @@
                     rawData = JSON.parse(rawData);
                 }
 
-                console.log("STRUKTUR UTAMA DARI POWER AUTOMATE:", Object.keys(rawData));
-
-                const masterProvinsiRaw = rawData.provinsi || rawData.Provinsi_Master || rawData.Category || [];
                 const rekapDataRaw = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];
-
+                state.allMeetings = rekapDataRaw;
+					
                 // 1. Populate Dropdown Provinsi
                 provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
                 const provinsiSet = new Set();
 
+                const masterProvinsiRaw = rawData.provinsi || rawData.Provinsi_Master || rawData.Category || [];
                 masterProvinsiRaw.forEach(row => {
                     const rawProv = dapatkanNilaiKolom(row, ['Provinsi', 'provinsi']);
                     if (rawProv) {
@@ -816,7 +1184,6 @@
                     state.kegiatanByProvinsi[prov] = Array.from(state.kegiatanByProvinsi[prov]).sort();
                 });
 
-                console.log("MAPPING KEGIATAN BERHASIL:", state.kegiatanByProvinsi);
                 hideMessage();
                 console.log('✅ Database berhasil dimuat secara LIVE.');
 
@@ -861,8 +1228,26 @@
             });
         }
 
+		// ── FUNGSI OTOMATIS POPULATE NAMA NOTULIS DARI STATE ──
+        function populateNotulisDropdown() {
+            const select = document.getElementById('namaNotulis');
+            if (!select) return;
+
+            select.innerHTML = '<option value="">-- Pilih Nama Notulis --</option>';
+
+            state.notulisList.forEach(nama => {
+                const opt = document.createElement('option');
+                opt.value = nama;
+                opt.textContent = nama;
+                select.appendChild(opt);
+            });
+            console.log("✅ Daftar Notulis dari STATE sukses dimuat.");
+        }
+
         // Load data on page open
         window.addEventListener('load', loadDataFromExcel);
+        window.addEventListener('load', populateNotulisDropdown);
+
 
         // Update Kegiatan dropdown filtered by selected Provinsi
         function updateKegiatanList(provinsi) {
@@ -1008,6 +1393,7 @@
         function openModal() {
             document.getElementById('modalOverlay').classList.add('active');
             document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalSuccess').style.display = 'none';
             document.getElementById('modalError').style.display = 'none';
 
@@ -1029,19 +1415,16 @@
         function showModalSuccess(link) {
             clearInterval(loadingInterval);
             document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalSuccess').style.display = 'block';
             
             // Ambil data Judul Rapat yang diinput oleh user
             const judulRapat = document.getElementById('judulRapat').value;
             const shortLink = link || 'Link tidak tersedia';
 
-            // Generate template teks WhatsApp otomatis
             const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
-            
-            // Tampilkan teks di kotak halaman web
             document.getElementById('waTextTemplate').innerHTML = `Berikut link notulensi Rapat <strong>"${judulRapat}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
 
-            // Atur tombol buka OneDrive
             const btnLink = document.getElementById('btnLinkBerkas');
             if (link) {
                 btnLink.href = link;
@@ -1050,16 +1433,13 @@
                 btnLink.style.display = 'none';
             }
 
-            // Logika Klik Tombol Salin ke Clipboard HP/Laptop
             const btnCopy = document.getElementById('btnCopyWA');
             btnCopy.onclick = function() {
                 navigator.clipboard.writeText(waText).then(() => {
-                    // Efek visual sukses disalin
                     const originalText = btnCopy.innerHTML;
                     btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
                     btnCopy.style.background = "#219653";
                     
-                    // Kembalikan teks asli tombol setelah 2.5 detik
                     setTimeout(() => {
                         btnCopy.innerHTML = originalText;
                         btnCopy.style.background = "#27ae60";
@@ -1073,6 +1453,7 @@
         function showModalError(errorMsg) {
             clearInterval(loadingInterval);
             document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalError').style.display = 'block';
             document.getElementById('errorText').textContent = errorMsg;
         }
@@ -1081,18 +1462,112 @@
             document.getElementById('modalOverlay').classList.remove('active');
         }
 
-        // --- FORM SUBMIT UTAMA ---
+		// ── 1. FUNGSI PEMERIKSA KATA KUNCI INTI ──
+        function dapatkanKataKunci(teks) {
+            const stopWords = ["rapat", "koordinasi", "pembahasan", "dan", "atau", "di", "ke", "yang", "untuk", "dengan", "tentang", "terkait", "dalam", "pada", "oleh", "evaluasi", "monitoring"];
+            
+            return teks.toLowerCase()
+                .replace(/[\\\/:*?"<>|.,_-]/g, ' ') // Ganti tanda baca menjadi spasi
+                .split(/\s+/)                      // Pecah kalimat menjadi kata-kata
+                .filter(w => w.length > 2 && !stopWords.includes(w)); // Saring kata yang > 2 huruf & bukan kata umum
+        }
+
+        // ── 2. FUNGSI DETEKSI RAPAT GANDA SEMANTIK ──
+        function cekRapatGanda() {
+            const inputJudul = document.getElementById('judulRapat').value.trim().toLowerCase();
+            const inputTanggalRaw = document.getElementById('tanggalRapat').value; // Format: YYYY-MM-DD
+            const warningDiv = document.getElementById('meetingWarningText');
+
+            if (!warningDiv) return false;
+            warningDiv.style.display = 'none';
+
+            // Jalankan deteksi hanya jika judul dan tanggal sudah diisi
+            if (inputJudul.length < 3 || !inputTanggalRaw) return false;
+
+            const inputTanggal = inputTanggalRaw.replace(/-/g, '.');
+            const kataKunciInput = dapatkanKataKunci(inputJudul);
+
+            const duplicate = state.allMeetings.find(row => {
+                const rowTgl = dapatkanNilaiKolom(row, ['Tanggal Rapat', 'Tanggal_x0020_Rapat', 'tanggalRapat']) || '';
+                
+                if (rowTgl !== inputTanggal) return false;
+
+                const rowJudul = dapatkanNilaiKolom(row, ['Judul Rapat', 'Judul_x0020_Rapat', 'judulRapat']) || '';
+                const cleanRowJudul = rowJudul.toLowerCase().trim();
+                const kataKunciRow = dapatkanKataKunci(rowJudul);
+
+                const irisan = kataKunciInput.filter(word => kataKunciRow.includes(word));
+                const isSimilarDirect = cleanRowJudul.includes(inputJudul) || inputJudul.includes(cleanRowJudul);
+                const isSimilarKeywords = irisan.length >= 2;
+
+                return isSimilarDirect || isSimilarKeywords;
+            });
+
+            if (duplicate) {
+                const duplicatedJudul = dapatkanNilaiKolom(duplicate, ['Judul Rapat', 'judulRapat']);
+                const duplicatedNotulis = dapatkanNilaiKolom(duplicate, ['namaNotulis', 'Nama Notulis', 'Nama_x0020_Notulis', 'Notulis', 'notulis', 'Dibuat Oleh']) || 'Staf Subdit';
+                const duplicatedTgl = dapatkanNilaiKolom(duplicate, ['Tanggal Rapat', 'tanggalRapat']) || '';
+                const linkFile = dapatkanNilaiKolom(duplicate, ['Link File', 'Link_x0020_File', 'linkFile', 'Link Undangan', 'Link_x0020_Undangan']);
+
+                let formattedDate = duplicatedTgl;
+                if (duplicatedTgl.includes('.')) {
+                    const parts = duplicatedTgl.split('.');
+                    if (parts.length === 3) formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
+                let warningHtml = `
+                    <div style="margin-bottom: 5px;">⚠️ <strong>PERINGATAN: RAPAT SERUPA TERDETEKSI!</strong></div>
+                    <div style="font-size: 13px; font-weight: normal; color: #7f1d1d; line-height: 1.6; margin-bottom: 10px;">
+                        Rapat pada tanggal tersebut sepertinya sudah diinput oleh <strong>"${duplicatedNotulis}"</strong>.<br>
+                        • <strong>Judul Terdaftar:</strong> "${duplicatedJudul}"<br>
+                        • <strong>Tanggal Rapat:</strong> ${formattedDate}
+                    </div>
+                `;
+
+                if (linkFile) {
+                    warningHtml += `
+                        <a href="${linkFile}" target="_blank" 
+                           style="display: inline-flex; align-items: center; gap: 6px; background-color: #1d355e; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 11.5px; transition: all 0.2s ease; border: 1.5px solid #1d355e;"
+                           onmouseover="this.style.backgroundColor='#f5b016'; this.style.color='#11223f'; this.style.borderColor='#f5b016';" 
+                           onmouseout="this.style.backgroundColor='#1d355e'; this.style.color='white'; this.style.borderColor='#1d355e';">
+                           📄 Buka Berkas yang Sudah Ada
+                        </a>
+                    `;
+                } else {
+                    warningHtml += `<span style="font-size:11px; color:#991b1b; font-style:italic;">(Berkas asli belum diunggah ke OneDrive)</span>`;
+                }
+
+                warningDiv.innerHTML = warningHtml;
+                warningDiv.style.display = 'block';
+                return true; 
+            }
+            return false;
+        }
+
+        document.getElementById('judulRapat').addEventListener('input', cekRapatGanda);
+        document.getElementById('tanggalRapat').addEventListener('change', cekRapatGanda);
+
+
+        // --- FORM SUBMIT MANUAL ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+			
+            const isDuplicate = cekRapatGanda();
+            if (isDuplicate) {
+                const yakin = confirm("⚠️ PERINGATAN: Rapat ini terdeteksi sudah diinput sebelumnya oleh rekan Anda.\n\nApakah Anda yakin ingin tetap mengirimkannya?");
+                if (!yakin) {
+                    return;
+                }
+            }
 
             if (!state.selectedProvinsi) return showMessage('Silakan pilih Provinsi', 'error');
             if (!namaKegiatanSelect.value) return showMessage('Silakan pilih Nama Kegiatan', 'error');
+            if (!document.getElementById('namaNotulis').value) return showMessage('Silakan pilih Nama Notulis', 'error');
 
             const file = fileInput.files[0];
             if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG)', 'error');
 
             try {
-                // BUKA POP-UP LOADING MENGUNCI LAYAR
                 openModal();
 
                 const fileBase64 = await fileToBase64(file);
@@ -1103,32 +1578,45 @@
                     judulRapat: document.getElementById('judulRapat').value,
                     instansiPengundang: document.getElementById('instansiPengundang').value,
                     tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
+                    namaNotulis: document.getElementById('namaNotulis').value.trim(),
+                    
+                    // OTOMATIS KIRIM TEKS CONTOH TEMPLATE JIKA MANUAL (Sesuai Struktur Fisik Word)
+                    tujuanRapat: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                    grupPembukaan: [
+                        { 
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi', 
+                            teksPembukaan: '1. x\n2. x' 
+                        }
+                    ],
+                    grupPembahasan: [
+                        { 
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi', 
+                            teksPembahasan: 'a. Aaa\nb. A' 
+                        }
+                    ],
+                    grupKesimpulan: [
+                        { teksKesimpulan: 'x' }
+                    ],
+
                     suratUndanganBase64: fileBase64,
                     suratUndanganNama: file.name,
                     suratUndanganTipe: file.type,
                     timestamp: new Date().toISOString()
                 };
 
-                // Kirim ke Flow
                 const responseData = await submitToFlow(formData);
-                
-                // JIKA BERHASIL, TAMPILKAN POP-UP SUKSES & LINK
                 const documentLink = responseData.linkBerkas || '';
                 showModalSuccess(documentLink);
 
-                // Reset Form
-                form.reset();
-                removeFile();
-                state.selectedProvinsi = '';
+                resetSeluruhForm();
 
             } catch (error) {
-                // JIKA GAGAL, TAMPILKAN POP-UP ERROR
                 showModalError(error.message);
                 console.error(error);
             }
         });
 
-        // Submit form data ke Power Automate (Versi Pelacak Error 400)
+        // Submit form data ke Power Automate
         async function submitToFlow(data) {
             const response = await fetch(FLOW_URL, {
                 method: 'POST',
@@ -1161,7 +1649,6 @@
             return text ? JSON.parse(text) : {};
         }
 
-        // Helper UI functions
         function showMessage(message, type) {
             messageDiv.textContent = message;
             messageDiv.className = `message ${type}`;
@@ -1172,17 +1659,105 @@
             messageDiv.style.display = 'none';
         }
 
-        function showLoading() {
-            loadingDiv.style.display = 'block';
-            form.style.opacity = '0.6';
-            form.style.pointerEvents = 'none';
+        // Full form reset
+        function resetSeluruhForm() {
+            form.reset();
+            removeFile();
+            state.selectedProvinsi = '';
+            namaKegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+            newNotulisRow.style.display = 'none';
+            newNotulisInput.value = '';
+            document.getElementById('meetingWarningText').style.display = 'none';
+            document.getElementById('transkripRapat').value = '';
+            hideMessage();
         }
 
-        function hideLoading() {
-            loadingDiv.style.display = 'none';
-            form.style.opacity = '1';
-            form.style.pointerEvents = 'auto';
-        }
-    </script>
+        // Deteksi kemiripan ketikan baru saat user mengetik nama kegiatan baru
+        newKegiatanInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim().toLowerCase();
+            const warningDiv = document.getElementById('aiWarningText');
+            
+            if (!warningDiv) return;
+            warningDiv.style.display = 'none';
+            if (val.length < 3) return; 
+
+            const existingList = state.kegiatanByProvinsi[state.selectedProvinsi] || [];
+            
+            const similar = existingList.find(keg => {
+                const cleanKeg = keg.toLowerCase().replace(/^\d+[\s.]*/, ''); // Buang nomor urut lama
+                const valWords = val.split(/\s+/);
+                const kegWords = cleanKeg.split(/\s+/);
+                
+                const commonWords = valWords.filter(w => w.length > 2 && kegWords.some(kw => kw.includes(w) || w.includes(kw)));
+                return cleanKeg.includes(val) || val.includes(cleanKeg) || commonWords.length >= 2;
+            });
+
+            if (similar) {
+                warningDiv.innerHTML = `💡 Kegiatan serupa ditemukan: <strong>"${similar}"</strong>.<br>Jika ini adalah kegiatan yang dimaksud, silakan klik ✕ (Batal) dan pilih dari dropdown utama agar tidak terjadi duplikasi folder!`;
+                warningDiv.style.display = 'block';
+            }
+        });
+		
+		// ── SELEKSI NOTULIS ──
+        const namaNotulisSelect = document.getElementById('namaNotulis');
+        const btnAddNotulis = document.getElementById('btnAddNotulis');
+        const newNotulisRow = document.getElementById('newNotulisRow');
+        const newNotulisInput = document.getElementById('newNotulisInput');
+        const btnConfirmNotulis = document.getElementById('btnConfirmNotulis');
+        const btnCancelNotulis = document.getElementById('btnCancelNotulis');
+
+        btnAddNotulis.addEventListener('click', (e) => {
+            e.preventDefault();
+            newNotulisRow.style.display = 'block';
+            newNotulisInput.focus();
+        });
+
+        btnCancelNotulis.addEventListener('click', () => {
+            newNotulisRow.style.display = 'none';
+            newNotulisInput.value = '';
+        });
+
+        btnConfirmNotulis.addEventListener('click', () => {
+            const newName = newNotulisInput.value.trim();
+
+            if (!newName) {
+                showMessage('Silakan masukkan nama notulis baru', 'error');
+                return;
+            }
+
+            let exists = false;
+            for (let i = 0; i < namaNotulisSelect.options.length; i++) {
+                if (namaNotulisSelect.options[i].value.toLowerCase() === newName.toLowerCase()) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (exists) {
+                showMessage('Nama ini sudah ada di dalam daftar pilihan', 'error');
+                return;
+            }
+
+            const opt = document.createElement('option');
+            opt.value = newName;
+            opt.textContent = newName;
+            namaNotulisSelect.appendChild(opt);
+            
+            namaNotulisSelect.value = newName;
+
+            newNotulisRow.style.display = 'none';
+            newNotulisInput.value = '';
+            
+            showMessage(`Nama "${newName}" berhasil ditambahkan ke daftar pilihan`, 'success');
+            setTimeout(hideMessage, 3000);
+        });
+
+        newNotulisInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); btnConfirmNotulis.click(); }
+            if (e.key === 'Escape') { btnCancelNotulis.click(); }
+        });
+	</script>
 </body>
 </html>

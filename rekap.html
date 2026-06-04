@@ -182,7 +182,20 @@
             background-color: rgba(29, 53, 94, 0.02);
         }
 
-        /* Tombol Aksi Buka Berkas & Hapus */
+        /* Link Judul Rapat */
+        .meeting-title-link {
+            color: #1d355e;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .meeting-title-link:hover {
+            color: #f5b016;
+            text-decoration: underline;
+        }
+
+        /* Tombol Aksi */
         .action-cell {
             display: flex;
             gap: 8px;
@@ -210,10 +223,27 @@
             color: #11223f;
         }
 
+        /* CSS Tambahan Khusus Tombol Undangan Emas */
+        .btn-undangan {
+            background-color: #f5b016 !important;
+            color: #11223f !important;
+        }
+        .btn-undangan:hover {
+            background-color: #1d355e !important;
+            color: white !important;
+        }
+
+        .btn-kelola {
+            background-color: #2980b9 !important;
+            color: white !important;
+        }
+        .btn-kelola:hover {
+            background-color: #1f5f89 !important;
+        }
+
         .btn-delete {
             background-color: #e74c3c;
         }
-
         .btn-delete:hover {
             background-color: #c0392b;
             color: white;
@@ -283,7 +313,22 @@
             line-height: 1.5;
         }
 
-        /* Tombol Pilihan Hapus */
+        /* Tombol Pilihan Hapus & Kelola */
+        .btn-modal-action {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+
         .btn-delete-excel {
             background: #f39c12;
             color: white;
@@ -353,7 +398,7 @@
             td, th { padding: 10px; }
         }
 
-/* --- DESAIN KHUSUS TAMPILAN HANDPHONE (RESPONSIVE) --- */
+        /* --- DESAIN KHUSUS TAMPILAN HANDPHONE (RESPONSIVE) --- */
         @media (max-width: 768px) {
             /* 1. Atur Filter Grid menjadi Vertikal */
             .filter-section {
@@ -422,11 +467,13 @@
             td:nth-of-type(3):before { content: "Provinsi"; }
             td:nth-of-type(4):before { content: "Nama Kegiatan"; }
             td:nth-of-type(5):before { content: "Judul Rapat"; }
-            td:nth-of-type(6):before { content: "Aksi Berkas"; }
+            td:nth-of-type(6):before { content: "Notulis"; }
+            td:nth-of-type(7):before { content: "Aksi Berkas"; }
 
             .action-cell {
                 width: 100%;
                 justify-content: center;
+                flex-wrap: wrap;
             }
             
             .btn-action {
@@ -436,8 +483,6 @@
                 font-size: 13px;
             }
         }
-
-
     </style>
 </head>
 <body>
@@ -491,13 +536,39 @@
                             <th style="width: 150px;">Provinsi</th>
                             <th>Nama Kegiatan</th>
                             <th>Judul Rapat / Bahasan</th>
-                            <th style="width: 200px;">Aksi</th>
+                            <th style="width: 120px;">Notulis</th> <!-- KOLOM INI WAJIB ADA -->
+                            <th style="width: 250px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <!-- Data akan disuntikkan secara dinamis menggunakan JS -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POP-UP KELOLA BERKAS (BARU) -->
+    <div id="kelolaModal" class="modal-overlay">
+        <div class="modal-box">
+            <!-- Menu Pilihan -->
+            <div id="kelolaMenuState">
+                <span style="font-size: 50px; display:block; margin-bottom:15px;">⚙️</span>
+                <div class="modal-title" id="kelolaTitle">Pengelola Berkas Rapat</div>
+                <div class="modal-sub" id="kelolaSub">Pilih berkas yang ingin Anda buka atau buat PDF baru.</div>
+                
+                <a href="#" target="_blank" id="btnBukaWord" class="btn-modal-action" style="background:#1d355e; color:white; text-decoration:none;">📝 Edit / Buka Draf Word</a>
+                <a href="#" target="_blank" id="btnBukaPdf" class="btn-modal-action" style="background:#27ae60; color:white; text-decoration:none;">📄 Buka PDF Notulensi</a>
+                <button class="btn-modal-action" id="btnGeneratePdf" style="background:#f5b016; color:#11223f;" onclick="triggerGeneratePdf()">⚡ Generate PDF Notulensi</button>
+                
+                <button class="btn-close-modal btn-modal-action" style="margin-top:15px;" onclick="closeKelolaModal()">Tutup</button>
+            </div>
+
+            <!-- Loading Generate -->
+            <div id="kelolaLoadingState" style="display: none;">
+                <div class="modal-spinner"></div>
+                <div class="modal-title">Sedang Memproses Berkas...</div>
+                <div class="modal-sub" id="kelolaLoadingText">Mengonversi draf Word ke PDF...</div>
             </div>
         </div>
     </div>
@@ -514,9 +585,9 @@
                     Apakah Anda yakin ingin menghapus data rapat ini? <br>
                     <strong id="deleteTargetText" style="color:#1d355e;"></strong>
                 </div>
-                <button class="btn-delete-excel" onclick="executeDelete('excel')">🗂️ Hapus Baris Excel Saja</button>
-                <button class="btn-delete-all" onclick="executeDelete('all')">🔥 Hapus Excel & Berkas OneDrive</button>
-                <button class="btn-close-modal" onclick="closeDeleteModal()">Batal</button>
+                <button class="btn-delete-excel btn-modal-action" onclick="executeDelete('excel')">🗂️ Hapus Baris Excel Saja</button>
+                <button class="btn-delete-all btn-modal-action" onclick="executeDelete('all')">🔥 Hapus Excel & Berkas OneDrive</button>
+                <button class="btn-close-modal btn-modal-action" onclick="closeDeleteModal()">Batal</button>
             </div>
 
             <!-- 2. Tampilan Loading Saat Proses Hapus -->
@@ -531,7 +602,7 @@
                 <span style="font-size: 50px; display:block; margin-bottom:15px;">✅</span>
                 <div class="modal-title">Penghapusan Berhasil!</div>
                 <div class="modal-sub" id="successDeleteSub">Data telah berhasil bersih terhapus dari server.</div>
-                <button class="btn-close-modal" style="background:#27ae60; color:white;" onclick="closeDeleteModal()">OK</button>
+                <button class="btn-close-modal btn-modal-action" style="background:#27ae60; color:white;" onclick="closeDeleteModal()">OK</button>
             </div>
 
             <!-- 4. Tampilan Gagal / Error (BARU) -->
@@ -539,7 +610,7 @@
                 <span style="font-size: 50px; display:block; margin-bottom:15px;">❌</span>
                 <div class="modal-title" style="color:#e74c3c;">Penghapusan Gagal</div>
                 <div class="modal-sub" id="deleteErrorText" style="color:#c0392b; font-weight:600; background:#fee2e2; padding:10px; border-radius:6px; border:1px solid #fca5a5; word-break:break-all;"></div>
-                <button class="btn-close-modal" style="margin-top:15px;" onclick="resetDeleteModal()">Kembali</button>
+                <button class="btn-close-modal btn-modal-action" style="margin-top:15px;" onclick="resetDeleteModal()">Kembali</button>
             </div>
 
         </div>
@@ -551,8 +622,11 @@
             // 1. URL Flow untuk MENARIK DATA dari Excel (Sudah Aktif)
             getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
             
-            // 2. URL Flow untuk MENGHAPUS DATA (Ganti teks di bawah ini dengan URL Flow Hapus baru Anda)
-            deleteFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/23aee5f5975142f6b04e41b3a2cd9017/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=NH-7wj_uII3uM3yrq-TOECGTfitTYoEAQGtECChX_iU' 
+            // 2. URL Flow untuk MENGHAPUS DATA
+            deleteFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/23aee5f5975142f6b04e41b3a2cd9017/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=NH-7wj_uII3uM3yrq-TOECGTfitTYoEAQGtECChX_iU',
+            
+            // 3. URL Flow untuk MENG-GENERATE PDF (Tambahkan URL HTTP POST baru Anda di sini)
+            generatePdfFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/254d386f21e34f4182eb66568f070e00/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bAfWgBtAM9TPzwmd5_zGinC-mVqkATky0RLFSpS3CkA'
         };
 
         // State & Variabel Sistem
@@ -563,6 +637,19 @@
             namaKegiatan: '',
             tanggalRapat: '',
             judulRapat: '',
+            rowElement: null
+        };
+
+        // State penampung data yang sedang dikelola di modal pop-up kelola berkas
+        let activeKelolaData = {
+            powerAppsId: '',
+            provinsi: '',
+            namaKegiatan: '',
+            tanggalRapat: '',
+            judulRapat: '',
+            linkFile: '',
+            linkGabungan: '',
+            pathNotulensi: '',
             rowElement: null
         };
 
@@ -644,7 +731,7 @@
             });
         }
 
-        // --- MERENDER BARIS TABEL SECARA DINAMIS (DENGAN TANGGAL & JUDUL) ---
+        // --- MERENDER BARIS TABEL SECARA DINAMIS (DENGAN REKAP NOTULIS + LINK JUDUL & TOMBOL KELOLA) ---
         function renderTable(dataList) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -652,12 +739,22 @@
             dataList.forEach((row, index) => {
                 const tr = document.createElement('tr');
 
+                // Deklarasikan variabel-variabel kolom secara lengkap
                 const tgl = dapatkanNilaiKolom(row, ['Tanggal Rapat', 'Tanggal_x0020_Rapat', 'tanggalRapat']) || '-';
                 const prov = dapatkanNilaiKolom(row, ['Provinsi', 'provinsi']) || '-';
                 const keg = dapatkanNilaiKolom(row, ['Nama Kegiatan', 'Nama_x0020_Kegiatan', 'NamaKegiatan', 'kegiatan']) || '-';
                 const judul = dapatkanNilaiKolom(row, ['Judul Rapat', 'Judul_x0020_Rapat', 'judulRapat']) || '-';
-                const linkFile = dapatkanNilaiKolom(row, ['Link File', 'Link_x0020_File', 'linkFile', 'Link Undangan', 'Link_x0020_Undangan']);
+                
+                // Deklarasikan variabel Notulis
+                const notulis = dapatkanNilaiKolom(row, ['Notulis', 'notulis', 'Dibuat Oleh']) || '-';
+                
+                const linkFile = dapatkanNilaiKolom(row, ['Link File', 'Link_x0020_File', 'linkFile']) || '';
+                const linkUndangan = dapatkanNilaiKolom(row, ['Link Undangan', 'Link_x0020_Undangan', 'linkUndangan']) || '';
                 const powerAppsId = dapatkanNilaiKolom(row, ['__PowerAppsId__', 'powerappsid', 'ItemInternalId']) || '';
+                
+                // Kolom-kolom baru
+                const pathNotulensi = dapatkanNilaiKolom(row, ['Path Notulensi', 'Path_x0020_Notulensi', 'pathNotulensi']) || '';
+                const linkGabungan = dapatkanNilaiKolom(row, ['Link Gabungan', 'Link_x0020_Gabungan', 'linkGabungan', 'Link PDF', 'Link_x0020_PDF', 'linkPdf']) || '';
 
                 let formattedDate = tgl;
                 if (tgl.includes('.')) {
@@ -666,16 +763,28 @@
                 }
 
                 const safeJudul = judul.replace(/'/g, "\\'");
+                const safePathNotulensi = pathNotulensi.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
 
                 tr.innerHTML = `
                     <td style="font-weight:bold; color:#1d355e;">${index + 1}</td>
                     <td>${formattedDate}</td>
                     <td style="font-weight:600;">${prov}</td>
                     <td>${keg}</td>
-                    <td>${judul}</td>
+                    <td>
+                        <!-- Judul Rapat Klik ke Word -->
+                        ${linkFile ? `<a href="${linkFile}" target="_blank" class="meeting-title-link">${judul}</a>` : judul}
+                    </td>
+                    <!-- Menampilkan Nama Notulis di baris tabel -->
+                    <td style="font-weight:600; color:#475569;">${notulis}</td>
                     <td>
                         <div class="action-cell">
-                            ${linkFile ? `<a href="${linkFile}" target="_blank" class="btn-action">📄 Buka</a>` : `<span style="font-size:11px; color:#94a3b8; font-style:italic; margin-right:5px;">No File</span>`}
+                            <!-- 1. Tombol Buka Surat Undangan Asli -->
+                            ${linkUndangan ? `<a href="${linkUndangan}" target="_blank" class="btn-action btn-undangan">✉️ Undangan</a>` : `<span style="font-size:11px; color:#94a3b8; font-style:italic;">No Invite</span>`}
+                            
+                            <!-- 2. Tombol Kelola Berkas (Word & PDF) -->
+                            <button onclick="openKelolaModal('${powerAppsId}', '${prov}', '${keg}', '${tgl}', '${safeJudul}', '${linkFile}', '${linkGabungan}', '${safePathNotulensi}', this)" class="btn-action btn-kelola">⚙️ Kelola</button>
+
+                            <!-- 3. Tombol Hapus -->
                             <button onclick="confirmDelete('${powerAppsId}', '${prov}', '${keg}', '${tgl}', '${safeJudul}', this)" class="btn-action btn-delete">🗑️ Hapus</button>
                         </div>
                     </td>
@@ -707,6 +816,150 @@
             });
         }
 
+        // ── LOGIKA MODAL POP-UP KELOLA BERKAS (BARU) ──
+        function openKelolaModal(id, prov, keg, tgl, judul, linkWord, linkPdf, pathNotulensi, buttonElement) {
+            activeKelolaData.powerAppsId = id;
+            activeKelolaData.provinsi = prov;
+            activeKelolaData.namaKegiatan = keg;
+            activeKelolaData.tanggalRapat = tgl;
+            activeKelolaData.judulRapat = judul;
+            activeKelolaData.linkFile = linkWord;
+            activeKelolaData.linkGabungan = linkPdf;
+            activeKelolaData.pathNotulensi = pathNotulensi;
+            activeKelolaData.rowElement = buttonElement.closest('tr');
+
+            document.getElementById('kelolaTitle').textContent = `Kelola: "${judul}"`;
+            document.getElementById('kelolaSub').innerHTML = `Tanggal Rapat: <strong>${tgl}</strong> | Kategori: <strong>${keg}</strong>`;
+
+            const btnWord = document.getElementById('btnBukaWord');
+            btnWord.href = linkWord || '#';
+
+            const btnPdf = document.getElementById('btnBukaPdf');
+            const btnGen = document.getElementById('btnGeneratePdf');
+
+            // Aktifkan tombol Buka PDF jika tautan PDF di database Excel sudah terisi
+            if (linkPdf && linkPdf !== "null" && linkPdf !== "") {
+                btnPdf.href = linkPdf;
+                btnPdf.style.background = "#27ae60";
+                btnPdf.style.pointerEvents = "auto";
+                btnPdf.textContent = "📄 Buka PDF Notulensi";
+                btnGen.textContent = "🔄 Re-generate PDF Baru"; 
+            } else {
+                btnPdf.href = "#";
+                btnPdf.style.background = "#94a3b8"; 
+                btnPdf.style.pointerEvents = "none"; 
+                btnPdf.textContent = "📄 PDF Notulensi (Belum Dibuat)";
+                btnGen.textContent = "⚡ Generate PDF Notulensi";
+            }
+
+            document.getElementById('kelolaModal').classList.add('active');
+            document.getElementById('kelolaMenuState').style.display = 'block';
+            document.getElementById('kelolaLoadingState').style.display = 'none';
+        }
+
+        function closeKelolaModal() {
+            document.getElementById('kelolaModal').classList.remove('active');
+        }
+
+        // Pemicuan Pembuatan PDF Melalui Power Automate Flow
+        async function triggerGeneratePdf() {
+    // Sembunyikan menu utama modal, tampilkan area loading
+    document.getElementById('kelolaMenuState').style.display = 'none';
+    document.getElementById('kelolaLoadingState').style.display = 'block';
+
+    const textElement = document.getElementById('kelolaLoadingText');
+    
+    // Teks animasi loading dinamis
+    const loadingTexts = [
+        "Menghubungi server Microsoft...",
+        "Membaca berkas draf Word dari folder OneDrive...",
+        "Mengonversi draf Word ke bentuk PDF...",
+        "Menyimpan berkas PDF baru ke OneDrive...",
+        "Mencatat tautan berkas PDF ke database..."
+    ];
+    let i = 0;
+    textElement.textContent = loadingTexts[0];
+    const loadInterval = setInterval(() => {
+        i = (i + 1) % loadingTexts.length;
+        textElement.textContent = loadingTexts[i];
+    }, 3000);
+
+    const payload = {
+        powerAppsId: activeKelolaData.powerAppsId,
+        provinsi: activeKelolaData.provinsi,
+        namaKegiatan: activeKelolaData.namaKegiatan,
+        tanggalRapat: activeKelolaData.tanggalRapat,
+        judulRapat: activeKelolaData.judulRapat,
+        pathNotulensi: activeKelolaData.pathNotulensi
+    };
+
+    try {
+        const response = await fetch(CONFIG.generatePdfFlowUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("Gagal memproses konversi PDF di server.");
+
+        // Membaca respon teks dari server
+        await response.text();
+        clearInterval(loadInterval);
+
+        // 1. Memuat ulang database rekap dari server di latar belakang
+        textElement.textContent = "Menyinkronkan database dashboard...";
+        await loadDashboardData();
+
+        // 2. Cari baris data yang baru saja di-update berdasarkan PowerApps ID-nya
+        const updatedRow = databaseRekap.find(row => {
+            const id = dapatkanNilaiKolom(row, ['__PowerAppsId__', 'powerappsid', 'ItemInternalId']) || '';
+            return id === activeKelolaData.powerAppsId;
+        });
+
+        // 3. Ambil tautan PDF terbaru dari baris hasil sinkronisasi tersebut
+        let newPdfLink = "";
+        if (updatedRow) {
+            newPdfLink = dapatkanNilaiKolom(updatedRow, ['Link Gabungan', 'Link_x0020_Gabungan', 'linkGabungan', 'Link PDF', 'Link_x0020_PDF', 'linkPdf']) || '';
+        }
+
+        const btnPdf = document.getElementById('btnBukaPdf');
+        const btnGen = document.getElementById('btnGeneratePdf');
+
+        // 4. Jika link PDF sukses didapatkan, langsung aktifkan tombol di dalam modal secara real-time
+        if (newPdfLink && newPdfLink !== "null" && newPdfLink !== "") {
+            btnPdf.href = newPdfLink;
+            btnPdf.style.background = "#27ae60";       // Berubah menjadi Hijau sukses
+            btnPdf.style.pointerEvents = "auto";       // Tombol bisa diklik kembali
+            btnPdf.textContent = "📄 Buka PDF Notulensi (Baru Dibuat)";
+            
+            btnGen.textContent = "🔄 Re-generate PDF Baru"; // Ubah teks tombol generate
+            
+            // Beri feedback pesan sukses berwarna hijau di sub-title modal
+            document.getElementById('kelolaSub').innerHTML = `
+                Tanggal Rapat: <strong>${activeKelolaData.tanggalRapat}</strong><br>
+                <span style="color:#27ae60; font-weight:bold; display:block; margin-top:10px;">✅ PDF Notulensi Berhasil Dibuat!</span>
+            `;
+        } else {
+            // Fallback jika sync delay pada database Excel
+            btnPdf.textContent = "📄 Buka PDF Notulensi";
+        }
+
+        // 5. Kembalikan ke menu utama modal (tanpa menutup modal)
+        document.getElementById('kelolaLoadingState').style.display = 'none';
+        document.getElementById('kelolaMenuState').style.display = 'block';
+
+    } catch (error) {
+        clearInterval(loadInterval);
+        
+        // Kembalikan ke menu utama modal agar user bisa melihat status kegagalan
+        document.getElementById('kelolaLoadingState').style.display = 'none';
+        document.getElementById('kelolaMenuState').style.display = 'block';
+        
+        alert("Gagal memproses PDF: " + error.message);
+        console.error(error);
+    }
+}
+
         // ── KONTROL KONFIRMASI HAPUS (RESET ALL STATES) ──
         function confirmDelete(id, prov, keg, tgl, judul, buttonElement) {
             activeDeleteData.powerAppsId = id;
@@ -726,16 +979,16 @@
             document.getElementById('modalErrorState').style.display = 'none';
         }
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-        }
-
         // Fungsi mengembalikan modal ke konfirmasi jika terjadi error
         function resetDeleteModal() {
             document.getElementById('modalConfirmState').style.display = 'block';
             document.getElementById('modalLoadingState').style.display = 'none';
             document.getElementById('modalSuccessState').style.display = 'none';
             document.getElementById('modalErrorState').style.display = 'none';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
         }
 
         // ── EKSEKUSI PENGHAPUSAN KE SERVER via FLOW HAPUS (DENGAN FEEDBACK STATE) ──

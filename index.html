@@ -788,7 +788,7 @@
         const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b6b4896fdcac49f3880f8e9454f5c41a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zpBFr9b0h9hhQg2Zs7lTGaj958T5sOOTm_B9osyy4hk';
         
         // KUNCI KEY GEMINI FREE API (Menggunakan Gemini 3.5 Flash)
-        const GEMINI_API_KEY = 'AIzaSyCGtXXVNZyRWnFWhUTNDmrR8dVSFGjuZuA'; 
+        let GEMINI_API_KEY = ''; 
 
         // State — diisi dari database Power Automate / Excel
         const state = {
@@ -1125,18 +1125,35 @@
             try {
                 const response = await fetch(GET_DATA_FLOW_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'getData' })
                 });
 
                 if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
 
                 let rawData = await response.json();
-                
                 if (typeof rawData === 'string') {
                     rawData = JSON.parse(rawData);
+                }
+
+                // --- AMBIL API KEY SECARA DINAMIS DARI EXCEL (SANGAT AMAN & FAIL-SAFE) ---
+                if (rawData.geminiKey) {
+                    let keyString = '';
+                    
+                    if (Array.isArray(rawData.geminiKey) && rawData.geminiKey.length > 0) {
+                        // Kasus 1: Jika dikirim sebagai Daftar/Array (seperti pada screenshot Anda)
+                        const firstRow = rawData.geminiKey[0];
+                        keyString = firstRow.Nilai || firstRow.nilai || '';
+                    } else if (typeof rawData.geminiKey === 'object' && rawData.geminiKey !== null) {
+                        // Kasus 2: Jika dikirim sebagai Objek Tunggal
+                        keyString = rawData.geminiKey.Nilai || rawData.geminiKey.nilai || '';
+                    } else {
+                        // Kasus 3: Jika dikirim sebagai Teks murni
+                        keyString = rawData.geminiKey;
+                    }
+
+                    GEMINI_API_KEY = keyString.toString().trim();
+                    console.log("🔑 API Key berhasil dimuat secara aman dari database Excel.");
                 }
 
                 const rekapDataRaw = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];

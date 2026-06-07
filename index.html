@@ -812,16 +812,19 @@
 
 
 // --- MEMUAT INSTRUKSI PROMPT SECARA DINAMIS DARI FILE LUAR ---
-        async function loadSystemPrompt() {
-            try {
-                const response = await fetch('prompt_notulensi.txt');
-                if (response.ok) {
-                    state.systemPrompt = await response.text();
-                    console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
-                } else {
-                    throw new Error("Respons jaringan tidak OK saat membaca prompt.");
-                }
-            } catch (err) {
+async function loadSystemPrompt() {
+    try {
+        const response = await fetch('prompt_notulensi.txt');
+        if (response.ok) {
+            // Mengubah semua teks literal \n dari file txt menjadi karakter enter asli
+            const rawText = await response.text();
+            state.systemPrompt = rawText.replace(/\\n/g, '\n'); 
+            
+            console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
+        } else {
+            throw new Error("Respons jaringan tidak OK saat membaca prompt.");
+        }
+    } catch (err) {
                 console.warn("⚠️ Gagal memuat prompt luar, menggunakan draf cadangan:", err.message);
                 // Draf cadangan jika file txt eksternal gagal di-load
                 state.systemPrompt = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan yang Profesional...";

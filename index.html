@@ -1007,6 +1007,15 @@ async function loadSystemPrompt() {
                 
                 // SANITISASI JSON SEBELUM PARSING (Menghilangkan blockwrap & backslash nakal)
                 let cleanText = rawText.replace(/```json|```/g, '').trim();
+
+                // 1. Convert any accidental backspaces (\b) to newlines or spaces (often a typo for \n b.)
+                cleanText = cleanText.replace(/\\b/g, '\\n ');
+
+                // 2. Remove invalid XML control characters (ASCII 0-8, 11, 12, 14-31)
+                // This prevents XML-based connectors in Power Automate from failing
+                cleanText = cleanText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+
+                // 3. Escape single backslashes that aren't valid JSON escape sequences
                 cleanText = cleanText.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
 
                 // --- PARSE JSON DARI AI ---

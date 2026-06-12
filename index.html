@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Notulensi Subdit Wil 2 BPB</title>
-    
+
     <!-- PUSTAKA GRATIS UNTUK EKSTRAKSI DOKUMEN DI BROWSER (ZERO COST) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -32,11 +33,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('logo-pu.png'); /* Mengambil file logo di folder yang sama */
+            background-image: url('logo-pu.png');
+            /* Mengambil file logo di folder yang sama */
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 60vh auto; /* Ukuran siluet proporsional di tengah */
-            opacity: 0.04; /* Sangat samar agar form tetap mudah dibaca */
+            background-size: 60vh auto;
+            /* Ukuran siluet proporsional di tengah */
+            opacity: 0.04;
+            /* Sangat samar agar form tetap mudah dibaca */
             z-index: -1;
             pointer-events: none;
         }
@@ -44,7 +48,8 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar siluet terlihat lembut */
+            background: rgba(255, 255, 255, 0.95);
+            /* Sedikit transparan agar siluet terlihat lembut */
             border-radius: 12px;
             box-shadow: 0 15px 35px rgba(29, 53, 94, 0.12);
             overflow: hidden;
@@ -57,9 +62,11 @@
             color: white;
             padding: 25px 40px;
             display: flex;
-            justify-content: space-between; /* Membuat logo di kiri, tombol di kanan */
+            justify-content: space-between;
+            /* Membuat logo di kiri, tombol di kanan */
             align-items: center;
-            flex-wrap: wrap; /* Menjaga tampilan rapi saat dibuka di HP */
+            flex-wrap: wrap;
+            /* Menjaga tampilan rapi saat dibuka di HP */
             gap: 20px;
             border-bottom: 5px solid #f5b016;
         }
@@ -72,11 +79,14 @@
 
         /* Desain Tombol Rekap Bertema Emas PUPR */
         .btn-recap {
-            background: #f5b016; /* Kuning Emas PUPR */
-            color: #11223f; /* Tulisan Biru Gelap agar terbaca jelas */
+            background: #f5b016;
+            /* Kuning Emas PUPR */
+            color: #11223f;
+            /* Tulisan Biru Gelap agar terbaca jelas */
             padding: 10px 20px;
             border-radius: 6px;
-            text-decoration: none; /* Menghilangkan garis bawah link */
+            text-decoration: none;
+            /* Menghilangkan garis bawah link */
             font-weight: 700;
             font-size: 13px;
             display: flex;
@@ -90,7 +100,8 @@
 
         .btn-recap:hover {
             background: transparent;
-            color: #f5b016; /* Efek outline emas saat dihover */
+            color: #f5b016;
+            /* Efek outline emas saat dihover */
             transform: translateY(-1px);
             box-shadow: 0 6px 15px rgba(245, 176, 22, 0.2);
         }
@@ -104,7 +115,7 @@
             align-items: center;
             justify-content: center;
             padding: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             flex-shrink: 0;
         }
 
@@ -124,7 +135,8 @@
         .header-content p {
             font-size: 13px;
             opacity: 0.9;
-            color: #f5b016; /* Subtitle berwarna emas */
+            color: #f5b016;
+            /* Subtitle berwarna emas */
             font-weight: 600;
         }
 
@@ -140,7 +152,8 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #1d355e; /* Label berwarna navy */
+            color: #1d355e;
+            /* Label berwarna navy */
             font-size: 14px;
         }
 
@@ -238,7 +251,8 @@
 
         button[type="submit"]:hover {
             background: #11223f;
-            border-color: #f5b016; /* Border berubah emas saat dihover */
+            border-color: #f5b016;
+            /* Border berubah emas saat dihover */
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(29, 53, 94, 0.2);
         }
@@ -320,8 +334,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .help-text {
@@ -331,20 +350,20 @@
         }
 
         /* Area Unggah Berkas Bertema Navy & Emas */
-.upload-area {
-    border: 2px dashed #cbd5e1;
-    border-radius: 8px;
-    padding: 30px 20px;
-    text-align: center;
-    cursor: pointer;
-    background: #f8fafc;
-    transition: all 0.3s ease;
-}
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
 
-.upload-area:hover {
-    border-color: #1d355e;
-    background: rgba(29, 53, 94, 0.03);
-}
+        .upload-area:hover {
+            border-color: #1d355e;
+            background: rgba(29, 53, 94, 0.03);
+        }
 
         .upload-area.dragover {
             border-color: #f5b016;
@@ -352,9 +371,22 @@
             transform: scale(1.01);
         }
 
-        .upload-icon { font-size: 32px; margin-bottom: 8px; }
-        .upload-text { font-size: 14px; font-weight: 600; color: #1d355e; margin-bottom: 4px; }
-        .upload-hint { font-size: 12px; color: #64748b; }
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d355e;
+            margin-bottom: 4px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #64748b;
+        }
 
         /* File Preview */
         .file-preview {
@@ -368,7 +400,9 @@
             margin-top: 8px;
         }
 
-        .file-icon { font-size: 28px; }
+        .file-icon {
+            font-size: 28px;
+        }
 
         .file-info {
             flex: 1;
@@ -405,7 +439,9 @@
             transition: background 0.2s;
         }
 
-        .file-remove:hover { background: #c0392b; }
+        .file-remove:hover {
+            background: #c0392b;
+        }
 
         @media (max-width: 768px) {
             .header {
@@ -431,55 +467,74 @@
         }
 
 
-/* Tombol OCR Baru: Navy & Gold Style */
-.btn-ocr {
-    background: white;
-    color: #1d355e;
-    border: 2px solid #1d355e;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    margin-top: 12px;
-}
+        /* Tombol OCR Baru: Navy & Gold Style */
+        .btn-ocr {
+            background: white;
+            color: #1d355e;
+            border: 2px solid #1d355e;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
 
-.btn-ocr:hover {
-    background: #1d355e;
-    color: white;
-}
+        .btn-ocr:hover {
+            background: #1d355e;
+            color: white;
+        }
 
-.btn-ocr:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+        .btn-ocr:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
 
         /* Box Status OCR yang Dinamis */
-#ocrStatusBox {
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    display: none; /* Sembunyi jika tidak aktif */
-    border: 1px solid transparent;
-}
+        #ocrStatusBox {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            /* Sembunyi jika tidak aktif */
+            border: 1px solid transparent;
+        }
 
-.ocr-processing { background: #fff8e1; color: #8a6d3b; border-color: #f5c542; }
-.ocr-success { background: #e8f5e9; color: #1b5e20; border-color: #4caf50; }
-.ocr-error { background: #ffebee; color: #b71c1c; border-color: #ef5350; }
+        .ocr-processing {
+            background: #fff8e1;
+            color: #8a6d3b;
+            border-color: #f5c542;
+        }
 
-        
+        .ocr-success {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-color: #4caf50;
+        }
+
+        .ocr-error {
+            background: #ffebee;
+            color: #b71c1c;
+            border-color: #ef5350;
+        }
+
+
         /* --- MODAL POP-UP LOADING, SUCCESS, ERROR & AI TRANSCRIPT --- */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(17, 34, 63, 0.85); /* Navy transparan PUPR */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 34, 63, 0.85);
+            /* Navy transparan PUPR */
             backdrop-filter: blur(5px);
             z-index: 9999;
             display: flex;
@@ -502,7 +557,7 @@
             padding: 40px 30px;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             transform: translateY(20px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -514,9 +569,11 @@
         /* Loading State */
         .modal-spinner {
             border: 5px solid #f1f5f9;
-            border-top: 5px solid #f5b016; /* Emas PUPR */
+            border-top: 5px solid #f5b016;
+            /* Emas PUPR */
             border-radius: 50%;
-            width: 60px; height: 60px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
@@ -553,7 +610,9 @@
             transition: background 0.3s ease;
         }
 
-        .btn-open-link:hover { background: #219653; }
+        .btn-open-link:hover {
+            background: #219653;
+        }
 
         .btn-close-modal {
             background: #f1f5f9;
@@ -568,29 +627,35 @@
             transition: background 0.3s ease;
         }
 
-        .btn-close-modal:hover { background: #e2e8f0; }
+        .btn-close-modal:hover {
+            background: #e2e8f0;
+        }
 
         @keyframes spin {
-    to { transform: rotate(360deg); }
-}
-.spinner {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-}
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
     </style>
 </head>
+
 <body>
-<!-- MODAL POP-UP (Loading, Success, Error & AI Transcript) -->
+    <!-- MODAL POP-UP (Loading, Success, Error & AI Transcript) -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-box">
-            
+
             <!-- Tampilan Saat Loading -->
             <div id="modalLoading" style="display: none;">
                 <div class="modal-spinner"></div>
@@ -600,7 +665,8 @@
 
             <!-- Tampilan POP-UP INPUT/UPLOAD TRANSKRIP AI -->
             <div id="modalAITranscript" style="display: none; text-align: left;">
-                <h3 style="color: #1d355e; margin-bottom: 10px; font-weight: 700; font-size: 16px;">⚡ Kirim Menggunakan Asisten AI</h3>
+                <h3 style="color: #1d355e; margin-bottom: 10px; font-weight: 700; font-size: 16px;">⚡ Kirim Menggunakan
+                    Asisten AI</h3>
                 <p style="font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">
                     Unggah berkas atau tempelkan teks transkrip rapat (Zoom/Tactiq/Teams) Anda di bawah ini.
                 </p>
@@ -608,27 +674,30 @@
                 <!-- AREA UNGGAH FILE TRANSKRIP -->
                 <div class="form-group">
                     <label style="font-size: 13px;">Pilihan 1: Unggah Berkas Transkrip (.txt, .docx, .pdf, .csv)</label>
-                    <div class="upload-area" id="aiUploadArea" style="padding: 15px 10px; background: #f8fafc;" onclick="document.getElementById('aiTranscriptFile').click()">
+                    <div class="upload-area" id="aiUploadArea" style="padding: 15px 10px; background: #f8fafc;"
+                        onclick="document.getElementById('aiTranscriptFile').click()">
                         <div style="font-size: 20px; margin-bottom: 4px;">📂</div>
-                        <div style="font-size: 12px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini</div>
+                        <div style="font-size: 12px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini
+                        </div>
                     </div>
-                    <input 
-                        type="file" 
-                        id="aiTranscriptFile" 
-                        accept=".txt,.csv,.docx,.pdf"
-                        style="display:none"
-                        onchange="bacaFileTranskrip(this.files[0])"
-                    >
-                    <div id="aiFileFeedback" style="display: none; font-size: 12px; color: #27ae60; margin-top: 5px; font-weight: 600;"></div>
+                    <input type="file" id="aiTranscriptFile" accept=".txt,.csv,.docx,.pdf" style="display:none"
+                        onchange="bacaFileTranskrip(this.files[0])">
+                    <div id="aiFileFeedback"
+                        style="display: none; font-size: 12px; color: #27ae60; margin-top: 5px; font-weight: 600;">
+                    </div>
                 </div>
 
                 <!-- INPUT COPAST MANUAL -->
                 <div class="form-group" style="margin-top: 15px;">
-                    <label for="transkripRapat" style="font-size: 13px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar Manual</label>
-                    <textarea id="transkripRapat" placeholder="Paste transkrip rapat Anda di sini..." style="min-height: 120px; font-size: 12px;"></textarea>
+                    <label for="transkripRapat" style="font-size: 13px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar
+                        Manual</label>
+                    <textarea id="transkripRapat" placeholder="Paste transkrip rapat Anda di sini..."
+                        style="min-height: 120px; font-size: 12px;"></textarea>
                 </div>
 
-                <button type="button" class="btn-open-link" style="background:#1d355e; margin-top:10px; text-align: center;" onclick="submitRapatDenganAI()">⚡ Mulai Proses & Kirim</button>
+                <button type="button" class="btn-open-link"
+                    style="background:#1d355e; margin-top:10px; text-align: center;" onclick="submitRapatDenganAI()">⚡
+                    Mulai Proses & Kirim</button>
                 <button type="button" class="btn-close-modal" onclick="closeModal()">Batal</button>
             </div>
 
@@ -636,16 +705,25 @@
             <div id="modalSuccess" style="display: none;">
                 <span class="modal-icon-success">✅</span>
                 <div class="modal-loading-text">Notulensi Berhasil Dibuat!</div>
-                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di dalam file Word.</div>
-                
+                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di
+                    dalam file Word.</div>
+
                 <!-- KOTAK SALIN WHATSAPP -->
-                <div id="waShareContainer" style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <span style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN UNTUK SHARE WHATSAPP:</span>
-                    <div id="waTextTemplate" style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;"></div>
-                    <button type="button" id="btnCopyWA" class="btn-open-link" style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks WA</button>
+                <div id="waShareContainer"
+                    style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <span
+                        style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN
+                        UNTUK SHARE WHATSAPP:</span>
+                    <div id="waTextTemplate"
+                        style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;">
+                    </div>
+                    <button type="button" id="btnCopyWA" class="btn-open-link"
+                        style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks
+                        WA</button>
                 </div>
 
-                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄 Buka File Notulensi (Word)</a>
+                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄
+                    Buka File Notulensi (Word)</a>
                 <button type="button" class="btn-close-modal" onclick="closeModal()">Selesai</button>
             </div>
 
@@ -689,42 +767,44 @@
             <!-- Form -->
             <form id="activityForm">
 
-                 <!-- Surat Undangan Section -->
-<div class="form-group">
-    <label for="suratUndangan">
-        Surat Undangan <span class="required">*</span>
-    </label>
-    
-    <!-- Area Klik Upload -->
-    <div class="upload-area" id="uploadArea" onclick="document.getElementById('suratUndangan').click()">
-        <div style="font-size: 32px; margin-bottom: 8px;">📎</div>
-        <div style="font-size: 14px; font-weight: 600; color: #1d355e;">Klik untuk upload surat undangan</div>
-        <div style="font-size: 12px; color: #64748b;">PDF atau JPG • Maksimal 5MB</div>
-    </div>
-    
-    <input type="file" id="suratUndangan" accept=".pdf,.jpg,.jpeg" style="display:none">
+                <!-- Surat Undangan Section -->
+                <div class="form-group">
+                    <label for="suratUndangan">
+                        Surat Undangan <span class="required">*</span>
+                    </label>
 
-    <!-- Preview File Setelah Upload (Tersembunyi Awalnya) -->
-    <div id="filePreview" class="file-preview" style="display:none">
-        <span id="fileIcon" style="font-size: 28px;">📄</span>
-        <div class="file-info" style="flex:1; margin-left: 10px;">
-            <div id="fileName" style="font-size: 13px; font-weight: 600; color: #1d355e;"></div>
-            <div id="fileSize" style="font-size: 11px; color: #64748b;"></div>
-        </div>
-        <button type="button" class="file-remove" onclick="removeFile()" style="background:#e74c3c; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer;">✕</button>
-    </div>
+                    <!-- Area Klik Upload -->
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('suratUndangan').click()">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📎</div>
+                        <div style="font-size: 14px; font-weight: 600; color: #1d355e;">Klik untuk upload surat undangan
+                        </div>
+                        <div style="font-size: 12px; color: #64748b;">PDF, JPG Atau PNG • Maksimal 5MB</div>
+                    </div>
 
-    <!-- Tombol Baca Surat (Hanya muncul jika file ada) -->
-    <div id="ocrActionArea" style="display:none;">
-        <button type="button" id="btnOCR" class="btn-ocr" onclick="runOCR()">
-            <span>🔍</span> Baca Surat Otomatis (AI)
-        </button>
-    </div>
+                    <input type="file" id="suratUndangan" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
 
-    <!-- Container Status OCR -->
-    <div id="ocrStatusBox"></div>
-    <div id="fileError" class="help-text" style="color:#e74c3c; display:none"></div>
-</div>
+                    <!-- Preview File Setelah Upload (Tersembunyi Awalnya) -->
+                    <div id="filePreview" class="file-preview" style="display:none">
+                        <span id="fileIcon" style="font-size: 28px;">📄</span>
+                        <div class="file-info" style="flex:1; margin-left: 10px;">
+                            <div id="fileName" style="font-size: 13px; font-weight: 600; color: #1d355e;"></div>
+                            <div id="fileSize" style="font-size: 11px; color: #64748b;"></div>
+                        </div>
+                        <button type="button" class="file-remove" onclick="removeFile()"
+                            style="background:#e74c3c; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer;">✕</button>
+                    </div>
+
+                    <!-- Tombol Baca Surat (Hanya muncul jika file ada) -->
+                    <div id="ocrActionArea" style="display:none;">
+                        <button type="button" id="btnOCR" class="btn-ocr" onclick="runOCR()">
+                            <span>🔍</span> Baca Surat Otomatis (AI)
+                        </button>
+                    </div>
+
+                    <!-- Container Status OCR -->
+                    <div id="ocrStatusBox"></div>
+                    <div id="fileError" class="help-text" style="color:#e74c3c; display:none"></div>
+                </div>
 
                 <!-- Provinsi -->
                 <div class="form-group">
@@ -751,16 +831,15 @@
                     <!-- Hidden: only shows when + Tambah is clicked -->
                     <div id="newKegiatanRow" style="display:none; margin-top:10px;">
                         <div class="input-with-add">
-                            <input
-                                type="text"
-                                id="newKegiatanInput"
-                                placeholder="Ketik nama kegiatan baru..."
-                                autocomplete="off"
-                            >
+                            <input type="text" id="newKegiatanInput" placeholder="Ketik nama kegiatan baru..."
+                                autocomplete="off">
                             <button type="button" id="btnConfirmKegiatan" class="btn-add">✓ Simpan</button>
-                            <button type="button" id="btnCancelKegiatan" class="btn-cancel" style="padding:10px 14px;">✕</button>
+                            <button type="button" id="btnCancelKegiatan" class="btn-cancel"
+                                style="padding:10px 14px;">✕</button>
                         </div>
-						<div id="aiWarningText" style="display:none; color:#d68010; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4;"></div>
+                        <div id="aiWarningText"
+                            style="display:none; color:#d68010; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4;">
+                        </div>
                     </div>
                     <div class="help-text">Pilih dari daftar atau klik "+ Tambah" untuk kegiatan baru</div>
                 </div>
@@ -770,30 +849,21 @@
                     <label for="judulRapat">
                         Judul Rapat <span class="required">*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="judulRapat" 
-                        name="judulRapat" 
-                        placeholder="Masukkan judul rapat (maksimal 120 karakter)"
-                        maxlength="120"
-                        required
-                    >
+                    <input type="text" id="judulRapat" name="judulRapat"
+                        placeholder="Masukkan judul rapat (maksimal 120 karakter)" maxlength="120" required>
                 </div>
-				
-				<div id="meetingWarningText" style="display:none; color:#e74c3c; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4; background:#fee2e2; padding:8px 12px; border-radius:6px; border:1px solid #fca5a5;"></div>
-				
+
+                <div id="meetingWarningText"
+                    style="display:none; color:#e74c3c; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4; background:#fee2e2; padding:8px 12px; border-radius:6px; border:1px solid #fca5a5;">
+                </div>
+
                 <!-- Instansi Pengundang -->
                 <div class="form-group">
                     <label for="instansiPengundang">
                         Instansi Pengundang <span class="required">*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="instansiPengundang" 
-                        name="instansiPengundang" 
-                        placeholder="Masukkan nama instansi pengundang"
-                        required
-                    >
+                    <input type="text" id="instansiPengundang" name="instansiPengundang"
+                        placeholder="Masukkan nama instansi pengundang" required>
                 </div>
 
                 <!-- Tanggal Rapat -->
@@ -801,16 +871,11 @@
                     <label for="tanggalRapat">
                         Tanggal Rapat <span class="required">*</span>
                     </label>
-                    <input 
-                        type="date" 
-                        id="tanggalRapat" 
-                        name="tanggalRapat"
-                        required
-                    >
+                    <input type="date" id="tanggalRapat" name="tanggalRapat" required>
                     <div class="help-text">Pilih tanggal dari kalender</div>
                 </div>
 
-				<!-- Input Nama Notulis dengan Dropdown & Tambah Opsi -->
+                <!-- Input Nama Notulis dengan Dropdown & Tambah Opsi -->
                 <div class="form-group">
                     <label for="namaNotulis">
                         Nama Notulis / Pengisi Form <span class="required">*</span>
@@ -824,24 +889,23 @@
                     <!-- Hidden: hanya muncul saat + Tambah di klik -->
                     <div id="newNotulisRow" style="display:none; margin-top:10px;">
                         <div class="input-with-add">
-                            <input
-                                type="text"
-                                id="newNotulisInput"
-                                placeholder="Ketik nama notulis baru..."
-                                autocomplete="off"
-                            >
+                            <input type="text" id="newNotulisInput" placeholder="Ketik nama notulis baru..."
+                                autocomplete="off">
                             <button type="button" id="btnConfirmNotulis" class="btn-add">✓ Simpan</button>
-                            <button type="button" id="btnCancelNotulis" class="btn-cancel" style="padding:10px 14px;">✕</button>
+                            <button type="button" id="btnCancelNotulis" class="btn-cancel"
+                                style="padding:10px 14px;">✕</button>
                         </div>
                     </div>
-                    <div class="help-text">Pilih nama Anda dari daftar, atau klik "+ Tambah" jika nama Anda belum terdaftar</div>
+                    <div class="help-text">Pilih nama Anda dari daftar, atau klik "+ Tambah" jika nama Anda belum
+                        terdaftar</div>
                 </div>
 
                 <!-- Buttons -->
                 <div class="button-group">
                     <button type="submit">Kirim Manual</button>
                     <!-- TOMBOL PILOTING MODEL ASISTEN AI -->
-                    <button type="button" class="btn-reset" style="background: #27ae60; color: white;" onclick="openAITranscriptModal()">⚡ Kirim via AI</button>
+                    <button type="button" class="btn-reset" style="background: #27ae60; color: white;"
+                        onclick="openAITranscriptModal()">⚡ Kirim via AI</button>
                     <button type="button" class="btn-reset" onclick="resetSeluruhForm()">Bersihkan</button>
                     <button type="button" class="btn-cancel" onclick="window.location.reload()">Batal</button>
                 </div>
@@ -856,10 +920,10 @@
         // ── CONFIGURATION ──
         const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
         const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e2cc75598f1f4d419248737790517523/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=i4q61lejZS-RWxirrlcPmqcv-3zqzpbk4AYlJh4zf4A';
-        
+
         // KUNCI KEY GEMINI FREE API (Menggunakan Gemini 3.5 Flash)
         let GEMINI_API_KEY = '';
-        let GEMINI_API_KEYS = [];  
+        let GEMINI_API_KEYS = [];
 
         // State — diisi dari database Power Automate / Excel
         const state = {
@@ -878,26 +942,26 @@
                 "Dian Puspitasari",
                 "M. Naufal Ammar N."
             ],
-	        systemPrompt: '',
+            systemPrompt: '',
             meetingId: '',        // ← tambah ini
             meetingPasscode: ''   // ← tambah ini
         };
 
 
-// --- MEMUAT INSTRUKSI PROMPT SECARA DINAMIS DARI FILE LUAR ---
-async function loadSystemPrompt() {
-    try {
-        const response = await fetch('prompt_notulensi.txt');
-        if (response.ok) {
-            // Mengubah semua teks literal \n dari file txt menjadi karakter enter asli
-            const rawText = await response.text();
-            state.systemPrompt = rawText.replace(/\\n/g, '\n'); 
-            
-            console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
-        } else {
-            throw new Error("Respons jaringan tidak OK saat membaca prompt.");
-        }
-    } catch (err) {
+        // --- MEMUAT INSTRUKSI PROMPT SECARA DINAMIS DARI FILE LUAR ---
+        async function loadSystemPrompt() {
+            try {
+                const response = await fetch('prompt_notulensi.txt');
+                if (response.ok) {
+                    // Mengubah semua teks literal \n dari file txt menjadi karakter enter asli
+                    const rawText = await response.text();
+                    state.systemPrompt = rawText.replace(/\\n/g, '\n');
+
+                    console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
+                } else {
+                    throw new Error("Respons jaringan tidak OK saat membaca prompt.");
+                }
+            } catch (err) {
                 console.warn("⚠️ Gagal memuat prompt luar, menggunakan draf cadangan:", err.message);
                 // Draf cadangan jika file txt eksternal gagal di-load
                 state.systemPrompt = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan yang Profesional...";
@@ -954,19 +1018,19 @@ async function loadSystemPrompt() {
             try {
                 if (ext === 'txt' || ext === 'csv') {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         textarea.value = e.target.result;
                         feedback.style.color = "#27ae60";
                         feedback.textContent = `✓ Berhasil membaca ${file.name} (${e.target.result.length} karakter)`;
                     };
                     reader.readAsText(file);
-                } 
+                }
                 else if (ext === 'docx') {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const arrayBuffer = e.target.result;
                         mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-                            .then(function(result) {
+                            .then(function (result) {
                                 textarea.value = result.value;
                                 feedback.style.color = "#27ae60";
                                 feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${result.value.length} karakter)`;
@@ -976,22 +1040,22 @@ async function loadSystemPrompt() {
                             });
                     };
                     reader.readAsArrayBuffer(file);
-                } 
+                }
                 else if (ext === 'pdf') {
                     const reader = new FileReader();
-                    reader.onload = async function(e) {
+                    reader.onload = async function (e) {
                         try {
                             const typedarray = new Uint8Array(e.target.result);
                             const pdf = await pdfjsLib.getDocument(typedarray).promise;
                             let extractedText = "";
-                            
+
                             for (let i = 1; i <= pdf.numPages; i++) {
                                 const page = await pdf.getPage(i);
                                 const textContent = await page.getTextContent();
                                 const pageText = textContent.items.map(item => item.str).join(" ");
                                 extractedText += pageText + "\n";
                             }
-                            
+
                             textarea.value = extractedText;
                             feedback.style.color = "#27ae60";
                             feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${extractedText.length} karakter)`;
@@ -1001,7 +1065,7 @@ async function loadSystemPrompt() {
                         }
                     };
                     reader.readAsArrayBuffer(file);
-                } 
+                }
                 else {
                     throw new Error("Format file tidak didukung. Harap pilih file .txt, .csv, .docx, atau .pdf.");
                 }
@@ -1041,25 +1105,31 @@ async function loadSystemPrompt() {
             }
 
             if (GEMINI_API_KEYS.length === 0) {
-    alert("API Key Gemini belum dimuat. Silakan refresh halaman dan coba lagi.");
-    return;
-}
+                alert("API Key Gemini belum dimuat. Silakan refresh halaman dan coba lagi.");
+                return;
+            }
 
             document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalLoading').style.display = 'block';
             document.getElementById('loadingDynamicText').textContent = "Asisten AI sedang menganalisis transkrip...";
 
             try {
-                // 1. HIT KE GOOGLE GEMINI API (Menggunakan variabel dinamis state.systemPrompt)
-                // 1. HIT KE GOOGLE GEMINI API (dengan key & model fallback otomatis)
-const resData = await geminiRequest({
-    contents: [{
-        parts: [{ text: state.systemPrompt + "\n" + transkrip }]
-    }]
-});
-                
+                // 🔥 TAMBAHKAN generationConfig dengan temperature 🔥
+                const payload = {
+                    contents: [{
+                        parts: [{ text: state.systemPrompt + "\n" + transkrip }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.2,      // Nilai rendah untuk output JSON yang konsisten
+                        // topP: 0.95,         // (Opsional) Bisa ditambahkan sesuai kebutuhan
+                        // topK: 40,           // (Opsional)
+                        // maxOutputTokens: 8192, // (Opsional) Sesuaikan dengan panjang output
+                    }
+                };
+                const resData = await geminiRequest(payload);
+
                 let rawText = resData.candidates[0].content.parts[0].text;
-                
+
                 // SANITISASI JSON SEBELUM PARSING (Menghilangkan blockwrap & backslash nakal)
                 let cleanText = rawText.replace(/```json|```/g, '').trim();
 
@@ -1104,10 +1174,10 @@ const resData = await geminiRequest({
                     instansiPengundang: document.getElementById('instansiPengundang').value,
                     tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
                     namaNotulis: document.getElementById('namaNotulis').value.trim(),
-                    
-		    // --- SELIPKAN BARIS BARU INI ---
+
+                    // --- SELIPKAN BARIS BARU INI ---
                     transkripTeks: transkrip,
-		    hasilAiJSON: cleanText,
+                    hasilAiJSON: cleanText,
 
 
                     // --- MENGGUNAKAN NAMA VARIABEL BARU (ARRAY) ---
@@ -1126,7 +1196,7 @@ const resData = await geminiRequest({
 
                 const responseData = await submitToFlow(formData);
                 const documentLink = responseData.linkBerkas || '';
-                
+
                 showModalSuccess(documentLink);
                 resetSeluruhForm();
 
@@ -1171,27 +1241,27 @@ const resData = await geminiRequest({
                 }
 
                 // --- AMBIL SEMUA API KEY KE DALAM POOL ---
-GEMINI_API_KEYS = [];
+                GEMINI_API_KEYS = [];
 
-const geminiKeyRaw = rawData.geminiKey || [];
-const keyArray = Array.isArray(geminiKeyRaw) ? geminiKeyRaw : [geminiKeyRaw];
+                const geminiKeyRaw = rawData.geminiKey || [];
+                const keyArray = Array.isArray(geminiKeyRaw) ? geminiKeyRaw : [geminiKeyRaw];
 
-keyArray.forEach(row => {
-    const nama = row.NamaSetting || row.namaSetting || row.namasetting || '';
-    const nilai = row.Nilai || row.nilai || '';
-    
-    if (nama.toLowerCase().includes('geminiapi') && nilai.toString().trim()) {
-        GEMINI_API_KEYS.push(nilai.toString().trim());
-        console.log(`🔑 Key dimuat: ${nama}`);
-    }
-});
+                keyArray.forEach(row => {
+                    const nama = row.NamaSetting || row.namaSetting || row.namasetting || '';
+                    const nilai = row.Nilai || row.nilai || '';
 
-GEMINI_API_KEY = GEMINI_API_KEYS[0] || '';
-console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat dari Excel.`);
+                    if (nama.toLowerCase().includes('geminiapi') && nilai.toString().trim()) {
+                        GEMINI_API_KEYS.push(nilai.toString().trim());
+                        console.log(`🔑 Key dimuat: ${nama}`);
+                    }
+                });
+
+                GEMINI_API_KEY = GEMINI_API_KEYS[0] || '';
+                console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat dari Excel.`);
 
                 const rekapDataRaw = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];
                 state.allMeetings = rekapDataRaw;
-					
+
                 // 1. Populate Dropdown Provinsi
                 provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
                 const provinsiSet = new Set();
@@ -1217,10 +1287,10 @@ console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat dari Excel.`
 
                 rekapDataRaw.forEach(row => {
                     const rawProv = dapatkanNilaiKolom(row, ['Provinsi', 'provinsi']);
-                    const rawKeg  = dapatkanNilaiKolom(row, ['Nama Kegiatan', 'Nama_x0020_Kegiatan', 'NamaKegiatan', 'kegiatan']);
+                    const rawKeg = dapatkanNilaiKolom(row, ['Nama Kegiatan', 'Nama_x0020_Kegiatan', 'NamaKegiatan', 'kegiatan']);
 
                     const prov = rawProv ? rawProv.toString().trim() : null;
-                    const keg  = rawKeg ? rawKeg.toString().trim() : null;
+                    const keg = rawKeg ? rawKeg.toString().trim() : null;
 
                     if (prov && keg) {
                         if (!state.kegiatanByProvinsi[prov]) {
@@ -1246,54 +1316,54 @@ console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat dari Excel.`
         }
 
 
- // MODEL FALLBACK: Jika model utama (gemini-3.5-flash) mengalami limit atau gangguan, coba model berikut secara berurutan
+        // MODEL FALLBACK: Jika model utama (gemini-3.5-flash) mengalami limit atau gangguan, coba model berikut secara berurutan
 
 
         const MODELS_FALLBACK = [
-        'gemini-3.5-flash',
-        'gemini-2.5-flash',
-        'gemini-3.1-flash-lite'
+            'gemini-3.5-flash',
+            'gemini-2.5-flash',
+            'gemini-3.1-flash-lite'
         ];
 
-async function geminiRequest(payload, models = MODELS_FALLBACK) {
-    for (const model of models) {
-        for (const apiKey of GEMINI_API_KEYS) {
-            let response;
-            try {
-                response = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
+        async function geminiRequest(payload, models = MODELS_FALLBACK) {
+            for (const model of models) {
+                for (const apiKey of GEMINI_API_KEYS) {
+                    let response;
+                    try {
+                        response = await fetch(
+                            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload),
+                            }
+                        );
+                    } catch (networkErr) {
+                        console.warn(`⚠️ Network error: ${networkErr.message}, skip...`);
+                        continue; // skip ke key berikutnya
                     }
-                );
-            } catch (networkErr) {
-                console.warn(`⚠️ Network error: ${networkErr.message}, skip...`);
-                continue; // skip ke key berikutnya
+
+                    // Cek rate limit / server busy
+                    if (response.status === 429 || response.status === 503) {
+                        console.warn(`⚠️ key ...${apiKey.slice(-6)} + ${model} → ${response.status}, skip...`);
+                        continue; // skip ke key berikutnya, TIDAK throw
+                    }
+
+                    // Error lain yang tidak bisa di-recover
+                    if (!response.ok) {
+                        const errJson = await response.json().catch(() => ({}));
+                        throw new Error(errJson.error?.message || `HTTP ${response.status}`);
+                    }
+
+                    // Sukses
+                    const result = await response.json();
+                    console.log(`✅ Berhasil: model=${model}, key=...${apiKey.slice(-6)}`);
+                    return result; // langsung return, stop semua loop
+                }
             }
 
-            // Cek rate limit / server busy
-            if (response.status === 429 || response.status === 503) {
-                console.warn(`⚠️ key ...${apiKey.slice(-6)} + ${model} → ${response.status}, skip...`);
-                continue; // skip ke key berikutnya, TIDAK throw
-            }
-
-            // Error lain yang tidak bisa di-recover
-            if (!response.ok) {
-                const errJson = await response.json().catch(() => ({}));
-                throw new Error(errJson.error?.message || `HTTP ${response.status}`);
-            }
-
-            // Sukses
-            const result = await response.json();
-            console.log(`✅ Berhasil: model=${model}, key=...${apiKey.slice(-6)}`);
-            return result; // langsung return, stop semua loop
+            throw new Error('Semua API key dan model tidak tersedia. Coba beberapa saat lagi.');
         }
-    }
-
-    throw new Error('Semua API key dan model tidak tersedia. Coba beberapa saat lagi.');
-}
 
         // Fallback Data offline jika flow tidak dapat dijangkau
         function populateFallbackData() {
@@ -1328,7 +1398,7 @@ async function geminiRequest(payload, models = MODELS_FALLBACK) {
             });
         }
 
-		// ── FUNGSI OTOMATIS POPULATE NAMA NOTULIS DARI STATE ──
+        // ── FUNGSI OTOMATIS POPULATE NAMA NOTULIS DARI STATE ──
         function populateNotulisDropdown() {
             const select = document.getElementById('namaNotulis');
             if (!select) return;
@@ -1365,9 +1435,9 @@ async function geminiRequest(payload, models = MODELS_FALLBACK) {
         // Handle Provinsi selection change
         provinsiSelect.addEventListener('change', (e) => {
             state.selectedProvinsi = e.target.value;
-            namaKegiatanSelect.value = '';             
-            updateKegiatanList(state.selectedProvinsi); 
-            newKegiatanRow.style.display = 'none';      
+            namaKegiatanSelect.value = '';
+            updateKegiatanList(state.selectedProvinsi);
+            newKegiatanRow.style.display = 'none';
             newKegiatanInput.value = '';
         });
 
@@ -1407,7 +1477,7 @@ async function geminiRequest(payload, models = MODELS_FALLBACK) {
             state.kegiatanByProvinsi[state.selectedProvinsi].push(newKegiatan);
             state.kegiatanByProvinsi[state.selectedProvinsi].sort();
             updateKegiatanList(state.selectedProvinsi);
-            namaKegiatanSelect.value = newKegiatan; 
+            namaKegiatanSelect.value = newKegiatan;
 
             newKegiatanRow.style.display = 'none';
             newKegiatanInput.value = '';
@@ -1418,28 +1488,28 @@ async function geminiRequest(payload, models = MODELS_FALLBACK) {
             if (e.key === 'Enter') { e.preventDefault(); btnConfirmKegiatan.click(); }
             if (e.key === 'Escape') { btnCancelKegiatan.click(); }
         });
-        
+
         // ===============================
         // OCR STATUS UI
         // ===============================
         // 1. FUNGSI UNTUK MENAMPILKAN STATUS (Memperbaiki error 'null textContent')
-// --- 1. Perbaikan Fungsi Status (Sinkron dengan id="ocrStatusBox") ---
-function setOCRStatus(status, message) {
-    const statusBox = document.getElementById('ocrStatusBox'); // Sesuaikan dengan HTML Anda
-    
-    if (!statusBox) {
-        console.error("Elemen 'ocrStatusBox' tidak ditemukan! Pastikan di HTML ada <div id='ocrStatusBox'></div>");
-        return;
-    }
+        // --- 1. Perbaikan Fungsi Status (Sinkron dengan id="ocrStatusBox") ---
+        function setOCRStatus(status, message) {
+            const statusBox = document.getElementById('ocrStatusBox'); // Sesuaikan dengan HTML Anda
 
-    statusBox.style.display = 'block';
-    statusBox.textContent = message; // Error null akan hilang
-    
-    statusBox.className = ''; 
-    if (status === 'processing') statusBox.classList.add('ocr-processing');
-    if (status === 'success') statusBox.classList.add('ocr-success');
-    if (status === 'error') statusBox.classList.add('ocr-error');
-}
+            if (!statusBox) {
+                console.error("Elemen 'ocrStatusBox' tidak ditemukan! Pastikan di HTML ada <div id='ocrStatusBox'></div>");
+                return;
+            }
+
+            statusBox.style.display = 'block';
+            statusBox.textContent = message; // Error null akan hilang
+
+            statusBox.className = '';
+            if (status === 'processing') statusBox.classList.add('ocr-processing');
+            if (status === 'success') statusBox.classList.add('ocr-success');
+            if (status === 'error') statusBox.classList.add('ocr-error');
+        }
 
         // File upload UI handlers
         const fileInput = document.getElementById('suratUndangan');
@@ -1459,106 +1529,106 @@ function setOCRStatus(status, message) {
         });
 
         // --- FUNGSI SAAT FILE DIPILIH ---
-function handleFileSelect(file) {
-    const errorDiv = document.getElementById('fileError');
-    const fileInput = document.getElementById('suratUndangan'); // Pastikan variable ini ada
-    
-    errorDiv.style.display = 'none';
-    if (!file) return;
+        function handleFileSelect(file) {
+            const errorDiv = document.getElementById('fileError');
+            const fileInput = document.getElementById('suratUndangan'); // Pastikan variable ini ada
 
-    // 1. Validasi Format
-    const allowed = ['application/pdf', 'image/jpeg', 'image/jpg'];
-    if (!allowed.includes(file.type)) {
-        errorDiv.textContent = 'File harus berformat PDF atau JPG.';
-        errorDiv.style.display = 'block';
-        fileInput.value = '';
-        setOCRStatus('error', '❌ Format file tidak didukung.');
-        return;
-    }
+            errorDiv.style.display = 'none';
+            if (!file) return;
 
-    // 2. Validasi Ukuran (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-        errorDiv.textContent = 'Ukuran file maksimal 5MB.';
-        errorDiv.style.display = 'block';
-        fileInput.value = '';
-        setOCRStatus('error', '❌ Ukuran file melebihi 5 MB.');
-        return;
-    }
+            // 1. Validasi Format
+            const allowed = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowed.includes(file.type)) {
+                errorDiv.textContent = 'File harus berformat PDF, JPG, atau PNG.';
+                errorDiv.style.display = 'block';
+                fileInput.value = '';
+                setOCRStatus('error', '❌ Format file tidak didukung.');
+                return;
+            }
 
-    // 3. Update UI (Sembunyikan upload area, munculkan preview & tombol OCR)
-    document.getElementById('uploadArea').style.display = 'none';
-    document.getElementById('filePreview').style.display = 'flex';
-    document.getElementById('ocrActionArea').style.display = 'block'; // Munculkan tombol OCR
-    
-    // Update Detail Preview
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('fileSize').textContent = formatFileSize(file.size);
-    document.getElementById('fileIcon').textContent = file.type === 'application/pdf' ? '📄' : '🖼️';
+            // 2. Validasi Ukuran (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                errorDiv.textContent = 'Ukuran file maksimal 5MB.';
+                errorDiv.style.display = 'block';
+                fileInput.value = '';
+                setOCRStatus('error', '❌ Ukuran file melebihi 5 MB.');
+                return;
+            }
 
-    // 4. Update Status (Memberi tahu user untuk klik tombol)
-    setOCRStatus(
-        'processing',
-        '💡 Berkas berhasil diunggah. Silakan klik "Baca Surat Otomatis" untuk mengisi form.'
-    );
-}
+            // 3. Update UI (Sembunyikan upload area, munculkan preview & tombol OCR)
+            document.getElementById('uploadArea').style.display = 'none';
+            document.getElementById('filePreview').style.display = 'flex';
+            document.getElementById('ocrActionArea').style.display = 'block'; // Munculkan tombol OCR
 
-// --- FUNGSI TOMBOL OCR (Yang dijalankan saat tombol diklik) ---
-async function runOCR() {
-    const fileInput = document.getElementById('suratUndangan');
-    const file = fileInput.files[0];
-    const btn = document.getElementById('btnOCR');
+            // Update Detail Preview
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileIcon').textContent = file.type === 'application/pdf' ? '📄' : '🖼️';
 
-    if (!file) return;
+            // 4. Update Status (Memberi tahu user untuk klik tombol)
+            setOCRStatus(
+                'processing',
+                '💡 Berkas berhasil diunggah. Silakan klik "Baca Surat Otomatis" untuk mengisi form.'
+            );
+        }
 
-    const originalHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Memindai...';
-    setOCRStatus('processing', '🔍 Sedang memindai surat dengan AI...');
+        // --- FUNGSI TOMBOL OCR (Yang dijalankan saat tombol diklik) ---
+        async function runOCR() {
+            const fileInput = document.getElementById('suratUndangan');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnOCR');
 
-    try {
-        const base64Data = await toBase64(file);
-        const OCR_MODELS = [
-    'gemini-3.1-flash-lite',
-    'gemini-3.5-flash',
-    'gemini-2.5-flash'
-];
+            if (!file) return;
 
-        const result = await geminiRequest(
-            {
-                contents: [{
-                    parts: [
-                        { text: "Ekstrak informasi JSON dari surat ini: {judul: '...', instansi: '...', tanggal: 'YYYY-MM-DD', meetingId: '...', passcode: '...'}. Jika Meeting ID atau Passcode tidak ditemukan, isi dengan string kosong ''. Berikan HANYA JSON." },
-                        { inline_data: { mime_type: file.type, data: base64Data } }
-                    ]
-                }]
-            },
-            OCR_MODELS  // ← tambah ini
-        );
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Memindai...';
+            setOCRStatus('processing', '🔍 Sedang memindai surat dengan AI...');
 
-        const rawText = result.candidates[0].content.parts[0].text;
-        const cleanJSON = rawText.replace(/```json|```/g, '').trim();
-        const data = JSON.parse(cleanJSON);
+            try {
+                const base64Data = await toBase64(file);
+                const OCR_MODELS = [
+                    'gemini-3.1-flash-lite',
+                    'gemini-3.5-flash',
+                    'gemini-2.5-flash'
+                ];
 
-        document.getElementById('judulRapat').value = data.judul || "";
-        document.getElementById('instansiPengundang').value = data.instansi || "";
-        if (data.tanggal) document.getElementById('tanggalRapat').value = data.tanggal;
+                const result = await geminiRequest(
+                    {
+                        contents: [{
+                            parts: [
+                                { text: "Ekstrak informasi JSON dari surat ini: {judul: '...', instansi: '...', tanggal: 'YYYY-MM-DD', meetingId: '...', passcode: '...'}. Jika Meeting ID atau Passcode tidak ditemukan, isi dengan string kosong ''. Berikan HANYA JSON." },
+                                { inline_data: { mime_type: file.type, data: base64Data } }
+                            ]
+                        }]
+                    },
+                    OCR_MODELS  // ← tambah ini
+                );
 
-        // Simpan di state, tidak tampil di form
-state.meetingId = data.meetingId || "";
-state.meetingPasscode = data.passcode || "";
+                const rawText = result.candidates[0].content.parts[0].text;
+                const cleanJSON = rawText.replace(/```json|```/g, '').trim();
+                const data = JSON.parse(cleanJSON);
 
-        setOCRStatus('success', '✅ Data surat berhasil dibaca otomatis.');
+                document.getElementById('judulRapat').value = data.judul || "";
+                document.getElementById('instansiPengundang').value = data.instansi || "";
+                if (data.tanggal) document.getElementById('tanggalRapat').value = data.tanggal;
 
-    } catch (err) {
-        console.error("OCR Error:", err);
-        setOCRStatus('error', '❌ ' + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
-    }
-}
+                // Simpan di state, tidak tampil di form
+                state.meetingId = data.meetingId || "";
+                state.meetingPasscode = data.passcode || "";
 
-        
+                setOCRStatus('success', '✅ Data surat berhasil dibaca otomatis.');
+
+            } catch (err) {
+                console.error("OCR Error:", err);
+                setOCRStatus('error', '❌ ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+
         // Form Submit
         let loadingInterval; // Variabel untuk animasi teks loading
 
@@ -1590,7 +1660,7 @@ state.meetingPasscode = data.passcode || "";
             document.getElementById('modalLoading').style.display = 'none';
             document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalSuccess').style.display = 'block';
-            
+
             // Ambil data Judul Rapat yang diinput oleh user
             const judulRapat = document.getElementById('judulRapat').value;
             const shortLink = link || 'Link tidak tersedia';
@@ -1607,12 +1677,12 @@ state.meetingPasscode = data.passcode || "";
             }
 
             const btnCopy = document.getElementById('btnCopyWA');
-            btnCopy.onclick = function() {
+            btnCopy.onclick = function () {
                 navigator.clipboard.writeText(waText).then(() => {
                     const originalText = btnCopy.innerHTML;
                     btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
                     btnCopy.style.background = "#219653";
-                    
+
                     setTimeout(() => {
                         btnCopy.innerHTML = originalText;
                         btnCopy.style.background = "#27ae60";
@@ -1635,10 +1705,10 @@ state.meetingPasscode = data.passcode || "";
             document.getElementById('modalOverlay').classList.remove('active');
         }
 
-		// ── 1. FUNGSI PEMERIKSA KATA KUNCI INTI ──
+        // ── 1. FUNGSI PEMERIKSA KATA KUNCI INTI ──
         function dapatkanKataKunci(teks) {
             const stopWords = ["rapat", "koordinasi", "pembahasan", "dan", "atau", "di", "ke", "yang", "untuk", "dengan", "tentang", "terkait", "dalam", "pada", "oleh", "evaluasi", "monitoring"];
-            
+
             return teks.toLowerCase()
                 .replace(/[\\\/:*?"<>|.,_-]/g, ' ') // Ganti tanda baca menjadi spasi
                 .split(/\s+/)                      // Pecah kalimat menjadi kata-kata
@@ -1662,7 +1732,7 @@ state.meetingPasscode = data.passcode || "";
 
             const duplicate = state.allMeetings.find(row => {
                 const rowTgl = dapatkanNilaiKolom(row, ['Tanggal Rapat', 'Tanggal_x0020_Rapat', 'tanggalRapat']) || '';
-                
+
                 if (rowTgl !== inputTanggal) return false;
 
                 const rowJudul = dapatkanNilaiKolom(row, ['Judul Rapat', 'Judul_x0020_Rapat', 'judulRapat']) || '';
@@ -1712,7 +1782,7 @@ state.meetingPasscode = data.passcode || "";
 
                 warningDiv.innerHTML = warningHtml;
                 warningDiv.style.display = 'block';
-                return true; 
+                return true;
             }
             return false;
         }
@@ -1724,7 +1794,7 @@ state.meetingPasscode = data.passcode || "";
         // --- FORM SUBMIT MANUAL ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-			
+
             const isDuplicate = cekRapatGanda();
             if (isDuplicate) {
                 const yakin = confirm("⚠️ PERINGATAN: Rapat ini terdeteksi sudah diinput sebelumnya oleh rekan Anda.\n\nApakah Anda yakin ingin tetap mengirimkannya?");
@@ -1738,7 +1808,7 @@ state.meetingPasscode = data.passcode || "";
             if (!document.getElementById('namaNotulis').value) return showMessage('Silakan pilih Nama Notulis', 'error');
 
             const file = fileInput.files[0];
-            if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG)', 'error');
+            if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG/PNG)', 'error');
 
             try {
                 openModal();
@@ -1752,19 +1822,19 @@ state.meetingPasscode = data.passcode || "";
                     instansiPengundang: document.getElementById('instansiPengundang').value,
                     tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
                     namaNotulis: document.getElementById('namaNotulis').value.trim(),
-                    
+
                     // OTOMATIS KIRIM TEKS CONTOH TEMPLATE JIKA MANUAL (Sesuai Struktur Fisik Word)
                     tujuanRapat: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
                     grupPembukaan: [
-                        { 
-                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi', 
-                            teksPembukaan: '1. x\n2. x' 
+                        {
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi',
+                            teksPembukaan: '1. x\n2. x'
                         }
                     ],
                     grupPembahasan: [
-                        { 
-                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi', 
-                            teksPembahasan: 'a. Aaa\nb. A' 
+                        {
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi',
+                            teksPembahasan: 'a. Aaa\nb. A'
                         }
                     ],
                     grupKesimpulan: [
@@ -1806,7 +1876,7 @@ state.meetingPasscode = data.passcode || "";
                 try {
                     const errText = await response.text();
                     const errObj = JSON.parse(errText);
-                    
+
                     if (errObj && errObj.error && errObj.error.message) {
                         detailedErrorMessage = errObj.error.message;
                     } else if (errObj && errObj.message) {
@@ -1835,64 +1905,64 @@ state.meetingPasscode = data.passcode || "";
         }
 
         function resetSeluruhForm() {
-    // 1. Reset input standar (teks, tanggal, select)
-    const form = document.getElementById('activityForm');
-    form.reset();
+            // 1. Reset input standar (teks, tanggal, select)
+            const form = document.getElementById('activityForm');
+            form.reset();
 
-    // 2. Hapus file dan kembalikan tampilan Upload Area
-    // Kita panggil fungsi removeFile yang sudah kita buat sebelumnya
-    removeFile();
+            // 2. Hapus file dan kembalikan tampilan Upload Area
+            // Kita panggil fungsi removeFile yang sudah kita buat sebelumnya
+            removeFile();
 
-    // 3. Bersihkan pesan peringatan rapat ganda jika ada
-    const warningMeeting = document.getElementById('meetingWarningText');
-    if (warningMeeting) {
-        warningMeeting.style.display = 'none';
-        warningMeeting.innerHTML = '';
-    }
+            // 3. Bersihkan pesan peringatan rapat ganda jika ada
+            const warningMeeting = document.getElementById('meetingWarningText');
+            if (warningMeeting) {
+                warningMeeting.style.display = 'none';
+                warningMeeting.innerHTML = '';
+            }
 
-    // 4. Bersihkan status OCR
-    const statusBox = document.getElementById('ocrStatusBox');
-    if (statusBox) {
-        statusBox.style.display = 'none';
-        statusBox.innerHTML = '';
-        statusBox.className = '';
-    }
+            // 4. Bersihkan status OCR
+            const statusBox = document.getElementById('ocrStatusBox');
+            if (statusBox) {
+                statusBox.style.display = 'none';
+                statusBox.innerHTML = '';
+                statusBox.className = '';
+            }
 
-    // 5. Reset dropdown Nama Kegiatan (karena ini dinamis)
-    const namaKegiatanSelect = document.getElementById('namaKegiatan');
-    if (namaKegiatanSelect) {
-        namaKegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
-    }
+            // 5. Reset dropdown Nama Kegiatan (karena ini dinamis)
+            const namaKegiatanSelect = document.getElementById('namaKegiatan');
+            if (namaKegiatanSelect) {
+                namaKegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            }
 
-    // 6. Sembunyikan input "Tambah Kegiatan" jika sedang terbuka
-    const newKegiatanRow = document.getElementById('newKegiatanRow');
-    if (newKegiatanRow) {
-        newKegiatanRow.style.display = 'none';
-    }
+            // 6. Sembunyikan input "Tambah Kegiatan" jika sedang terbuka
+            const newKegiatanRow = document.getElementById('newKegiatanRow');
+            if (newKegiatanRow) {
+                newKegiatanRow.style.display = 'none';
+            }
 
-    state.meetingId = '';
-    state.meetingPasscode = '';
+            state.meetingId = '';
+            state.meetingPasscode = '';
 
 
-    console.log("Formulir dan lampiran telah dibersihkan sepenuhnya.");
-}
+            console.log("Formulir dan lampiran telah dibersihkan sepenuhnya.");
+        }
 
         // Deteksi kemiripan ketikan baru saat user mengetik nama kegiatan baru
         newKegiatanInput.addEventListener('input', (e) => {
             const val = e.target.value.trim().toLowerCase();
             const warningDiv = document.getElementById('aiWarningText');
-            
+
             if (!warningDiv) return;
             warningDiv.style.display = 'none';
-            if (val.length < 3) return; 
+            if (val.length < 3) return;
 
             const existingList = state.kegiatanByProvinsi[state.selectedProvinsi] || [];
-            
+
             const similar = existingList.find(keg => {
                 const cleanKeg = keg.toLowerCase().replace(/^\d+[\s.]*/, ''); // Buang nomor urut lama
                 const valWords = val.split(/\s+/);
                 const kegWords = cleanKeg.split(/\s+/);
-                
+
                 const commonWords = valWords.filter(w => w.length > 2 && kegWords.some(kw => kw.includes(w) || w.includes(kw)));
                 return cleanKeg.includes(val) || val.includes(cleanKeg) || commonWords.length >= 2;
             });
@@ -1902,8 +1972,8 @@ state.meetingPasscode = data.passcode || "";
                 warningDiv.style.display = 'block';
             }
         });
-		
-		// ── SELEKSI NOTULIS ──
+
+        // ── SELEKSI NOTULIS ──
         const namaNotulisSelect = document.getElementById('namaNotulis');
         const btnAddNotulis = document.getElementById('btnAddNotulis');
         const newNotulisRow = document.getElementById('newNotulisRow');
@@ -1947,12 +2017,12 @@ state.meetingPasscode = data.passcode || "";
             opt.value = newName;
             opt.textContent = newName;
             namaNotulisSelect.appendChild(opt);
-            
+
             namaNotulisSelect.value = newName;
 
             newNotulisRow.style.display = 'none';
             newNotulisInput.value = '';
-            
+
             showMessage(`Nama "${newName}" berhasil ditambahkan ke daftar pilihan`, 'success');
             setTimeout(hideMessage, 3000);
         });
@@ -1962,71 +2032,72 @@ state.meetingPasscode = data.passcode || "";
             if (e.key === 'Escape') { btnCancelNotulis.click(); }
         });
 
-        
+
         // --- FUNGSI UNTUK MENGHAPUS FILE & RESET TAMPILAN UPLOAD ---
-function removeFile() {
-    // 1. Kosongkan data file di dalam input sembunyi
-    const fileInput = document.getElementById('suratUndangan');
-    fileInput.value = '';
+        function removeFile() {
+            // 1. Kosongkan data file di dalam input sembunyi
+            const fileInput = document.getElementById('suratUndangan');
+            fileInput.value = '';
 
-    // 2. Munculkan kembali kotak upload abu-abu (dashed)
-    const uploadArea = document.getElementById('uploadArea');
-    if (uploadArea) uploadArea.style.display = 'block';
+            // 2. Munculkan kembali kotak upload abu-abu (dashed)
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) uploadArea.style.display = 'block';
 
-    // 3. Sembunyikan kotak preview file (yang warna biru)
-    const filePreview = document.getElementById('filePreview');
-    if (filePreview) filePreview.style.display = 'none';
+            // 3. Sembunyikan kotak preview file (yang warna biru)
+            const filePreview = document.getElementById('filePreview');
+            if (filePreview) filePreview.style.display = 'none';
 
-    // 4. Sembunyikan tombol "Baca Surat Otomatis"
-    const ocrActionArea = document.getElementById('ocrActionArea');
-    if (ocrActionArea) ocrActionArea.style.display = 'none';
+            // 4. Sembunyikan tombol "Baca Surat Otomatis"
+            const ocrActionArea = document.getElementById('ocrActionArea');
+            if (ocrActionArea) ocrActionArea.style.display = 'none';
 
-    // 5. Sembunyikan pesan status OCR (kuning/hijau/merah)
-    const ocrStatus = document.getElementById('ocrStatusBox');
-    if (ocrStatus) {
-        ocrStatus.style.display = 'none';
-        ocrStatus.textContent = '';
-        ocrStatus.className = '';
-    }
+            // 5. Sembunyikan pesan status OCR (kuning/hijau/merah)
+            const ocrStatus = document.getElementById('ocrStatusBox');
+            if (ocrStatus) {
+                ocrStatus.style.display = 'none';
+                ocrStatus.textContent = '';
+                ocrStatus.className = '';
+            }
 
-    // 6. Sembunyikan pesan error file jika ada
-    const fileError = document.getElementById('fileError');
-    if (fileError) fileError.style.display = 'none';
+            // 6. Sembunyikan pesan error file jika ada
+            const fileError = document.getElementById('fileError');
+            if (fileError) fileError.style.display = 'none';
 
-    // ← TAMBAH 3 BARIS INI:
-    document.getElementById('judulRapat').value = '';
-    document.getElementById('instansiPengundang').value = '';
-    document.getElementById('tanggalRapat').value = '';
+            // ← TAMBAH 3 BARIS INI:
+            document.getElementById('judulRapat').value = '';
+            document.getElementById('instansiPengundang').value = '';
+            document.getElementById('tanggalRapat').value = '';
 
-    state.meetingId = '';
-    state.meetingPasscode = '';
+            state.meetingId = '';
+            state.meetingPasscode = '';
 
-    console.log("Lampiran surat berhasil dihapus.");
-}
-
-
-// --- FUNGSI PEMBANTU: MENGUBAH FILE KE BASE64 ---
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        // Memulai pembacaan file
-        reader.readAsDataURL(file);
-        // Jika berhasil, potong header (data:image/jpeg;base64,) dan ambil datanya saja
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        // Jika gagal, berikan pesan error
-        reader.onerror = error => reject(error);
-    });
-}
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
+            console.log("Lampiran surat berhasil dihapus.");
+        }
 
 
+        // --- FUNGSI PEMBANTU: MENGUBAH FILE KE BASE64 ---
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                // Memulai pembacaan file
+                reader.readAsDataURL(file);
+                // Jika berhasil, potong header (data:image/jpeg;base64,) dan ambil datanya saja
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                // Jika gagal, berikan pesan error
+                reader.onerror = error => reject(error);
+            });
+        }
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
 
-	</script>
+
+
+    </script>
 </body>
+
 </html>

@@ -37,14 +37,29 @@
             border: 1px solid rgba(29, 53, 94, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
-            color: white;
-            padding: 20px 30px;
-            border-bottom: 5px solid #f5b016;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
+    background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
+    color: white;
+    padding: 25px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap !important; /* Mengunci posisi kiri-kanan agar TIDAK PERNAH turun ke bawah di desktop */
+    gap: 20px;
+    border-bottom: 5px solid #f5b016;
+}
+
+.page-wrapper-rekap .header {
+    padding: 16px 24px;
+    border-bottom-width: 4px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: nowrap !important; /* Mengunci logo & teks judul selalu berdampingan */
+}
+
         .logo-container {
             width: 80px !important;
             height: 80px !important;

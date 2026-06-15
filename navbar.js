@@ -1,12 +1,12 @@
-// ========== 1. INJEKSI CSS RESPONSIF SECARA OTOMATIS ==========
+// ========== 1. INJEKSI CSS DESAIN TABS CENTERED & RINGKAS ==========
 const navbarStyle = document.createElement('style');
 navbarStyle.innerHTML = `
     .navbar-container {
         background-color: #11223f;
         border-bottom: 3px solid #f5b016;
-        padding: 12px 24px;
+        padding: 8px 16px;
         display: flex;
-        justify-content: space-between;
+        justify-content: center; /* Pusatkan menu di tengah */
         align-items: center;
         position: sticky;
         top: 0;
@@ -15,22 +15,13 @@ navbarStyle.innerHTML = `
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    .navbar-brand {
-        color: #f5b016;
-        font-weight: 700;
-        font-size: 15px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        white-space: nowrap;
-    }
-
     .navbar-links {
         display: flex;
-        gap: 12px;
+        gap: 8px;
         align-items: center;
         list-style: none;
+        width: 100%;
+        justify-content: center; /* Pusatkan link di desktop */
     }
 
     .navbar-links a {
@@ -53,36 +44,29 @@ navbarStyle.innerHTML = `
         font-weight: 700;
     }
 
-    /* === RESPONSIVE MOBILE NAVBAR (SWIPEABLE) === */
+    /* === RESPONSIVE MOBILE TABS === */
     @media (max-width: 768px) {
         .navbar-container {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 10px 15px;
-            gap: 10px;
-        }
-
-        .navbar-brand {
-            font-size: 14px;
+            padding: 8px 10px;
         }
 
         .navbar-links {
-            width: 100%;
-            overflow-x: auto; /* Aktifkan geser horizontal di HP */
+            justify-content: flex-start; /* Rata kiri di HP untuk geser mulus */
+            overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 4px;
+            padding-bottom: 2px;
             display: flex;
-            gap: 8px;
-            -webkit-overflow-scrolling: touch; /* Geser halus di iOS */
+            gap: 6px;
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Sembunyikan scrollbar bawaan browser demi estetika */
+        /* Sembunyikan scrollbar bawaan */
         .navbar-links::-webkit-scrollbar {
             display: none;
         }
         .navbar-links {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .navbar-links a {
@@ -93,24 +77,25 @@ navbarStyle.innerHTML = `
 `;
 document.head.appendChild(navbarStyle);
 
-// ========== 2. DETEKSI OTOMATIS HALAMAN AKTIF (ACTIVE TAB) ==========
+// ========== 2. DETEKSI OTOMATIS HALAMAN AKTIF ==========
 const currentPath = window.location.pathname;
-const getActive = (path) => currentPath.includes(path) ? 'active' : '';
 
-// Tentukan tab aktif untuk Home/Landing Page
-const isHomeActive = currentPath.endsWith('/') || currentPath.endsWith('index.html') ? 'active' : '';
+// Mengambil hanya nama file di akhir path (misal: "rekapnotadinas.html")
+// dan mengabaikan parameter query atau hash jika ada
+const currentPage = currentPath.split('/').pop().split('?')[0].split('#')[0];
 
-// ========== 3. INJEKSI HTML NAVBAR ==========
+// Melakukan perbandingan secara presisi (exact match)
+const getActive = (path) => currentPage === path ? 'active' : '';
+const isHomeActive = currentPage === '' || currentPage === 'index.html' ? 'active' : '';
+
+// ========== 3. INJEKSI HTML NAVBAR TABS RINGKAS ==========
 document.getElementById('navbar').innerHTML = `
     <div class="navbar-container">
-        <a href="index.html" class="navbar-brand">
-            🚧 Subdit Wil 2 BPB
-        </a>
         <ul class="navbar-links">
             <li><a href="index.html" class="${isHomeActive}">🏛️ Home</a></li>
             <li><a href="notulensi.html" class="${getActive('notulensi.html')}">📋 Notulensi</a></li>
-            <li><a href="notadinas.html" class="${getActive('notadinas.html')}">📄 Nota Dinas / Surat</a></li>
-            <li><a href="rekap.html" class="${getActive('rekap.html')}">📊 Rekap Notulensi</a></li>
+            <li><a href="notadinas.html" class="${getActive('notadinas.html')}">📄 ND & Surat</a></li>
+            <li><a href="rekap.html" class="${getActive('rekap.html')}">📊 Rekap Notul</a></li>
             <li><a href="rekapnotadinas.html" class="${getActive('rekapnotadinas.html')}">📁 Rekap ND & Surat</a></li>
         </ul>
     </div>

@@ -286,7 +286,12 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 0 !important; /* Menghilangkan gap sekeliling di HP */
+            }
+
+            .container {
+                border-radius: 0 !important; /* Membuat container rata mulus ke pinggir layar */
+                border: none !important; /* Menghilangkan border pinggir */
             }
 
             .dashboard-content {
@@ -295,11 +300,10 @@
 
             .header {
                 flex-direction: column;
-                text-align: left; /* Rata kiri */
-                align-items: flex-start; /* Menjajakan logo & teks sejajar kiri */
+                text-align: left;
+                align-items: flex-start;
                 padding: 12px 16px;
             }
-
             .filter-section {
                 grid-template-columns: 1fr;
                 gap: 12px;

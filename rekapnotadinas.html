@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard Rekap Nota Dinas & Surat - Subdit Wil 2 BPB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+            color: #334155;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('logo-pu.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60vh auto;
+            opacity: 0.04;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(29, 53, 94, 0.08);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 4px solid #f5b016;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-container {
+            width: 52px;
+            height: 52px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-content h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-content p {
+            font-size: 12px;
+            color: #f5b016;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            background: #f5b016;
+            color: #11223f;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: #e09e0b;
+        }
+
+        .dashboard-content {
+            padding: 20px 24px;
+        }
+
+        /* TOGGLE FILTER BUTTON */
+        .filter-toggle-container {
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        .btn-toggle-filter {
+            background-color: #f1f5f9;
+            color: #1d355e;
+            border: 1px solid #cbd5e1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            width: auto;
+        }
+
+        .btn-toggle-filter:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* FILTER SECTION */
+        .filter-section {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1d355e;
+            margin-bottom: 6px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            background: white;
+            color: #334155;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            border-color: #1d355e;
+            box-shadow: 0 0 0 3px rgba(29, 53, 94, 0.1);
+        }
+
+        .date-range {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-nd {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-surat {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* TABLE */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+            background: white;
+        }
+
+        th {
+            background-color: #1d355e;
+            color: white;
+            padding: 14px 12px;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+            line-height: 1.4;
+        }
+
+        .document-title-link {
+            color: #1d355e;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .document-title-link:hover {
+            color: #f5b016;
+            text-decoration: underline;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #1d355e;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            min-width: 32px;
+            min-height: 32px;
+        }
+
+        .btn-action:hover {
+            opacity: 0.85;
+        }
+
+        .btn-draft {
+            background-color: #34495e !important;
+        }
+
+        .btn-final {
+            background-color: #27ae60 !important;
+        }
+
+        .btn-kelola {
+            background-color: #2980b9 !important;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+
+        /* UPLOAD FIELD IN MODAL */
+        .modal-upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .modal-upload-area:hover {
+            border-color: #1d355e;
+            background: #f1f5f9;
+        }
+
+        .modal-upload-feedback {
+            font-size: 12px;
+            color: #27ae60;
+            font-weight: 600;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* ========= RESPONSIVE MOBILE ========= */
+        @media (max-width: 1024px) {
+            .filter-section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+
+            .dashboard-content {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .filter-section {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+                margin-bottom: 16px;
+            }
+
+            .filter-toggle-container {
+                display: flex;
+                justify-content: stretch;
+                margin-bottom: 12px;
+            }
+
+            .btn-toggle-filter {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                border: 1px solid #cbd5e1;
+                margin-bottom: 16px;
+                border-radius: 12px;
+                background: white;
+                padding: 8px 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            }
+
+            td {
+                border: none;
+                border-bottom: 1px dashed #e2e8f0;
+                position: relative;
+                padding: 10px 8px 10px 38% !important;
+                text-align: right;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                min-height: 44px;
+                font-size: 13px;
+            }
+
+            td:last-child {
+                border-bottom: 0;
+                justify-content: flex-end;
+                padding-bottom: 12px !important;
+            }
+
+            td:before {
+                position: absolute;
+                left: 8px;
+                width: 35%;
+                font-weight: 700;
+                color: #64748b;
+                text-align: left;
+                content: attr(data-label);
+                font-size: 12px;
+            }
+
+            .action-cell {
+                gap: 6px;
+                justify-content: flex-end;
+                width: 100%;
+            }
+
+            .btn-action {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 34, 63, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-spinner {
+            border: 4px solid #f1f5f9;
+            border-top: 4px solid #f5b016;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d355e;
+            margin-bottom: 8px;
+        }
+
+        .modal-sub {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .btn-modal-action {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .btn-save-meta {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-delete-excel {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-delete-all {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-close-modal {
+            background: #e2e8f0;
+            color: #334155;
+            margin-bottom: 0;
+        }
+
+        /* UTILITY */
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .message.info {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+            font-size: 14px;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+    <div class="page-wrapper-rekap">
+        <div class="container">
+            <div class="header">
+                <div class="header-left">
+                    <div class="logo-container"><img src="logo-pu.png" alt="Logo PU"></div>
+                    <div class="header-content">
+                        <h1>Rekap Nota Dinas & Surat</h1>
+                        <p>Subdit Wilayah 2 - Kementerian Pekerjaan Umum</p>
+                    </div>
+                </div>
+                <a href="notadinas.html" class="btn-back">📑 Buat Baru</a>
+            </div>
+
+            <div class="dashboard-content">
+                <div id="message" class="message"></div>
+                <div id="loading" class="loading">
+                    <div class="modal-spinner"></div>
+                    <p>Memuat rekap data dari server...</p>
+                </div>
+
+                <!-- Tombol Toggle Filter -->
+                <div class="filter-toggle-container" id="filterToggleContainer">
+                    <button class="btn-toggle-filter" onclick="toggleFilter()">
+                        <span>🔍 Filter & Pencarian</span>
+                        <span id="filterIcon">▲</span>
+                    </button>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section" id="filterArea" style="display: none;">
+                    <div class="filter-group">
+                        <label>🔍 Cari</label>
+                        <input type="text" id="searchBar" placeholder="No. Surat / Perihal / Kegiatan"
+                            oninput="applyFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label>📑 Jenis Dokumen</label>
+                        <select id="filterJenis" onchange="applyFilters()">
+                            <option value="">-- Semua --</option>
+                            <option value="Nota Dinas">Nota Dinas</option>
+                            <option value="Surat Undangan">Surat Undangan</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>📍 Provinsi</label>
+                        <select id="filterProvinsi" onchange="applyFilters()">
+                            <option value="">-- Semua --</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>📅 Rentang Tanggal</label>
+                        <div class="date-range">
+                            <input type="date" id="filterTanggalDari" onchange="applyFilters()">
+                            <span style="font-size:12px; color:#94a3b8;">–</span>
+                            <input type="date" id="filterTanggalSampai" onchange="applyFilters()">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>✍️ PIC Pembuat</label>
+                        <select id="filterPIC" onchange="applyFilters()">
+                            <option value="">-- Semua --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabel -->
+                <div class="table-container" id="tableArea" style="display: none;">
+                    <table id="rekapTable">
+                        <thead>
+                            <tr>
+                                <th style="width:40px; text-align:center;">No</th>
+                                <th style="width:110px;">Jenis</th>
+                                <th style="width:100px;">Tanggal</th>
+                                <th style="width:140px;">Nomor Surat</th>
+                                <th>Provinsi</th>
+                                <th>Nama Kegiatan</th>
+                                <th>Perihal / Judul</th>
+                                <th>PIC</th>
+                                <th style="width:160px; text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL KELOLA (Upload Berkas Final & Isi Nomor Surat) -->
+        <div id="kelolaModal" class="modal-overlay">
+            <div class="modal-box">
+                <div id="kelolaMenuState">
+                    <div style="font-size:40px; margin-bottom: 8px;">⚙️</div>
+                    <div class="modal-title" id="kelolaTitle">Kelola Berkas</div>
+                    <div class="modal-sub" id="kelolaSub">Pembaruan Nomor & Unggah Berkas Final</div>
+
+                    <form id="metaForm" onsubmit="executeMetaUpdate(event)"
+                        style="text-align: left; margin-bottom: 15px;">
+                        <!-- Input Nomor Surat -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nomor Surat Resmi</label>
+                            <input type="text" id="modalNomorSurat" placeholder="Contoh: UM.0102-W2/..." required>
+                        </div>
+
+                        <!-- Upload File Final -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
+                                (PDF/Word bertanda tangan)</label>
+                            <div class="modal-upload-area" id="modalUploadArea"
+                                onclick="document.getElementById('modalFileFinal').click()">
+                                <span style="font-size: 24px; display:block; margin-bottom: 4px;">📂</span>
+                                <span style="font-size: 12px; font-weight: 600; color:#1d355e;"
+                                    id="modalUploadLabel">Pilih file final...</span>
+                            </div>
+                            <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx" style="display:none;"
+                                onchange="handleFileFinalSelect(this.files[0])">
+                            <div class="modal-upload-feedback" id="modalUploadFeedback">✓ Berkas terpilih</div>
+                        </div>
+
+                        <button type="submit" class="btn-modal-action btn-save-meta">✓ Simpan Perubahan</button>
+                    </form>
+
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 15px; margin-top: 15px;">
+                        <a href="#" target="_blank" id="btnBukaDraft" class="btn-modal-action btn-draft"
+                            style="color:white; display:none;">📝 Buka Draft Word</a>
+                        <a href="#" target="_blank" id="btnBukaFinal" class="btn-modal-action btn-final"
+                            style="color:white; display:none;">✅ Buka File Final</a>
+                    </div>
+                    <button class="btn-close-modal btn-modal-action" onclick="closeKelolaModal()">Tutup</button>
+                </div>
+
+                <div id="kelolaLoadingState" style="display: none;">
+                    <div class="modal-spinner"></div>
+                    <div class="modal-title">Menyimpan Perubahan...</div>
+                    <div class="modal-sub" id="kelolaLoadingText">Menghubungi server dan memperbarui dokumen.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DELETE -->
+        <div id="deleteModal" class="modal-overlay">
+            <div class="modal-box">
+                <div id="modalConfirmState">
+                    <div style="font-size:40px; margin-bottom: 8px;">⚠️</div>
+                    <div class="modal-title">Konfirmasi Hapus</div>
+                    <div class="modal-sub">Hapus data dokumen berikut?<br><strong id="deleteTargetText"
+                            style="color:#1d355e; display:block; margin-top:8px;"></strong></div>
+                    <button class="btn-delete-excel btn-modal-action" onclick="executeDelete('excel')">🗂️ Hapus Riwayat
+                        Excel Saja</button>
+                    <button class="btn-delete-all btn-modal-action" onclick="executeDelete('all')">🔥 Hapus Riwayat &
+                        Berkas Server</button>
+                    <button class="btn-close-modal btn-modal-action" onclick="closeDeleteModal()">Batal</button>
+                </div>
+                <div id="modalLoadingState" style="display: none;">
+                    <div class="modal-spinner"></div>
+                    <div class="modal-title">Menghapus...</div>
+                    <div class="modal-sub" id="loadingDeleteSub">Memproses penghapusan berkas...</div>
+                </div>
+                <div id="modalSuccessState" style="display: none;">
+                    <div style="font-size:40px; margin-bottom: 8px;">✅</div>
+                    <div class="modal-title">Berhasil!</div>
+                    <div class="modal-sub" id="successDeleteSub">Data dokumen telah berhasil dihapus.</div>
+                    <button class="btn-close-modal btn-modal-action" style="background:#27ae60;color:white;"
+                        onclick="closeDeleteModal()">OK</button>
+                </div>
+                <div id="modalErrorState" style="display: none;">
+                    <div style="font-size:40px; margin-bottom: 8px;">❌</div>
+                    <div class="modal-title" style="color:#e74c3c;">Gagal</div>
+                    <div class="modal-sub" id="deleteErrorText" style="color:#c0392b;">Gagal memproses penghapusan data.
+                    </div>
+                    <button class="btn-close-modal btn-modal-action" onclick="resetDeleteModal()">Kembali</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL KONFIRMASI UPDATE METADATA (CUSTOM) -->
+        <div id="confirmUpdateModal" class="modal-overlay">
+            <div class="modal-box" style="text-align: left; max-width: 450px;">
+                <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
+                <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmUpdateTitle">
+                    Konfirmasi Perubahan</div>
+                <div class="modal-sub" id="confirmUpdateBody"
+                    style="font-size: 13px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                    <!-- Informasi perubahan dinamis -->
+                </div>
+                <button type="button" class="btn-modal-action btn-save-meta" id="btnUpdateYes">Ya, Simpan</button>
+                <button type="button" class="btn-close-modal btn-modal-action" id="btnUpdateNo"
+                    style="margin-top: 5px;">Batal</button>
+            </div>
+        </div>
+
+
+        <script>
+
+            // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
+        const CACHE_KEY = 'subdit_wil2_master_cache';
+        const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+
+        function getCachedData() {
+            const cached = sessionStorage.getItem(CACHE_KEY);
+            const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
+            if (cached && cachedTime) {
+                const age = Date.now() - parseInt(cachedTime, 10);
+                if (age < CACHE_DURATION) {
+                    console.log("⚡ Menggunakan data master dari CACHE (Instant)");
+                    return JSON.parse(cached);
+                }
+            }
+            return null;
+        }
+
+        function setCachedData(data) {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            console.log("💾 Data master baru disimpan ke cache browser.");
+        }
+
+        function clearCachedData() {
+            sessionStorage.removeItem(CACHE_KEY);
+            sessionStorage.removeItem(CACHE_TIME_KEY);
+            console.log("🧹 Cache dibersihkan karena ada perubahan data.");
+        }
+
+        (function () {
+            // ========== KONFIGURASI FLOW POWER AUTOMATE ==========
+            const CONFIG = {
+                getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
+                // URL flow untuk memproses hapus dokumen ND-Surat
+                deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
+                // URL flow untuk update Nomor Surat & upload File Final
+                updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/199ee6565eb64bde8d1da4e59a16cc79/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VVrxAkygkw8iZl0_r2pAGv746gtKb3_EcTJWez0IoRA'
+            };
+
+            let databaseND = [];
+            let activeDeleteData = { provinsi: '', namaKegiatan: '', perihal: '', pathND: '', rowElement: null };
+            let activeKelolaData = { provinsi: '', namaKegiatan: '', perihal: '', nomorSurat: '', pathND: '', linkFile: '', linkFinal: '', rowElement: null };
+            let selectedFileFinalData = { base64: '', nama: '', tipe: '' };
+
+            let filterIsVisible = window.innerWidth > 768;
+
+            // Mendapatkan data properti dengan toleransi nama kolom
+            function getValue(row, keys) {
+                for (let k of keys) if (row[k] !== undefined && row[k] !== null) return row[k];
+                let cleanKeys = keys.map(k => k.toLowerCase().replace(/[\s_]|_x0020_/g, ''));
+                for (let key of Object.keys(row)) {
+                    let ck = key.toLowerCase().replace(/[\s_]|_x0020_/g, '');
+                    if (cleanKeys.includes(ck)) return row[key];
+                }
+                return null;
+            }
+
+            window.toggleFilter = function () {
+                filterIsVisible = !filterIsVisible;
+                updateFilterView();
+            };
+
+            function updateFilterView() {
+                const area = document.getElementById('filterArea');
+                const icon = document.getElementById('filterIcon');
+                if (filterIsVisible) {
+                    area.style.display = 'grid';
+                    icon.innerText = '▲';
+                } else {
+                    area.style.display = 'none';
+                    icon.innerText = '▼';
+                }
+            }
+
+            // Memuat dashboard data
+            // Memuat dashboard data
+            async function loadDashboardData() {
+                // 1. Cek apakah ada data di cache
+                let rawData = getCachedData();
+                if (rawData) {
+                    // Pastikan spinner dimatikan saat load dari cache
+                    document.getElementById('loading').style.display = 'none'; 
+                    prosesDashboardData(rawData); // Tampilkan instan
+                    return;
+                }
+
+                // 2. Jika tidak ada cache, fetch dari server
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('filterArea').style.display = 'none';
+                document.getElementById('tableArea').style.display = 'none';
+                document.getElementById('filterToggleContainer').style.display = 'none';
+
+                try {
+                    let resp = await fetch(CONFIG.getDataFlowUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getData' }) });
+                    if (!resp.ok) throw new Error('Gagal menghubungi server');
+                    rawData = await resp.json();
+                    if (typeof rawData === 'string') rawData = JSON.parse(rawData);
+
+                    setCachedData(rawData); // Simpan ke cache
+                    prosesDashboardData(rawData);
+                    hideMessage();
+                } catch (e) {
+                    showMessage('Peringatan: ' + e.message, 'error');
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+
+            // Fungsi pengolahan visual tabel & filter (Cukup ditulis SATU KALI saja)
+            function prosesDashboardData(rawData) {
+                databaseND = rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || rawData.notaDinas || [];
+
+                databaseND.sort((a, b) => {
+                    let tglB = getValue(b, ['Tanggal', 'tanggal']) || '';
+                    let tglA = getValue(a, ['Tanggal', 'tanggal']) || '';
+                    return tglB.localeCompare(tglA);
+                });
+
+                buildProvinsiFilter(rawData.provinsi || rawData.Provinsi_Master || []);
+                buildPICFilter();
+                applyFilters();
+
+                document.getElementById('filterToggleContainer').style.display = 'flex';
+                updateFilterView();
+                document.getElementById('tableArea').style.display = 'block';
+            }
+
+            // Fungsi pengolahan visual tabel & filter (Sudah dibersihkan dari duplikasi)
+            function prosesDashboardData(rawData) {
+                databaseND = rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || rawData.notaDinas || [];
+
+                databaseND.sort((a, b) => {
+                    let tglB = getValue(b, ['Tanggal', 'tanggal']) || '';
+                    let tglA = getValue(a, ['Tanggal', 'tanggal']) || '';
+                    return tglB.localeCompare(tglA);
+                });
+
+                buildProvinsiFilter(rawData.provinsi || rawData.Provinsi_Master || []);
+                buildPICFilter();
+                applyFilters();
+
+                document.getElementById('filterToggleContainer').style.display = 'flex';
+                updateFilterView();
+                document.getElementById('tableArea').style.display = 'block';
+            }
+
+            function buildProvinsiFilter(provinsiMaster) {
+                let sel = document.getElementById('filterProvinsi');
+                sel.innerHTML = '<option value="">-- Semua Provinsi --</option>';
+                let set = new Set();
+                provinsiMaster.forEach(row => {
+                    let p = getValue(row, ['Provinsi', 'provinsi']);
+                    if (p) set.add(p.toString().trim());
+                });
+                Array.from(set).sort().forEach(p => {
+                    let opt = document.createElement('option');
+                    opt.value = p; opt.textContent = p;
+                    sel.appendChild(opt);
+                });
+            }
+
+            function buildPICFilter() {
+                let set = new Set();
+                databaseND.forEach(row => {
+                    let n = getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']);
+                    if (n && n !== '-') set.add(n);
+                });
+                let sel = document.getElementById('filterPIC');
+                sel.innerHTML = '<option value="">-- Semua PIC --</option>';
+                Array.from(set).sort().forEach(n => {
+                    let opt = document.createElement('option');
+                    opt.value = n; opt.textContent = n; // <-- DIPERBAIKI: Menggunakan variabel iterator 'n' yang benar
+                    sel.appendChild(opt);
+                });
+            }
+
+            window.applyFilters = function () {
+                let search = document.getElementById('searchBar').value.toLowerCase();
+                let jenis = document.getElementById('filterJenis').value;
+                let prov = document.getElementById('filterProvinsi').value;
+                let tglDari = document.getElementById('filterTanggalDari').value;
+                let tglSampai = document.getElementById('filterTanggalSampai').value;
+                let pic = document.getElementById('filterPIC').value;
+
+                let filtered = [...databaseND];
+
+                if (search) {
+                    filtered = filtered.filter(row => {
+                        let nomor = (getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '').toLowerCase();
+                        let perihal = (getValue(row, ['Perihal', 'perihal']) || '').toLowerCase();
+                        let kegiatan = (getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '').toLowerCase();
+                        return nomor.includes(search) || perihal.includes(search) || kegiatan.includes(search);
+                    });
+                }
+                if (jenis) filtered = filtered.filter(row => (getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || '') === jenis);
+                if (prov) filtered = filtered.filter(row => (getValue(row, ['Provinsi', 'provinsi']) || '') === prov);
+                if (tglDari || tglSampai) {
+                    filtered = filtered.filter(row => {
+                        let tglRaw = getValue(row, ['Tanggal', 'tanggal']) || '';
+                        if (!tglRaw) return false;
+                        let norm = tglRaw.replace(/\./g, '-');
+                        if (tglDari && norm < tglDari) return false;
+                        if (tglSampai && norm > tglSampai) return false;
+                        return true;
+                    });
+                }
+                if (pic) filtered = filtered.filter(row => (getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']) || '') === pic);
+
+                renderTable(filtered);
+            }
+
+            function renderTable(data) {
+                let tbody = document.getElementById('tableBody');
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; color: #64748b;">Data rekap dokumen tidak ditemukan.</td></tr>';
+                    return;
+                }
+
+                data.forEach((row, idx) => {
+                    let jenis = getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || 'Nota Dinas';
+                    let tgl = getValue(row, ['Tanggal', 'tanggal']) || '-';
+                    let nomor = getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '';
+                    let prov = getValue(row, ['Provinsi', 'provinsi']) || '-';
+                    let keg = getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '-';
+                    let perihal = getValue(row, ['Perihal', 'perihal']) || '-';
+                    let pic = getValue(row, ['PIC', 'pic', 'namaPembuat']) || '-';
+                    let linkFile = getValue(row, ['Link File', 'linkFile']) || '';
+                    let linkFinal = getValue(row, ['Link Final', 'linkFinal']) || '';
+                    let pathND = getValue(row, ['Path ND - Surat', 'pathNDSurat', 'pathND']) || '';
+
+                    let formatted = tgl;
+                    if (tgl.includes('.')) {
+                        let parts = tgl.split('.');
+                        if (parts.length === 3) formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+
+                    let badgeClass = jenis === 'Nota Dinas' ? 'badge-nd' : 'badge-surat';
+                    
+                    let displayNomor = '';
+                    if (nomor) {
+                        displayNomor = linkFinal 
+                            ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>` 
+                            : nomor;
+                    } else {
+                        displayNomor = '<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>';
+                    }
+
+                    let safePerihal = perihal.replace(/'/g, "\\'");
+                    let safePath = pathND.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                <td data-label="No" style="text-align:center;">${idx + 1}</td>
+                <td data-label="Jenis"><span class="badge ${badgeClass}">${jenis}</span></td>
+                <td data-label="Tanggal">${formatted}</td>
+                <td data-label="Nomor Surat">${displayNomor}</td>
+                <td data-label="Provinsi">${prov}</td>
+                <td data-label="Nama Kegiatan">${keg}</td>
+                <td data-label="Perihal / Judul">${linkFinal ? `<a href="${linkFinal}" target="_blank" class="document-title-link">🔗 ${perihal}</a>` : perihal}</td>
+                <td data-label="PIC">${pic}</td>
+                <td data-label="Aksi">
+                    <div class="action-cell">
+                        ${linkFile ? `<a href="${linkFile}" target="_blank" class="btn-action btn-draft" title="Buka Draft Word">📝</a>` : ''}
+                        ${linkFinal ? `<a href="${linkFinal}" target="_blank" class="btn-action btn-final" title="Buka Berkas Final">✅</a>` : ''}
+                        <button onclick="window.openKelolaModal('${prov}','${keg}','${safePerihal}','${nomor}','${safePath}','${linkFile}','${linkFinal}',this)" class="btn-action btn-kelola" title="Kelola / Update Berkas">⚙️</button>
+                        <button onclick="window.confirmDelete('${prov}','${keg}','${safePerihal}','${safePath}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
+                    </div>
+                </td>
+            `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // ========== OPEN KELOLA MODAL ==========
+            window.openKelolaModal = function (prov, keg, perihal, nomor, path, linkWord, linkFinal, btn) {
+                activeKelolaData = {
+                    provinsi: prov, namaKegiatan: keg, perihal: perihal,
+                    nomorSurat: nomor, pathND: path, linkFile: linkWord, linkFinal: linkFinal,
+                    rowElement: btn.closest('tr')
+                };
+
+                document.getElementById('kelolaTitle').innerHTML = 'Kelola: ' + (perihal.length > 35 ? perihal.substring(0, 35) + '...' : perihal);
+                document.getElementById('kelolaSub').innerHTML = `${prov} - <span style="color:#1d355e; font-weight:600;">${keg}</span>`;
+
+                document.getElementById('modalNomorSurat').value = nomor || '';
+
+                document.getElementById('modalFileFinal').value = '';
+                document.getElementById('modalUploadFeedback').style.display = 'none';
+                document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
+                selectedFileFinalData = { base64: '', nama: '', tipe: '' };
+
+                let draftBtn = document.getElementById('btnBukaDraft');
+                if (linkWord) {
+                    draftBtn.href = linkWord;
+                    draftBtn.style.display = 'inline-block';
+                } else {
+                    draftBtn.style.display = 'none';
+                }
+
+                let finalBtn = document.getElementById('btnBukaFinal');
+                if (linkFinal && linkFinal !== 'null') {
+                    finalBtn.href = linkFinal;
+                    finalBtn.style.display = 'inline-block';
+                } else {
+                    finalBtn.style.display = 'none';
+                }
+
+                document.getElementById('kelolaModal').classList.add('active');
+                document.getElementById('kelolaMenuState').style.display = 'block';
+                document.getElementById('kelolaLoadingState').style.display = 'none';
+            };
+
+            window.closeKelolaModal = function () {
+                document.getElementById('kelolaModal').classList.remove('active');
+            };
+
+            window.handleFileFinalSelect = async function (file) {
+                const feedback = document.getElementById('modalUploadFeedback');
+                const label = document.getElementById('modalUploadLabel');
+                feedback.style.display = 'none';
+
+                if (!file) return;
+
+                try {
+                    const base64 = await toBase64(file);
+                    selectedFileFinalData = { base64, nama: file.name, tipe: file.type };
+                    label.textContent = file.name;
+                    feedback.style.display = 'block';
+                    feedback.style.color = '#27ae60';
+                    feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
+                } catch (e) {
+                    feedback.style.display = 'block';
+                    feedback.style.color = '#e74c3c';
+                    feedback.textContent = 'Gagal memproses file.';
+                }
+            };
+
+            const uploadArea = document.getElementById('modalUploadArea');
+            uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#1d355e'; });
+            uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#cbd5e1'; });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#cbd5e1';
+                if (e.dataTransfer.files[0]) {
+                    document.getElementById('modalFileFinal').files = e.dataTransfer.files;
+                    window.handleFileFinalSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            // ========== EXECUTE UPDATE DATA ==========
+            function showCustomUpdateConfirm(title, messageHtml) {
+                return new Promise((resolve) => {
+                    const modal = document.getElementById('confirmUpdateModal');
+                    document.getElementById('confirmUpdateTitle').textContent = title;
+                    document.getElementById('confirmUpdateBody').innerHTML = messageHtml;
+
+                    modal.classList.add('active');
+
+                    const btnYes = document.getElementById('btnUpdateYes');
+                    const btnNo = document.getElementById('btnUpdateNo');
+
+                    const handleYes = () => {
+                        modal.classList.remove('active');
+                        cleanup();
+                        resolve(true);
+                    };
+                    const handleNo = () => {
+                        modal.classList.remove('active');
+                        cleanup();
+                        resolve(false);
+                    };
+
+                    const cleanup = () => {
+                        btnYes.removeEventListener('click', handleYes);
+                        btnNo.removeEventListener('click', handleNo);
+                    };
+
+                    btnYes.addEventListener('click', handleYes);
+                    btnNo.addEventListener('click', handleNo);
+                });
+            }
+
+            window.executeMetaUpdate = async function (event) {
+                event.preventDefault();
+
+                const nomorSuratBaru = document.getElementById('modalNomorSurat').value.trim();
+                const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file baru';
+
+                const confirmHtml = `
+                    <strong>Perihal:</strong> ${activeKelolaData.perihal}<br>
+                    <strong>Nomor Surat Baru:</strong> ${nomorSuratBaru}<br>
+                    <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
+                    <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
+                `;
+
+                const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
+                if (!yakin) return; 
+
+                document.getElementById('kelolaMenuState').style.display = 'none';
+                document.getElementById('kelolaLoadingState').style.display = 'block';
+
+                const payload = {
+                    action: 'updateMeta',
+                    nomorSurat: nomorSuratBaru,
+                    provinsi: activeKelolaData.provinsi,
+                    namaKegiatan: activeKelolaData.namaKegiatan,
+                    pathND: activeKelolaData.pathND,
+                    fileFinalBase64: selectedFileFinalData.base64 || '',
+                    fileFinalNama: selectedFileFinalData.nama || '',
+                    fileFinalTipe: selectedFileFinalData.tipe || ''
+                };
+
+                try {
+                    let res = await fetch(CONFIG.updateNDFlowUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!res.ok) throw new Error('Gagal memperbarui data di server.');
+                    clearCachedData();
+                    await loadDashboardData();
+                    closeKelolaModal();
+                    showMessage('Data dokumen berhasil diperbarui.', 'info');
+                } catch (err) {
+                    console.error(err);
+                    alert('Gagal memperbarui: ' + err.message);
+                    document.getElementById('kelolaLoadingState').style.display = 'none';
+                    document.getElementById('kelolaMenuState').style.display = 'block';
+                }
+            };
+
+            // ========== DELETE MODAL & PROCESS ==========
+            window.confirmDelete = function (prov, keg, perihal, path, btn) {
+                activeDeleteData = { provinsi: prov, namaKegiatan: keg, perihal: perihal, pathND: path, rowElement: btn.closest('tr') };
+                document.getElementById('deleteTargetText').innerHTML = `"${perihal}"<br><span style="font-size:12px; font-weight:normal; color:#64748b;">(${prov})</span>`;
+                document.getElementById('deleteModal').classList.add('active');
+                document.getElementById('modalConfirmState').style.display = 'block';
+                document.getElementById('modalLoadingState').style.display = 'none';
+                document.getElementById('modalSuccessState').style.display = 'none';
+                document.getElementById('modalErrorState').style.display = 'none';
+            };
+            window.closeDeleteModal = function () { document.getElementById('deleteModal').classList.remove('active'); };
+            window.resetDeleteModal = function () {
+                document.getElementById('modalConfirmState').style.display = 'block';
+                document.getElementById('modalLoadingState').style.display = 'none';
+                document.getElementById('modalSuccessState').style.display = 'none';
+                document.getElementById('modalErrorState').style.display = 'none';
+            };
+
+            window.executeDelete = async function (opt) {
+                document.getElementById('modalConfirmState').style.display = 'none';
+                document.getElementById('modalLoadingState').style.display = 'block';
+                document.getElementById('loadingDeleteSub').innerText = opt === 'all' ? 'Menghapus data di server & file...' : 'Menghapus data di Excel saja...';
+
+                try {
+                    let res = await fetch(CONFIG.deleteNDFlowUrl, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            provinsi: activeDeleteData.provinsi,
+                            namaKegiatan: activeDeleteData.namaKegiatan,
+                            perihal: activeDeleteData.perihal,
+                            pathND: activeDeleteData.pathND,
+                            deleteOption: opt
+                        })
+                    });
+                    if (!res.ok) throw new Error('Gagal memproses penghapusan data.');
+                    if (activeDeleteData.rowElement) activeDeleteData.rowElement.remove();
+
+                    document.getElementById('modalLoadingState').style.display = 'none';
+                    document.getElementById('modalSuccessState').style.display = 'block';
+                    document.getElementById('successDeleteSub').innerHTML = opt === 'all' ? 'Riwayat database & file di SharePoint berhasil dihapus.' : 'Riwayat database berhasil dihapus.';
+                    clearCachedData();
+                    await loadDashboardData();
+                } catch (err) {
+                    document.getElementById('modalLoadingState').style.display = 'none';
+                    document.getElementById('modalErrorState').style.display = 'block';
+                    document.getElementById('deleteErrorText').innerText = err.message || "Gagal memproses ke server.";
+                }
+            };
+
+            function toBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = error => reject(error);
+                });
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function showMessage(msg, type) {
+                let d = document.getElementById('message');
+                d.textContent = msg;
+                d.className = 'message ' + type;
+                d.style.display = 'block';
+                setTimeout(() => d.style.display = 'none', 5000);
+            }
+            function hideMessage() { document.getElementById('message').style.display = 'none'; }
+
+            window.addEventListener('load', loadDashboardData);
+        })();
+    </script>
+
+    </div>
+    <script src="navbar.js"></script>
+</body>
+
+</html>

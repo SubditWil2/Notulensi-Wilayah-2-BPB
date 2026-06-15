@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Notulensi Subdit Wil 2 BPB</title>
+
+    <!-- PUSTAKA GRATIS UNTUK EKSTRAKSI DOKUMEN DI BROWSER (ZERO COST) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Watermark Background Siluet Baling-Baling PU */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('logo-pu.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60vh auto;
+            opacity: 0.04;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(29, 53, 94, 0.12);
+            overflow: hidden;
+            border: 1px solid rgba(29, 53, 94, 0.1);
+        }
+
+        /* Header bertema Biru Navy & Kuning PUPR */
+        .header {
+            background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 5px solid #f5b016;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        /* Desain Tombol Rekap Bertema Emas PUPR */
+        .btn-recap {
+            background: #f5b016;
+            color: #11223f;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #f5b016;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+
+        .btn-recap:hover {
+            background: transparent;
+            color: #f5b016;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(245, 176, 22, 0.2);
+        }
+
+        .logo-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-content h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-content p {
+            font-size: 13px;
+            opacity: 0.9;
+            color: #f5b016;
+            font-weight: 600;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1d355e;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #334155;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #1d355e;
+            box-shadow: 0 0 0 3px rgba(245, 176, 22, 0.2);
+        }
+
+        input:disabled,
+        textarea:disabled,
+        select:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .input-with-add {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-with-add select {
+            flex: 1;
+        }
+
+        .btn-add {
+            padding: 12px 20px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #219653;
+        }
+
+        .btn-add:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        button[type="submit"] {
+            background: #1d355e;
+            color: white;
+            border: 2px solid #1d355e;
+            padding: 14px 40px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        button[type="submit"]:hover {
+            background: #11223f;
+            border-color: #f5b016;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(29, 53, 94, 0.2);
+        }
+
+        .btn-reset {
+            background: #f5b016;
+            color: #11223f;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: #e09f10;
+        }
+
+        .btn-cancel {
+            background: #94a3b8;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #64748b;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .message.info {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1d355e;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Area Unggah Berkas */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #1d355e;
+            background: rgba(29, 53, 94, 0.03);
+        }
+
+        .upload-area.dragover {
+            border-color: #f5b016;
+            background: rgba(245, 176, 22, 0.05);
+            transform: scale(1.01);
+        }
+
+        /* File Preview */
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f0f7ff;
+            border: 1.5px solid #1d355e;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .file-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .file-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d355e;
+            word-break: break-all;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .file-remove {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .file-remove:hover {
+            background: #c0392b;
+        }
+
+        /* --- MODAL POP-UP OVERLAY --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 34, 63, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-spinner {
+            border: 5px solid #f1f5f9;
+            border-top: 5px solid #f5b016;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .modal-loading-text {
+            color: #1d355e;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .modal-loading-sub {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .modal-icon-success {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .btn-modal-action {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .btn-save-meta {
+            background: #1d355e;
+            color: white;
+        }
+
+        .btn-open-link {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .btn-open-link:hover {
+            background: #219653;
+        }
+
+        .btn-close-modal {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-close-modal:hover {
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .form-content {
+                padding: 20px;
+            }
+
+            button[type="submit"],
+            .btn-reset,
+            .btn-cancel {
+                width: 100%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+
+        /* Tombol OCR Baru: Navy & Gold Style (PUPR Theme) */
+        .btn-ocr {
+            background: white !important;
+            color: #1d355e !important;
+            border: 2px solid #1d355e !important;
+            padding: 10px 18px !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+            font-size: 13px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            transition: all 0.3s ease !important;
+            margin-top: 12px !important;
+        }
+
+        .btn-ocr:hover {
+            background: #1d355e !important;
+            color: white !important;
+        }
+
+        .btn-ocr:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <!-- MODAL POP-UP (Loading, Success, Error & AI Transcript) -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box">
+
+            <!-- Tampilan Saat Loading -->
+            <div id="modalLoading" style="display: none;">
+                <div class="modal-spinner"></div>
+                <div class="modal-loading-text">Sedang Memproses...</div>
+                <div class="modal-loading-sub" id="loadingDynamicText">Membuat struktur folder proyek...</div>
+            </div>
+
+            <!-- Tampilan POP-UP INPUT/UPLOAD TRANSKRIP AI -->
+            <div id="modalAITranscript" style="display: none; text-align: left;">
+                <h3 style="color: #1d355e; margin-bottom: 10px; font-weight: 700; font-size: 16px;">⚡ Kirim Menggunakan
+                    Asisten AI</h3>
+                <p style="font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">
+                    Unggah berkas atau tempelkan teks transkrip rapat (Zoom/Tactiq/Teams) Anda di bawah ini.
+                </p>
+
+                <!-- AREA UNGGAH FILE TRANSKRIP -->
+                <div class="form-group">
+                    <label style="font-size: 13px;">Pilihan 1: Unggah Berkas Transkrip (.txt, .docx, .pdf, .csv)</label>
+                    <div class="upload-area" id="aiUploadArea" style="padding: 15px 10px; background: #f8fafc;"
+                        onclick="document.getElementById('aiTranscriptFile').click()">
+                        <div style="font-size: 20px; margin-bottom: 4px;">📂</div>
+                        <div style="font-size: 12px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini
+                        </div>
+                    </div>
+                    <input type="file" id="aiTranscriptFile" accept=".txt,.csv,.docx,.pdf" style="display:none"
+                        onchange="bacaFileTranskrip(this.files[0])">
+                    <div id="aiFileFeedback"
+                        style="display: none; font-size: 12px; color: #27ae60; margin-top: 5px; font-weight: 600;">
+                    </div>
+                </div>
+
+                <!-- INPUT COPAST MANUAL -->
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="transkripRapat" style="font-size: 13px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar
+                        Manual</label>
+                    <textarea id="transkripRapat" placeholder="Paste transkrip rapat Anda di sini..."
+                        style="min-height: 120px; font-size: 12px;"></textarea>
+                </div>
+
+                <button type="button" class="btn-open-link"
+                    style="background:#1d355e; margin-top:10px; text-align: center;" onclick="submitRapatDenganAI()">⚡
+                    Mulai Proses & Kirim</button>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Batal</button>
+            </div>
+
+            <!-- Tampilan Saat Sukses -->
+            <div id="modalSuccess" style="display: none;">
+                <span class="modal-icon-success">✅</span>
+                <div class="modal-loading-text">Notulensi Berhasil Dibuat!</div>
+                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di
+                    dalam file Word.</div>
+
+                <!-- KOTAK SALIN WHATSAPP -->
+                <div id="waShareContainer"
+                    style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <span
+                        style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN
+                        UNTUK SHARE WHATSAPP:</span>
+                    <div id="waTextTemplate"
+                        style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;">
+                    </div>
+                    <button type="button" id="btnCopyWA" class="btn-open-link"
+                        style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks
+                        WA</button>
+                </div>
+
+                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄
+                    Buka File Notulensi (Word)</a>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Selesai</button>
+            </div>
+
+            <!-- Tampilan Saat Error -->
+            <div id="modalError" style="display: none;">
+                <span class="modal-icon-success">❌</span>
+                <div class="modal-loading-text" style="color:#e74c3c;">Proses Gagal</div>
+                <div class="modal-loading-sub" id="errorText">Terjadi kesalahan pada server.</div>
+                <button type="button" class="btn-close-modal" onclick="closeModal()">Kembali</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI CUSTOM (BARU - UNIFORM) -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box" style="text-align: left; max-width: 450px;">
+            <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
+            <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmModalTitle">Konfirmasi
+                Pengiriman</div>
+            <div class="modal-sub" id="confirmModalBody"
+                style="font-size: 13px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                <!-- Rincian notulensi rapat akan disisipkan di sini -->
+            </div>
+            <button type="button" class="btn-modal-action btn-save-meta" id="btnConfirmYes">Ya, Kirim</button>
+            <button type="button" class="btn-close-modal btn-modal-action" id="btnConfirmNo"
+                style="margin-top: 5px;">Batal</button>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container">
+            <!-- Header bertema PUPR dengan Tombol Rekap -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="logo-container">
+                        <img src="logo-pu.png" alt="Logo PU">
+                    </div>
+                    <div class="header-content">
+                        <h1>Form Notulensi Subdit Wil 2 BPB</h1>
+                        <p>Kementerian Pekerjaan Umum</p>
+                    </div>
+                </div>
+                <a href="rekap.html" class="btn-recap">📊 Lihat Rekap Data</a>
+            </div>
+
+            <!-- Form Content -->
+            <div class="form-content">
+                <!-- Messages -->
+                <div id="message" class="message"></div>
+
+                <!-- INDIKATOR LOADING TRANSISI AMBIL DATA MASTER -->
+                <div id="loading" class="loading" style="display: none; text-align: center; padding: 30px 20px;">
+                    <div class="modal-spinner"
+                        style="width: 40px; height: 40px; border-width: 4px; margin-bottom: 12px;"></div>
+                    <p style="color: #1d355e; font-size: 14px; font-weight: 700;">Memuat database master dari server...
+                    </p>
+                    <p style="color: #64748b; font-size: 12px; margin-top: 4px;">Menghubungkan ke OneDrive &
+                        SharePoint...</p>
+                </div>
+
+                <!-- Form -->
+                <form id="activityForm">
+
+                    <!-- Surat Undangan Section -->
+                    <div class="form-group">
+                        <label for="suratUndangan">
+                            Surat Undangan <span class="required">*</span>
+                        </label>
+
+                        <!-- Area Klik Upload -->
+                        <div class="upload-area" id="uploadArea"
+                            onclick="document.getElementById('suratUndangan').click()">
+                            <div style="font-size: 32px; margin-bottom: 8px;">📎</div>
+                            <div style="font-size: 14px; font-weight: 600; color: #1d355e;">Klik untuk upload surat
+                                undangan</div>
+                            <div style="font-size: 12px; color: #64748b;">PDF, JPG Atau PNG • Maksimal 5MB</div>
+                        </div>
+
+                        <input type="file" id="suratUndangan" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+
+                        <!-- Preview File Setelah Upload (Tersembunyi Awalnya) -->
+                        <div id="filePreview" class="file-preview" style="display:none">
+                            <span id="fileIcon" style="font-size: 28px;">📄</span>
+                            <div class="file-info" style="flex:1; margin-left: 10px;">
+                                <div id="fileName" style="font-size: 13px; font-weight: 600; color: #1d355e;"></div>
+                                <div id="fileSize" style="font-size: 11px; color: #64748b;"></div>
+                            </div>
+                            <button type="button" class="file-remove" onclick="removeFile()"
+                                style="background:#e74c3c; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer;">✕</button>
+                        </div>
+
+                        <!-- Tombol Baca Surat (Hanya muncul jika file ada) -->
+                        <div id="ocrActionArea" style="display:none;">
+                            <button type="button" id="btnOCR" class="btn-ocr" onclick="runOCR()">
+                                <span>🔍</span> Baca Surat Otomatis (AI)
+                            </button>
+                        </div>
+
+                        <!-- Container Status OCR -->
+                        <div id="ocrStatusBox"></div>
+                        <div id="fileError" class="help-text" style="color:#e74c3c; display:none"></div>
+                    </div>
+
+                    <!-- Provinsi -->
+                    <div class="form-group">
+                        <label for="provinsi">
+                            Provinsi <span class="required">*</span>
+                        </label>
+                        <select id="provinsi" name="provinsi" required>
+                            <option value="">-- Pilih Provinsi --</option>
+                        </select>
+                        <div class="help-text">Pilih provinsi sesuai dengan lokasi kegiatan</div>
+                    </div>
+
+                    <!-- Nama Kegiatan with Add Option -->
+                    <div class="form-group">
+                        <label for="namaKegiatan">
+                            Nama Kegiatan <span class="required">*</span>
+                        </label>
+                        <div class="input-with-add">
+                            <select id="namaKegiatan" name="namaKegiatan" required>
+                                <option value="">-- Pilih Nama Kegiatan --</option>
+                            </select>
+                            <button type="button" id="btnAddKegiatan" class="btn-add">+ Tambah</button>
+                        </div>
+                        <!-- Hidden: only shows when + Tambah is clicked -->
+                        <div id="newKegiatanRow" style="display:none; margin-top:10px;">
+                            <div class="input-with-add">
+                                <input type="text" id="newKegiatanInput" placeholder="Ketik nama kegiatan baru..."
+                                    autocomplete="off">
+                                <button type="button" id="btnConfirmKegiatan" class="btn-add">✓ Simpan</button>
+                                <button type="button" id="btnCancelKegiatan" class="btn-cancel"
+                                    style="padding:10px 14px;">✕</button>
+                            </div>
+                            <div id="aiWarningText"
+                                style="display:none; color:#d68010; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4;">
+                            </div>
+                        </div>
+                        <div class="help-text">Pilih dari daftar atau klik "+ Tambah" untuk kegiatan baru</div>
+                    </div>
+
+                    <!-- Judul Rapat -->
+                    <div class="form-group">
+                        <label for="judulRapat">
+                            Judul Rapat <span class="required">*</span>
+                        </label>
+                        <input type="text" id="judulRapat" name="judulRapat"
+                            placeholder="Masukkan judul rapat (Maksimal 100 karakter)" maxlength="100" required>
+                    </div>
+
+                    <div id="meetingWarningText"
+                        style="display:none; color:#e74c3c; font-size:12.5px; margin-top:5px; font-weight:600; line-height:1.4; background:#fee2e2; padding:8px 12px; border-radius:6px; border:1px solid #fca5a5;">
+                    </div>
+
+                    <!-- Instansi Pengundang -->
+                    <div class="form-group">
+                        <label for="instansiPengundang">
+                            Instansi Pengundang <span class="required">*</span>
+                        </label>
+                        <input type="text" id="instansiPengundang" name="instansiPengundang"
+                            placeholder="Masukkan nama instansi pengundang" required>
+                    </div>
+
+                    <!-- Tanggal Rapat -->
+                    <div class="form-group">
+                        <label for="tanggalRapat">
+                            Tanggal Rapat <span class="required">*</span>
+                        </label>
+                        <input type="date" id="tanggalRapat" name="tanggalRapat" required>
+                        <div class="help-text">Pilih tanggal dari kalender</div>
+                    </div>
+
+                    <!-- Input Nama Notulis dengan Dropdown & Tambah Opsi -->
+                    <div class="form-group">
+                        <label for="namaNotulis">
+                            Nama Notulis / Pengisi Form <span class="required">*</span>
+                        </label>
+                        <div class="input-with-add">
+                            <select id="namaNotulis" name="namaNotulis" required>
+                                <option value="">-- Pilih Nama Notulis --</option>
+                            </select>
+                            <button type="button" id="btnAddNotulis" class="btn-add">+ Tambah</button>
+                        </div>
+                        <!-- Hidden: hanya muncul saat + Tambah di klik -->
+                        <div id="newNotulisRow" style="display:none; margin-top:10px;">
+                            <div class="input-with-add">
+                                <input type="text" id="newNotulisInput" placeholder="Ketik nama notulis baru..."
+                                    autocomplete="off">
+                                <button type="button" id="btnConfirmNotulis" class="btn-add">✓ Simpan</button>
+                                <button type="button" id="btnCancelNotulis" class="btn-cancel"
+                                    style="padding:10px 14px;">✕</button>
+                            </div>
+                        </div>
+                        <div class="help-text">Pilih nama Anda dari daftar, atau klik "+ Tambah" jika nama Anda belum
+                            terdaftar</div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="button-group">
+                        <button type="submit">Kirim Manual</button>
+                        <button type="button" class="btn-reset" style="background: #27ae60; color: white;"
+                            onclick="openAITranscriptModal()">⚡ Kirim via AI</button>
+                        <button type="button" class="btn-reset" onclick="resetSeluruhForm()">Bersihkan</button>
+                        <button type="button" class="btn-cancel" onclick="window.location.reload()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
+        const CACHE_KEY = 'subdit_wil2_master_cache';
+        const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+
+        function getCachedData() {
+            const cached = sessionStorage.getItem(CACHE_KEY);
+            const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
+            if (cached && cachedTime) {
+                const age = Date.now() - parseInt(cachedTime, 10);
+                if (age < CACHE_DURATION) {
+                    console.log("⚡ Menggunakan data master dari CACHE (Instant)");
+                    return JSON.parse(cached);
+                }
+            }
+            return null;
+        }
+
+        function setCachedData(data) {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            console.log("💾 Data master baru disimpan ke cache browser.");
+        }
+
+        function clearCachedData() {
+            sessionStorage.removeItem(CACHE_KEY);
+            sessionStorage.removeItem(CACHE_TIME_KEY);
+            console.log("🧹 Cache dibersihkan karena ada perubahan data.");
+        }
+
+
+
+        // ── CONFIGURATION ──
+        const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
+        const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e2cc75598f1f4d419248737790517523/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=i4q61lejZS-RWxirrlcPmqcv-3zqzpbk4AYlJh4zf4A';
+
+        let GEMINI_API_KEY = '';
+        let GEMINI_API_KEYS = [];
+
+        const state = {
+            kegiatanByProvinsi: {},
+            selectedProvinsi: '',
+            allMeetings: [],
+            notulisList: [
+                "Teuku Zaqirul Haq",
+                "Muhamad Adryan Arif F.",
+                "Lundu Sihombing",
+                "Abdi Nagara",
+                "Muarif",
+                "Halimatusa'adiyah Anar",
+                "Ryngga Dedy Andyka",
+                "Kiki Adhi Prasetyo",
+                "Dian Puspitasari",
+                "M. Naufal Ammar N."
+            ],
+            systemPrompt: '',
+            meetingId: '',
+            meetingPasscode: ''
+        };
+
+        async function loadSystemPrompt() {
+            try {
+                const response = await fetch('prompt_notulensi.txt');
+                if (response.ok) {
+                    const rawText = await response.text();
+                    state.systemPrompt = rawText.replace(/\\n/g, '\n');
+                    console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
+                } else {
+                    throw new Error("Respons jaringan tidak OK saat membaca prompt.");
+                }
+            } catch (err) {
+                console.warn("⚠️ Gagal memuat prompt luar, menggunakan draf cadangan:", err.message);
+                state.systemPrompt = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan yang Profesional...";
+            }
+        }
+        window.addEventListener('load', loadSystemPrompt);
+
+        // Get elements
+        const form = document.getElementById('activityForm');
+        const provinsiSelect = document.getElementById('provinsi');
+        const namaKegiatanSelect = document.getElementById('namaKegiatan');
+        const btnAddKegiatan = document.getElementById('btnAddKegiatan');
+        const newKegiatanRow = document.getElementById('newKegiatanRow');
+        const newKegiatanInput = document.getElementById('newKegiatanInput');
+        const btnConfirmKegiatan = document.getElementById('btnConfirmKegiatan');
+        const btnCancelKegiatan = document.getElementById('btnCancelKegiatan');
+        const messageDiv = document.getElementById('message');
+        const loadingDiv = document.getElementById('loading');
+
+        function openAITranscriptModal() {
+            if (!provinsiSelect.value || !namaKegiatanSelect.value || !document.getElementById('judulRapat').value || !document.getElementById('instansiPengundang').value || !document.getElementById('tanggalRapat').value || !document.getElementById('namaNotulis').value) {
+                alert("Silakan lengkapi semua kolom metadata di formulir utama sebelum memproses via AI.");
+                return;
+            }
+            if (!fileInput.files[0]) {
+                alert("Silakan unggah Surat Undangan terlebih dahulu.");
+                return;
+            }
+
+            document.getElementById('aiTranscriptFile').value = '';
+            document.getElementById('aiFileFeedback').style.display = 'none';
+            document.getElementById('transkripRapat').value = '';
+
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'block';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+        }
+
+        async function bacaFileTranskrip(file) {
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+            const feedback = document.getElementById('aiFileFeedback');
+            const textarea = document.getElementById('transkripRapat');
+
+            feedback.style.color = "#1d355e";
+            feedback.textContent = "Sedang mengekstrak berkas...";
+            feedback.style.display = "block";
+
+            try {
+                if (ext === 'txt' || ext === 'csv') {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        textarea.value = e.target.result;
+                        feedback.style.color = "#27ae60";
+                        feedback.textContent = `✓ Berhasil membaca ${file.name} (${e.target.result.length} karakter)`;
+                    };
+                    reader.readAsText(file);
+                }
+                else if (ext === 'docx') {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const arrayBuffer = e.target.result;
+                        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                            .then(function (result) {
+                                textarea.value = result.value;
+                                feedback.style.color = "#27ae60";
+                                feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${result.value.length} karakter)`;
+                            })
+                            .catch(err => {
+                                throw new Error("Gagal membaca dokumen Word (.docx): " + err.message);
+                            });
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+                else if (ext === 'pdf') {
+                    const reader = new FileReader();
+                    reader.onload = async function (e) {
+                        try {
+                            const typedarray = new Uint8Array(e.target.result);
+                            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                            let extractedText = "";
+
+                            for (let i = 1; i <= pdf.numPages; i++) {
+                                const page = await pdf.getPage(i);
+                                const textContent = await page.getTextContent();
+                                const pageText = textContent.items.map(item => item.str).join(" ");
+                                extractedText += pageText + "\n";
+                            }
+
+                            textarea.value = extractedText;
+                            feedback.style.color = "#27ae60";
+                            feedback.textContent = `✓ Berhasil mengekstrak ${file.name} (${extractedText.length} karakter)`;
+                        } catch (pdfErr) {
+                            feedback.style.color = "#e74c3c";
+                            feedback.textContent = "Gagal memproses file PDF: " + pdfErr.message;
+                        }
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+                else {
+                    throw new Error("Format file tidak didukung. Harap pilih file .txt, .csv, .docx, atau .pdf.");
+                }
+            } catch (err) {
+                feedback.style.color = "#e74c3c";
+                feedback.textContent = err.message;
+            }
+        }
+
+        const aiUploadArea = document.getElementById('aiUploadArea');
+        if (aiUploadArea) {
+            aiUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); aiUploadArea.style.borderColor = '#f5b016'; });
+            aiUploadArea.addEventListener('dragleave', () => { aiUploadArea.style.borderColor = '#cbd5e1'; });
+            aiUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                aiUploadArea.style.borderColor = '#cbd5e1';
+                if (e.dataTransfer.files[0]) {
+                    document.getElementById('aiTranscriptFile').files = e.dataTransfer.files;
+                    bacaFileTranskrip(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        // Fungsi Pembantu: Modal Konfirmasi Berbasis Promise (Custom)
+        function showCustomConfirm(title, messageHtml) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirmModal');
+                document.getElementById('confirmModalTitle').textContent = title;
+                document.getElementById('confirmModalBody').innerHTML = messageHtml;
+
+                modal.classList.add('active');
+
+                const btnYes = document.getElementById('btnConfirmYes');
+                const btnNo = document.getElementById('btnConfirmNo');
+
+                const handleYes = () => {
+                    modal.classList.remove('active');
+                    cleanup();
+                    resolve(true);
+                };
+                const handleNo = () => {
+                    modal.classList.remove('active');
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    btnYes.removeEventListener('click', handleYes);
+                    btnNo.removeEventListener('click', handleNo);
+                };
+
+                btnYes.addEventListener('click', handleYes);
+                btnNo.addEventListener('click', handleNo);
+            });
+        }
+
+        async function submitRapatDenganAI() {
+            const transkrip = document.getElementById('transkripRapat').value.trim();
+            if (!transkrip) {
+                alert("Silakan masukkan teks atau unggah berkas transkrip rapat terlebih dahulu!");
+                return;
+            }
+
+            if (!state.systemPrompt) {
+                alert("Sistem sedang memuat berkas panduan prompt. Harap tunggu beberapa detik lalu coba lagi.");
+                return;
+            }
+
+            if (GEMINI_API_KEYS.length === 0) {
+                alert("API Key Gemini belum dimuat. Silakan refresh halaman dan coba lagi.");
+                return;
+            }
+
+            document.getElementById('modalAITranscript').style.display = 'none';
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('loadingDynamicText').textContent = "Asisten AI sedang menganalisis transkrip...";
+
+            try {
+                const payload = {
+                    contents: [{
+                        parts: [{ text: state.systemPrompt + "\n" + transkrip }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.2
+                    }
+                };
+                const resData = await geminiRequest(payload);
+
+                let rawText = resData.candidates[0].content.parts[0].text;
+                let cleanText = rawText.replace(/```json|```/g, '').trim();
+
+                cleanText = cleanText.replace(/\\b/g, '\\n ');
+                cleanText = cleanText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+                cleanText = cleanText.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+
+                let parsedAI;
+                try {
+                    parsedAI = JSON.parse(cleanText);
+                } catch (parseError) {
+                    console.error("Gagal melakukan parsing JSON. Raw Text:", rawText);
+                    throw new Error(`Gagal membaca struktur JSON hasil AI: ${parseError.message}. Silakan coba kirim ulang.`);
+                }
+
+                console.log("=== INI ADALAH HASIL GENERATE DARI GEMINI AI ===");
+                console.log("Judul Rapat :", parsedAI.judulRapat);
+                console.log("Tujuan Rapat:", parsedAI.tujuanRapat);
+                console.log("Pembukaan   :\n", JSON.stringify(parsedAI.grupPembukaan, null, 2));
+                console.log("Pembahasan  :\n", JSON.stringify(parsedAI.grupPembahasan, null, 2));
+                console.log("Kesimpulan  :\n", JSON.stringify(parsedAI.grupKesimpulan, null, 2));
+                console.log("================================================");
+
+                document.getElementById('loadingDynamicText').textContent = "Mengunggah data rangkuman ke OneDrive...";
+                const file = fileInput.files[0];
+                const fileBase64 = await toBase64(file);
+
+                const formData = {
+                    provinsi: state.selectedProvinsi,
+                    namaKegiatan: namaKegiatanSelect.value,
+                    judulRapat: document.getElementById('judulRapat').value,
+                    instansiPengundang: document.getElementById('instansiPengundang').value,
+                    tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
+                    namaNotulis: document.getElementById('namaNotulis').value.trim(),
+                    transkripTeks: transkrip,
+                    hasilAiJSON: cleanText,
+                    tujuanRapat: parsedAI.tujuanRapat || '',
+                    grupPembukaan: parsedAI.grupPembukaan || [],
+                    grupPembahasan: parsedAI.grupPembahasan || [],
+                    grupKesimpulan: parsedAI.grupKesimpulan || [],
+                    suratUndanganBase64: fileBase64,
+                    suratUndanganNama: file.name,
+                    suratUndanganTipe: file.type,
+                    timestamp: new Date().toISOString(),
+                    meetingId: state.meetingId,
+                    meetingPasscode: state.meetingPasscode
+                };
+
+                const responseData = await submitToFlow(formData);
+                const documentLink = responseData.linkBerkas || '';
+                clearCachedData();
+
+                showModalSuccess(documentLink);
+                resetSeluruhForm();
+
+            } catch (err) {
+                showModalError(err.message);
+                console.error(err);
+            }
+        }
+
+        function dapatkanNilaiKolom(row, targetNames) {
+            for (const name of targetNames) {
+                if (row[name] !== undefined && row[name] !== null) {
+                    return row[name];
+                }
+            }
+            const cleanTargets = targetNames.map(n => n.toLowerCase().replace(/[\s_]|_x0020_/g, ''));
+            for (const key of Object.keys(row)) {
+                const cleanKey = key.toLowerCase().replace(/[\s_]|_x0020_/g, '');
+                if (cleanTargets.includes(cleanKey)) {
+                    return row[key];
+                }
+            }
+            return null;
+        }
+
+        // ── LOAD & PARSE DATABASE EXCEL SECARA OTOMATIS ──
+        async function loadDataFromExcel() {
+            // 1. Coba ambil data master dari cache sessionStorage terlebih dahulu
+            let rawData = getCachedData();
+            if (rawData) {
+                prosesDataExcel(rawData); // Olah data secara instan (0 detik)
+                // Sembunyikan loading & tampilkan form utama langsung
+                loadingDiv.style.display = 'none';
+                form.style.display = 'block';
+                return;
+            }
+
+            // 2. Jika tidak ada di cache, tampilkan spinner loading dan fetch dari server
+            loadingDiv.style.display = 'block';
+            form.style.display = 'none';
+
+            try {
+                const response = await fetch(GET_DATA_FLOW_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'getData' })
+                });
+
+                if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
+
+                rawData = await response.json();
+                if (typeof rawData === 'string') {
+                    rawData = JSON.parse(rawData);
+                }
+
+                // Simpan hasil fetch ke cache browser
+                setCachedData(rawData);
+
+                prosesDataExcel(rawData);
+                hideMessage();
+                console.log('✅ Database berhasil dimuat secara LIVE.');
+
+            } catch (err) {
+                hideMessage();
+                showMessage(`Peringatan: Menggunakan data offline/cadangan karena: ${err.message}`, 'error');
+                console.warn('⚠️ Gagal memanggil Flow, memuat fallback data offline:', err.message);
+                populateFallbackData();
+            } finally {
+                // Selesai loading: sembunyikan spinner & tampilkan form kembali
+                loadingDiv.style.display = 'none';
+                form.style.display = 'block';
+            }
+        }
+
+        // FUNGSI PEMBANTU: Mengolah & memetakan data Excel ke UI (Dropdown & API Keys)
+        function prosesDataExcel(rawData) {
+            GEMINI_API_KEYS = [];
+            const geminiKeyRaw = rawData.geminiKey || [];
+            const keyArray = Array.isArray(geminiKeyRaw) ? geminiKeyRaw : [geminiKeyRaw];
+
+            keyArray.forEach(row => {
+                const nama = row.NamaSetting || row.namaSetting || row.namasetting || '';
+                const nilai = row.Nilai || row.nilai || '';
+
+                if (nama.toLowerCase().includes('geminiapi') && nilai.toString().trim()) {
+                    GEMINI_API_KEYS.push(nilai.toString().trim());
+                    console.log(`🔑 Key dimuat: ${nama}`);
+                }
+            });
+
+            GEMINI_API_KEY = GEMINI_API_KEYS[0] || '';
+            console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat dari Excel.`);
+
+            const rekapDataRaw = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];
+            state.allMeetings = rekapDataRaw;
+
+            provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+            const provinsiSet = new Set();
+
+            const masterProvinsiRaw = rawData.provinsi || rawData.Provinsi_Master || rawData.Category || [];
+            masterProvinsiRaw.forEach(row => {
+                const rawProv = dapatkanNilaiKolom(row, ['Provinsi', 'provinsi']);
+                if (rawProv) {
+                    const provName = rawProv.toString().trim();
+                    provinsiSet.add(provName);
+                }
+            });
+
+            Array.from(provinsiSet).sort().forEach(provName => {
+                const opt = document.createElement('option');
+                opt.value = provName;
+                opt.textContent = provName;
+                provinsiSelect.appendChild(opt);
+            });
+
+            state.kegiatanByProvinsi = {};
+            let kegiatanArray = null;
+
+            if (rawData.masterKegiatanGabungan) {
+                if (typeof rawData.masterKegiatanGabungan === 'string') {
+                    try {
+                        let cleanedString = rawData.masterKegiatanGabungan.trim();
+                        if (cleanedString.includes('][')) {
+                            cleanedString = cleanedString.replace(/\]\s*\[/g, ',');
+                        }
+                        kegiatanArray = JSON.parse(cleanedString);
+                        console.log("Membaca Master Kegiatan Gabungan untuk dropdown, jumlah:", kegiatanArray.length);
+                    } catch (e) {
+                        console.warn("Gagal parse masterKegiatanGabungan di index, beralih ke rekapDataRaw:", e);
+                    }
+                } else if (Array.isArray(rawData.masterKegiatanGabungan)) {
+                    kegiatanArray = rawData.masterKegiatanGabungan;
+                }
+            }
+
+            if (!kegiatanArray || kegiatanArray.length === 0) {
+                kegiatanArray = rekapDataRaw;
+                console.log("Menggunakan data fallback riwayat notulensi untuk dropdown, jumlah:", kegiatanArray.length);
+            }
+
+            kegiatanArray.forEach(row => {
+                const rawProv = dapatkanNilaiKolom(row, ['Provinsi', 'provinsi']);
+                const rawKeg = dapatkanNilaiKolom(row, ['Nama Kegiatan', 'Nama_x0020_Kegiatan', 'NamaKegiatan', 'kegiatan']);
+
+                const prov = rawProv ? rawProv.toString().trim() : null;
+                const keg = rawKeg ? rawKeg.toString().trim() : null;
+
+                if (prov && keg) {
+                    if (!state.kegiatanByProvinsi[prov]) {
+                        state.kegiatanByProvinsi[prov] = new Set();
+                    }
+                    state.kegiatanByProvinsi[prov].add(keg);
+                }
+            });
+
+            Object.keys(state.kegiatanByProvinsi).forEach(prov => {
+                state.kegiatanByProvinsi[prov] = Array.from(state.kegiatanByProvinsi[prov]).sort();
+            });
+        }
+
+        const MODELS_FALLBACK = [
+            'gemini-3.5-flash',
+            'gemini-2.5-flash',
+            'gemini-3.1-flash-lite'
+        ];
+
+        async function geminiRequest(payload, models = MODELS_FALLBACK) {
+            for (const model of models) {
+                for (const apiKey of GEMINI_API_KEYS) {
+                    let response;
+                    try {
+                        response = await fetch(
+                            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload),
+                            }
+                        );
+                    } catch (networkErr) {
+                        console.warn(`⚠️ Network error: ${networkErr.message}, skip...`);
+                        continue;
+                    }
+
+                    if (response.status === 429 || response.status === 503) {
+                        console.warn(`⚠️ key ...${apiKey.slice(-6)} + ${model} → ${response.status}, skip...`);
+                        continue;
+                    }
+
+                    if (!response.ok) {
+                        const errJson = await response.json().catch(() => ({}));
+                        throw new Error(errJson.error?.message || `HTTP ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log(`✅ Berhasil: model=${model}, key=...${apiKey.slice(-6)}`);
+                    return result;
+                }
+            }
+            throw new Error('Semua API key dan model tidak tersedia. Coba beberapa saat lagi.');
+        }
+
+        function populateFallbackData() {
+            state.kegiatanByProvinsi = {
+                '01. Sulawesi Utara': [],
+                '02. Sulawesi Tengah': ['02. Pembangunan Gedung Kantor Ombudsman Provinsi Sulawesi Tengah', '04. Pembangunan Gedung AMC Rumah Sakit Anutapura'],
+                '03. Sulawesi Selatan': ['02. Rehabilitasi dan Rekonstruksi BGN dan Prasarana Publik Terdampak Aksi Demonstrasi Provinsi Sulawesi Selatan'],
+                '04. Sulawesi Tenggara': [],
+                '05. Gorontalo': [],
+                '06. Sulawesi Barat': [],
+                '07. Bali': [],
+                '08. Nusa Tenggara Barat': ['03. Pembangunan Gedung DPRD Provinsi NTB'],
+                '09. Nusa Tenggara Timur': ['02. PLBN Motaain'],
+                '10. Maluku': [],
+                '11. Maluku Utara': ['03. Pembangunan Gedung Kantor BPKP Sofifi'],
+                '12. Papua': [],
+                '13. Papua Barat': ['13. Papua Barat'],
+                '14. Papua Barat Daya': [],
+                '15. Papua Selatan': [],
+                '16. Papua Tengah': ['02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP Provinsi Papua Tengah', '16. Papua Tengah'],
+                '17. Papua Pegunungan': ['02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP'],
+                '18. Vanuatu': ['01. Renovasi Gedung Parlemen dan Manua Centre School di Vanuatu'],
+                '19. Kegiatan Lainnya': ['01. Notulensi', '01. Pembinaan Bangunan Gedung dan Rumah Negara']
+            };
+
+            provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+            Object.keys(state.kegiatanByProvinsi).sort().forEach(prov => {
+                const opt = document.createElement('option');
+                opt.value = prov;
+                opt.textContent = prov;
+                provinsiSelect.appendChild(opt);
+            });
+        }
+
+        function populateNotulisDropdown() {
+            const select = document.getElementById('namaNotulis');
+            if (!select) return;
+
+            select.innerHTML = '<option value="">-- Pilih Nama Notulis --</option>';
+
+            state.notulisList.forEach(nama => {
+                const opt = document.createElement('option');
+                opt.value = nama;
+                opt.textContent = nama;
+                select.appendChild(opt);
+            });
+            console.log("✅ Daftar Notulis dari STATE sukses dimuat.");
+        }
+
+        window.addEventListener('load', loadDataFromExcel);
+        window.addEventListener('load', populateNotulisDropdown);
+
+        function updateKegiatanList(provinsi) {
+            namaKegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            const cleanProv = provinsi ? provinsi.trim() : '';
+            const list = state.kegiatanByProvinsi[cleanProv] || [];
+            list.forEach(kegiatan => {
+                const option = document.createElement('option');
+                option.value = kegiatan;
+                option.textContent = kegiatan;
+                namaKegiatanSelect.appendChild(option);
+            });
+        }
+
+        provinsiSelect.addEventListener('change', (e) => {
+            state.selectedProvinsi = e.target.value;
+            namaKegiatanSelect.value = '';
+            updateKegiatanList(state.selectedProvinsi);
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+        });
+
+        btnAddKegiatan.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!state.selectedProvinsi) {
+                showMessage('Silakan pilih Provinsi terlebih dahulu', 'error');
+                return;
+            }
+            newKegiatanRow.style.display = 'block';
+            newKegiatanInput.focus();
+        });
+
+        btnCancelKegiatan.addEventListener('click', () => {
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+        });
+
+        btnConfirmKegiatan.addEventListener('click', () => {
+            const newKegiatan = newKegiatanInput.value.trim();
+
+            if (!newKegiatan) {
+                showMessage('Silakan masukkan nama kegiatan baru', 'error');
+                return;
+            }
+
+            if (!state.kegiatanByProvinsi[state.selectedProvinsi]) {
+                state.kegiatanByProvinsi[state.selectedProvinsi] = [];
+            }
+
+            if (state.kegiatanByProvinsi[state.selectedProvinsi].includes(newKegiatan)) {
+                showMessage('Kegiatan ini sudah ada dalam daftar', 'error');
+                return;
+            }
+
+            state.kegiatanByProvinsi[state.selectedProvinsi].push(newKegiatan);
+            state.kegiatanByProvinsi[state.selectedProvinsi].sort();
+            updateKegiatanList(state.selectedProvinsi);
+            namaKegiatanSelect.value = newKegiatan;
+
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+            showMessage(`Kegiatan baru "${newKegiatan}" ditambahkan`, 'success');
+        });
+
+        newKegiatanInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); btnConfirmKegiatan.click(); }
+            if (e.key === 'Escape') { btnCancelKegiatan.click(); }
+        });
+
+        function setOCRStatus(status, message) {
+            const statusBox = document.getElementById('ocrStatusBox');
+
+            if (!statusBox) {
+                console.error("Elemen 'ocrStatusBox' tidak ditemukan!");
+                return;
+            }
+
+            statusBox.style.display = 'block';
+            statusBox.textContent = message;
+
+            statusBox.className = '';
+            if (status === 'processing') statusBox.classList.add('ocr-processing');
+            if (status === 'success') statusBox.classList.add('ocr-success');
+            if (status === 'error') statusBox.classList.add('ocr-error');
+        }
+
+        const fileInput = document.getElementById('suratUndangan');
+        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+
+        function handleFileSelect(file) {
+            const errorDiv = document.getElementById('fileError');
+            errorDiv.style.display = 'none';
+            if (!file) return;
+
+            const allowed = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowed.includes(file.type)) {
+                errorDiv.textContent = 'File harus berformat PDF, JPG, atau PNG.';
+                errorDiv.style.display = 'block';
+                fileInput.value = '';
+                setOCRStatus('error', '❌ Format file tidak didukung.');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                errorDiv.textContent = 'Ukuran file maksimal 5MB.';
+                errorDiv.style.display = 'block';
+                fileInput.value = '';
+                setOCRStatus('error', '❌ Ukuran file melebihi 5 MB.');
+                return;
+            }
+
+            document.getElementById('uploadArea').style.display = 'none';
+            document.getElementById('filePreview').style.display = 'flex';
+            document.getElementById('ocrActionArea').style.display = 'block';
+
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileIcon').textContent = file.type === 'application/pdf' ? '📄' : '🖼️';
+
+            setOCRStatus('processing', '💡 Berkas berhasil diunggah. Silakan klik "Baca Surat Otomatis" untuk mengisi form.');
+        }
+
+        async function runOCR() {
+            const fileInput = document.getElementById('suratUndangan');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnOCR');
+
+            if (!file) return;
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Memindai...';
+            setOCRStatus('processing', '🔍 Sedang memindai surat dengan AI...');
+
+            try {
+                const base64Data = await toBase64(file);
+                const OCR_MODELS = [
+                    'gemini-3.1-flash-lite',
+                    'gemini-3.5-flash',
+                    'gemini-2.5-flash'
+                ];
+
+                const result = await geminiRequest(
+                    {
+                        contents: [{
+                            parts: [
+                                { text: "Ekstrak informasi JSON dari surat ini: {judul: '...', instansi: '...', tanggal: 'YYYY-MM-DD', meetingId: '...', passcode: '...'}. Jika Meeting ID atau Passcode tidak ditemukan, isi dengan string kosong ''. Berikan HANYA JSON." },
+                                { inline_data: { mime_type: file.type, data: base64Data } }
+                            ]
+                        }]
+                    },
+                    OCR_MODELS
+                );
+
+                const rawText = result.candidates[0].content.parts[0].text;
+                const cleanJSON = rawText.replace(/```json|```/g, '').trim();
+                const data = JSON.parse(cleanJSON);
+
+                document.getElementById('judulRapat').value = data.judul || "";
+                document.getElementById('instansiPengundang').value = data.instansi || "";
+                if (data.tanggal) document.getElementById('tanggalRapat').value = data.tanggal;
+
+                state.meetingId = data.meetingId || "";
+                state.meetingPasscode = data.passcode || "";
+
+                setOCRStatus('success', '✅ Data surat berhasil dibaca otomatis.');
+
+            } catch (err) {
+                console.error("OCR Error:", err);
+                setOCRStatus('error', '❌ ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        let loadingInterval;
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalAITranscript').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+
+            const loadingTexts = [
+                "Mengecek ketersediaan folder...",
+                "Menyusun template struktur folder...",
+                "Mengunggah berkas Surat Undangan...",
+                "Menyusun Template Word Notulensi...",
+                "Menyelesaikan dan menyimpan data..."
+            ];
+            let i = 0;
+            loadingInterval = setInterval(() => {
+                document.getElementById('loadingDynamicText').textContent = loadingTexts[i];
+                i = (i + 1) % loadingTexts.length;
+            }, 3500);
+        }
+
+        function showModalSuccess(link) {
+            clearInterval(loadingInterval);
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+
+            const judulRapat = document.getElementById('judulRapat').value;
+            const shortLink = link || 'Link tidak tersedia';
+
+            const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
+            document.getElementById('waTextTemplate').innerHTML = `Berikut link notulensi Rapat <strong>"${judulRapat}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
+
+            const btnLink = document.getElementById('btnLinkBerkas');
+            if (link) {
+                btnLink.href = link;
+                btnLink.style.display = 'inline-block';
+            } else {
+                btnLink.style.display = 'none';
+            }
+
+            const btnCopy = document.getElementById('btnCopyWA');
+            btnCopy.onclick = function () {
+                navigator.clipboard.writeText(waText).then(() => {
+                    const originalText = btnCopy.innerHTML;
+                    btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
+                    btnCopy.style.background = "#219653";
+
+                    setTimeout(() => {
+                        btnCopy.innerHTML = originalText;
+                        btnCopy.style.background = "#27ae60";
+                    }, 2500);
+                }).catch(err => {
+                    console.error("Gagal menyalin teks: ", err);
+                });
+            };
+        }
+
+        function showModalError(errorMsg) {
+            clearInterval(loadingInterval);
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalAITranscript').style.display = 'none';
+            document.getElementById('modalError').style.display = 'block';
+            document.getElementById('errorText').textContent = errorMsg;
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function dapatkanKataKunci(teks) {
+            const stopWords = ["rapat", "koordinasi", "pembahasan", "dan", "atau", "di", "ke", "yang", "untuk", "dengan", "tentang", "terkait", "dalam", "pada", "oleh", "evaluasi", "monitoring"];
+
+            return teks.toLowerCase()
+                .replace(/[\\\/:*?"<>|.,_-]/g, ' ')
+                .split(/\s+/)
+                .filter(w => w.length > 2 && !stopWords.includes(w));
+        }
+
+        function cekRapatGanda() {
+            const inputJudul = document.getElementById('judulRapat').value.trim().toLowerCase();
+            const inputTanggalRaw = document.getElementById('tanggalRapat').value;
+            const warningDiv = document.getElementById('meetingWarningText');
+
+            if (!warningDiv) return false;
+            warningDiv.style.display = 'none';
+
+            if (inputJudul.length < 3 || !inputTanggalRaw) return false;
+
+            const inputTanggal = inputTanggalRaw.replace(/-/g, '.');
+            const kataKunciInput = dapatkanKataKunci(inputJudul);
+
+            const duplicate = state.allMeetings.find(row => {
+                const rowTgl = dapatkanNilaiKolom(row, ['Tanggal Rapat', 'Tanggal_x0020_Rapat', 'tanggalRapat']) || '';
+
+                if (rowTgl !== inputTanggal) return false;
+
+                const rowJudul = dapatkanNilaiKolom(row, ['Judul Rapat', 'Judul_x0020_Rapat', 'judulRapat']) || '';
+                const cleanRowJudul = rowJudul.toLowerCase().trim();
+                const kataKunciRow = dapatkanKataKunci(rowJudul);
+
+                const irisan = kataKunciInput.filter(word => kataKunciRow.includes(word));
+                const isSimilarDirect = cleanRowJudul.includes(inputJudul) || inputJudul.includes(cleanRowJudul);
+                const isSimilarKeywords = irisan.length >= 2;
+
+                return isSimilarDirect || isSimilarKeywords;
+            });
+
+            if (duplicate) {
+                const duplicatedJudul = dapatkanNilaiKolom(duplicate, ['Judul Rapat', 'judulRapat']);
+                const duplicatedNotulis = dapatkanNilaiKolom(duplicate, ['namaNotulis', 'Nama Notulis', 'Nama_x0020_Notulis', 'Notulis', 'notulis', 'Dibuat Oleh']) || 'Staf Subdit';
+                const duplicatedTgl = dapatkanNilaiKolom(duplicate, ['Tanggal Rapat', 'tanggalRapat']) || '';
+                const linkFile = dapatkanNilaiKolom(duplicate, ['Link File', 'Link_x0020_File', 'linkFile', 'Link Undangan', 'Link_x0020_Undangan']);
+
+                let formattedDate = duplicatedTgl;
+                if (duplicatedTgl.includes('.')) {
+                    const parts = duplicatedTgl.split('.');
+                    if (parts.length === 3) formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
+                let warningHtml = `
+                    <div style="margin-bottom: 5px;">⚠️ <strong>PERINGATAN: RAPAT SERUPA TERDETEKSI!</strong></div>
+                    <div style="font-size: 13px; font-weight: normal; color: #7f1d1d; line-height: 1.6; margin-bottom: 10px;">
+                        Rapat pada tanggal tersebut sepertinya sudah diinput oleh <strong>"${duplicatedNotulis}"</strong>.<br>
+                        • <strong>Judul Terdaftar:</strong> "${duplicatedJudul}"<br>
+                        • <strong>Tanggal Rapat:</strong> ${formattedDate}
+                    </div>
+                `;
+
+                if (linkFile) {
+                    warningHtml += `
+                        <a href="${linkFile}" target="_blank" 
+                           style="display: inline-flex; align-items: center; gap: 6px; background-color: #1d355e; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; font-weight: 700; font-size: 11.5px; transition: all 0.2s ease; border: 1.5px solid #1d355e;"
+                           onmouseover="this.style.backgroundColor='#f5b016'; this.style.color='#11223f'; this.style.borderColor='#f5b016';" 
+                           onmouseout="this.style.backgroundColor='#1d355e'; this.style.color='white'; this.style.borderColor='#1d355e';">
+                           📄 Buka Berkas yang Sudah Ada
+                        </a>
+                    `;
+                } else {
+                    warningHtml += `<span style="font-size:11px; color:#991b1b; font-style:italic;">(Berkas asli belum diunggah ke OneDrive)</span>`;
+                }
+
+                warningDiv.innerHTML = warningHtml;
+                warningDiv.style.display = 'block';
+                return true;
+            }
+            return false;
+        }
+
+        document.getElementById('judulRapat').addEventListener('input', cekRapatGanda);
+        document.getElementById('tanggalRapat').addEventListener('change', cekRapatGanda);
+
+        // --- FORM SUBMIT MANUAL ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const isDuplicate = cekRapatGanda();
+
+            if (!state.selectedProvinsi) return showMessage('Silakan pilih Provinsi', 'error');
+            if (!namaKegiatanSelect.value) return showMessage('Silakan pilih Nama Kegiatan', 'error');
+            if (!document.getElementById('namaNotulis').value) return showMessage('Silakan pilih Nama Notulis', 'error');
+
+            const file = fileInput.files[0];
+            if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG/PNG)', 'error');
+
+            // Menyusun tampilan rincian HTML di dalam modal konfirmasi custom
+            let warningHeader = '';
+            if (isDuplicate) {
+                warningHeader = `<div style="color: #e74c3c; font-weight: bold; margin-bottom: 10px; border-bottom: 2px solid #ef5350; padding-bottom: 8px;">⚠️ PERINGATAN: Rapat serupa sudah terdaftar di sistem!</div>`;
+            }
+
+            const confirmBodyHtml = `
+                ${warningHeader}
+                <strong>Provinsi:</strong> ${state.selectedProvinsi}<br>
+                <strong>Kegiatan:</strong> ${namaKegiatanSelect.value}<br>
+                <strong>Judul Rapat:</strong> ${document.getElementById('judulRapat').value}<br>
+                <strong>Instansi:</strong> ${document.getElementById('instansiPengundang').value}<br>
+                <strong>Tanggal Rapat:</strong> ${document.getElementById('tanggalRapat').value.split('-').reverse().join('/')}<br>
+                <strong>Notulis:</strong> ${document.getElementById('namaNotulis').value}
+            `;
+
+            const yakin = await showCustomConfirm(isDuplicate ? "Tetap Kirim Data?" : "Kirim Notulensi Rapat?", confirmBodyHtml);
+            if (!yakin) return;
+
+            try {
+                openModal();
+
+                const fileBase64 = await toBase64(file);
+
+                const formData = {
+                    provinsi: state.selectedProvinsi,
+                    namaKegiatan: namaKegiatanSelect.value,
+                    judulRapat: document.getElementById('judulRapat').value,
+                    instansiPengundang: document.getElementById('instansiPengundang').value,
+                    tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
+                    namaNotulis: document.getElementById('namaNotulis').value.trim(),
+                    tujuanRapat: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                    grupPembukaan: [
+                        {
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi',
+                            teksPembukaan: '1. x\n2. x'
+                        }
+                    ],
+                    grupPembahasan: [
+                        {
+                            namaPembicara: 'Bapak/Ibu A - Jabatan - Instansi',
+                            teksPembahasan: 'a. Aaa\nb. A'
+                        }
+                    ],
+                    grupKesimpulan: [
+                        { teksKesimpulan: 'x' }
+                    ],
+                    suratUndanganBase64: fileBase64,
+                    suratUndanganNama: file.name,
+                    suratUndanganTipe: file.type,
+                    timestamp: new Date().toISOString(),
+                    meetingId: state.meetingId,
+                    meetingPasscode: state.meetingPasscode
+                };
+
+                const responseData = await submitToFlow(formData);
+                const documentLink = responseData.linkBerkas || '';
+                clearCachedData();
+                showModalSuccess(documentLink);
+
+                resetSeluruhForm();
+
+            } catch (error) {
+                showModalError(error.message);
+                console.error(error);
+            }
+        });
+
+        async function submitToFlow(data) {
+            const response = await fetch(FLOW_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                let detailedErrorMessage = response.statusText;
+                try {
+                    const errText = await response.text();
+                    const errObj = JSON.parse(errText);
+
+                    if (errObj && errObj.error && errObj.error.message) {
+                        detailedErrorMessage = errObj.error.message;
+                    } else if (errObj && errObj.message) {
+                        detailedErrorMessage = errObj.message;
+                    } else {
+                        detailedErrorMessage = errText || response.statusText;
+                    }
+                } catch (e) { }
+                throw new Error(`(Status ${response.status}) Penolakan Microsoft: ${detailedErrorMessage}`);
+            }
+
+            const text = await response.text();
+            return text ? JSON.parse(text) : {};
+        }
+
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+
+        function hideMessage() {
+            messageDiv.style.display = 'none';
+        }
+
+        function resetSeluruhForm() {
+            const form = document.getElementById('activityForm');
+            form.reset();
+            removeFile();
+
+            const warningMeeting = document.getElementById('meetingWarningText');
+            if (warningMeeting) {
+                warningMeeting.style.display = 'none';
+                warningMeeting.innerHTML = '';
+            }
+
+            const statusBox = document.getElementById('ocrStatusBox');
+            if (statusBox) {
+                statusBox.style.display = 'none';
+                statusBox.innerHTML = '';
+                statusBox.className = '';
+            }
+
+            const namaKegiatanSelect = document.getElementById('namaKegiatan');
+            if (namaKegiatanSelect) {
+                namaKegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            }
+
+            const newKegiatanRow = document.getElementById('newKegiatanRow');
+            if (newKegiatanRow) {
+                newKegiatanRow.style.display = 'none';
+            }
+
+            state.meetingId = '';
+            state.meetingPasscode = '';
+
+            console.log("Formulir dan lampiran telah dibersihkan sepenuhnya.");
+        }
+
+        newKegiatanInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim().toLowerCase();
+            const warningDiv = document.getElementById('aiWarningText');
+
+            if (!warningDiv) return;
+            warningDiv.style.display = 'none';
+            if (val.length < 3) return;
+
+            const existingList = state.kegiatanByProvinsi[state.selectedProvinsi] || [];
+
+            const similar = existingList.find(keg => {
+                const cleanKeg = keg.toLowerCase().replace(/^\d+[\s.]*/, '');
+                const valWords = val.split(/\s+/);
+                const kegWords = cleanKeg.split(/\s+/);
+
+                const commonWords = valWords.filter(w => w.length > 2 && kegWords.some(kw => kw.includes(w) || w.includes(kw)));
+                return cleanKeg.includes(val) || val.includes(cleanKeg) || commonWords.length >= 2;
+            });
+
+            if (similar) {
+                warningDiv.innerHTML = `💡 Kegiatan serupa ditemukan: <strong>"${similar}"</strong>.<br>Jika ini adalah kegiatan yang dimaksud, silakan klik ✕ (Batal) dan pilih dari dropdown utama agar tidak terjadi duplikasi folder!`;
+                warningDiv.style.display = 'block';
+            }
+        });
+
+        const namaNotulisSelect = document.getElementById('namaNotulis');
+        const btnAddNotulis = document.getElementById('btnAddNotulis');
+        const newNotulisRow = document.getElementById('newNotulisRow');
+        const newNotulisInput = document.getElementById('newNotulisInput');
+        const btnConfirmNotulis = document.getElementById('btnConfirmNotulis');
+        const btnCancelNotulis = document.getElementById('btnCancelNotulis');
+
+        btnAddNotulis.addEventListener('click', (e) => {
+            e.preventDefault();
+            newNotulisRow.style.display = 'block';
+            newNotulisInput.focus();
+        });
+
+        btnCancelNotulis.addEventListener('click', () => {
+            newNotulisRow.style.display = 'none';
+            newNotulisInput.value = '';
+        });
+
+        btnConfirmNotulis.addEventListener('click', () => {
+            const newName = newNotulisInput.value.trim();
+
+            if (!newName) {
+                showMessage('Silakan masukkan nama notulis baru', 'error');
+                return;
+            }
+
+            let exists = false;
+            for (let i = 0; i < namaNotulisSelect.options.length; i++) {
+                if (namaNotulisSelect.options[i].value.toLowerCase() === newName.toLowerCase()) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (exists) {
+                showMessage('Nama ini sudah ada di dalam daftar pilihan', 'error');
+                return;
+            }
+
+            const opt = document.createElement('option');
+            opt.value = newName;
+            opt.textContent = newName;
+            namaNotulisSelect.appendChild(opt);
+
+            namaNotulisSelect.value = newName;
+
+            newNotulisRow.style.display = 'none';
+            newNotulisInput.value = '';
+
+            showMessage(`Nama "${newName}" berhasil ditambahkan ke daftar pilihan`, 'success');
+            setTimeout(hideMessage, 3000);
+        });
+
+        newNotulisInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); btnConfirmNotulis.click(); }
+            if (e.key === 'Escape') { btnCancelNotulis.click(); }
+        });
+
+        function removeFile() {
+            const fileInput = document.getElementById('suratUndangan');
+            fileInput.value = '';
+
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) uploadArea.style.display = 'block';
+
+            const filePreview = document.getElementById('filePreview');
+            if (filePreview) filePreview.style.display = 'none';
+
+            const ocrActionArea = document.getElementById('ocrActionArea');
+            if (ocrActionArea) ocrActionArea.style.display = 'none';
+
+            const ocrStatus = document.getElementById('ocrStatusBox');
+            if (ocrStatus) {
+                ocrStatus.style.display = 'none';
+                ocrStatus.textContent = '';
+                ocrStatus.className = '';
+            }
+
+            const fileError = document.getElementById('fileError');
+            if (fileError) fileError.style.display = 'none';
+
+            document.getElementById('judulRapat').value = '';
+            document.getElementById('instansiPengundang').value = '';
+            document.getElementById('tanggalRapat').value = '';
+
+            state.meetingId = '';
+            state.meetingPasscode = '';
+
+            console.log("Lampiran surat berhasil dihapus.");
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+<script src="navbar.js"></script>
+
+</html>

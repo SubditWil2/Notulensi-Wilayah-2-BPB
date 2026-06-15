@@ -10,7 +10,7 @@ Sistem ini adalah aplikasi portal mandiri (custom hybrid web portal) yang diranc
 
 Sistem ini membagi tugas secara dinamis antara antarmuka pengguna (*Frontend*) dan mesin otomatisasi awan (*Backend*):
 [ Frontend: HTML/CSS/JS ] ──(HTTP Secure Webhook)──> [ Backend: Microsoft Power Automate ]
-index.html (Input Form) - Flow 1: Kirim Form & Isi Word
+notulensi.html (Input Form) - Flow 1: Kirim Form & Isi Word
 rekap.html (Dashboard Admin) - Flow 2: Pembuat Paket Folder
 - Flow 3: Penghapus Data (REST API)
 │
@@ -21,7 +21,7 @@ rekap.html (Dashboard Admin) - Flow 2: Pembuat Paket Folder
 
 ## 🌟 Fitur Utama Aplikasi
 
-### 1. Antarmuka Formulir Input (`index.html`)
+### 1. Antarmuka Formulir Input (`notulensi.html`)
 *   **Identitas Resmi Kementerian PUPR:** Didesain eksklusif menggunakan kode warna resmi PUPR (Biru Navy `#1D355E` dan Kuning Emas `#F5B016`) lengkap dengan logo resmi dan watermark siluet baling-baling PU di latar belakang.
 *   **Dropdown Sinkron Dinamis (Dependent Dropdown):** Pilihan dropdown "Provinsi" ditarik langsung secara *live* dari tabel master Excel, dan pilihan "Nama Kegiatan" otomatis menyaring secara instan hanya menampilkan kegiatan yang sesuai dengan provinsi terpilih.
 *   **Penambahan Kegiatan Baru On-The-Fly:** Menyediakan tombol `+ Tambah` yang memungkinkan user mengetikkan nama kegiatan baru secara instan jika belum terdaftar di database Excel.
@@ -89,7 +89,7 @@ Menggunakan REST API SharePoint untuk menghapus folder secara langsung via jalur
 Karena server SharePoint kementerian terkunci kuota penyimpanannya dan menolak unggah file `.aspx` (kebijakan NoScript), gunakan metode **Tombol Penghubung** berikut:
 
 ### 1. Letakkan Form di GitHub Pages / Netlify (100% Gratis)
-1.  Buat folder baru di komputer Anda, masukkan file **`index.html`** (ganti nama dari `form_notulensi.html`), **`rekap.html`**, dan gambar **`logo-pu.png`** ke dalamnya secara bersamaan.
+1.  Buat folder baru di komputer Anda, masukkan file **`notulensi.html`** (ganti nama dari `form_notulensi.html`), **`rekap.html`**, dan gambar **`logo-pu.png`** ke dalamnya secara bersamaan.
 2.  Unggah folder tersebut ke **Netlify Drop** atau repositori **GitHub Pages** Anda.
 3.  Anda akan mendapatkan URL aman (HTTPS) gratis untuk form input dan dashboard rekap Anda.
 

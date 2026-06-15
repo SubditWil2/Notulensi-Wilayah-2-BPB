@@ -1,15 +1,16 @@
 // ── NAVBAR SUBDIT WIL 2 BPB ──
-// Cara pakai:
-// 1. Tambah <div id="navbar"></div> sebagai elemen PERTAMA di dalam <body>
-// 2. Tambah <script src="navbar.js"></script> sebelum </body>
-// 3. Hapus padding dari body, ganti dengan wrapper (lihat instruksi di bawah)
-
 function loadNavbar() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    // Mengambil nama file dari path URL
+    let currentPage = window.location.pathname.split('/').pop();
+    
+    // Jika path kosong (akses root /), default, atau masih mengarah ke landing.html, arahkan ke index.html
+    if (currentPage === '' || currentPage === 'index.html' || currentPage === 'landing.html') {
+        currentPage = 'index.html';
+    }
 
     const navItems = [
         { href: 'index.html',            label: '🏛️ Home',               id: 'index.html' },
-        { href: 'notulensi.html',            label: '📋 Notulensi',          id: 'notulensi.html' },
+        { href: 'notulensi.html',        label: '📋 Notulensi',          id: 'notulensi.html' },
         { href: 'notadinas.html',        label: '📄 Nota Dinas & Surat', id: 'notadinas.html' },
         { href: 'rekap.html',            label: '📊 Rekap Notulensi',    id: 'rekap.html' },
         { href: 'rekapnotadinas.html',   label: '📁 Rekap Nota Dinas',   id: 'rekapnotadinas.html' },

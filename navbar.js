@@ -5,10 +5,10 @@
 // 3. Hapus padding dari body, ganti dengan wrapper (lihat instruksi di bawah)
 
 function loadNavbar() {
-    const currentPage = window.location.pathname.split('/').pop() || 'landing.html';
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
     const navItems = [
-        { href: 'landing.html',          label: '🏛️ Home',               id: 'landing.html' },
+        { href: 'index.html',            label: '🏛️ Home',               id: 'index.html' },
         { href: 'notulensi.html',            label: '📋 Notulensi',          id: 'notulensi.html' },
         { href: 'notadinas.html',        label: '📄 Nota Dinas & Surat', id: 'notadinas.html' },
         { href: 'rekap.html',            label: '📊 Rekap Notulensi',    id: 'rekap.html' },

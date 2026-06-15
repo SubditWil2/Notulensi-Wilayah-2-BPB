@@ -67,20 +67,21 @@
         }
 
         .logo-container {
-            width: 52px;
-            height: 52px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
+            width: 52px !important;
+            height: 52px !important;
+            background: white !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 5px !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+            flex-shrink: 0 !important; /* Mengunci logo agar tidak gepeng di mobile */
         }
-
         .logo-container img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
+            width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
         }
 
         .header-content h1 {
@@ -340,6 +341,9 @@
             }
 
             .header {
+                flex-direction: column;
+                text-align: left; /* Rata kiri */
+                align-items: flex-start; /* Menjajakan logo & teks sejajar kiri */
                 padding: 12px 16px;
             }
 

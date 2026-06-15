@@ -1,115 +1,117 @@
-// ── NAVBAR SUBDIT WIL 2 BPB ──
-function loadNavbar() {
-    // Mengambil nama file dari path URL
-    let currentPage = window.location.pathname.split('/').pop();
-    
-    // Jika path kosong (akses root /), default, atau masih mengarah ke landing.html, arahkan ke index.html
-    if (currentPage === '' || currentPage === 'index.html' || currentPage === 'landing.html') {
-        currentPage = 'index.html';
+// ========== 1. INJEKSI CSS RESPONSIF SECARA OTOMATIS ==========
+const navbarStyle = document.createElement('style');
+navbarStyle.innerHTML = `
+    .navbar-container {
+        background-color: #11223f;
+        border-bottom: 3px solid #f5b016;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    const navItems = [
-        { href: 'index.html',            label: '🏛️ Home',               id: 'index.html' },
-        { href: 'notulensi.html',        label: '📋 Notulensi',          id: 'notulensi.html' },
-        { href: 'notadinas.html',        label: '📄 Nota Dinas & Surat', id: 'notadinas.html' },
-        { href: 'rekap.html',            label: '📊 Rekap Notulensi',    id: 'rekap.html' },
-        { href: 'rekapnotadinas.html',   label: '📁 Rekap Nota Dinas',   id: 'rekapnotadinas.html' },
-    ];
+    .navbar-brand {
+        color: #f5b016;
+        font-weight: 700;
+        font-size: 15px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+    }
 
-    const navbarDiv = document.getElementById('navbar');
-    if (!navbarDiv) return;
+    .navbar-links {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        list-style: none;
+    }
 
-    navbarDiv.innerHTML = `
-        <style>
-            /* Reset body padding supaya navbar full width */
-            body {
-                padding-top: 0 !important;
-            }
+    .navbar-links a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
 
-            /* Wrapper konten utama — ganti fungsi body padding lama */
-            .page-wrapper {
-                padding: 20px;
-            }
+    .navbar-links a:hover, .navbar-links a.active {
+        color: #11223f !important;
+        background-color: #f5b016 !important;
+        font-weight: 700;
+    }
 
-            /* Khusus rekap yang pakai padding berbeda */
-            .page-wrapper-rekap {
-                padding: 16px;
-            }
+    /* === RESPONSIVE MOBILE NAVBAR (SWIPEABLE) === */
+    @media (max-width: 768px) {
+        .navbar-container {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px 15px;
+            gap: 10px;
+        }
 
-            #siteNavbar {
-                background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
-                border-bottom: 3px solid #f5b016;
-                padding: 0 24px;
-                display: flex;
-                align-items: center;
-                gap: 2px;
-                position: sticky;
-                top: 0;
-                z-index: 1000;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                width: 100%;
-            }
+        .navbar-brand {
+            font-size: 14px;
+        }
 
-            #siteNavbar .nav-brand {
-                color: #f5b016;
-                font-weight: 700;
-                font-size: 13px;
-                padding: 13px 16px 13px 0;
-                border-right: 1px solid rgba(245,176,22,0.3);
-                margin-right: 6px;
-                white-space: nowrap;
-                font-family: 'Segoe UI', sans-serif;
-                letter-spacing: 0.3px;
-            }
+        .navbar-links {
+            width: 100%;
+            overflow-x: auto; /* Aktifkan geser horizontal di HP */
+            white-space: nowrap;
+            padding-bottom: 4px;
+            display: flex;
+            gap: 8px;
+            -webkit-overflow-scrolling: touch; /* Geser halus di iOS */
+        }
 
-            #siteNavbar a.nav-item {
-                color: rgba(255,255,255,0.7);
-                text-decoration: none;
-                font-size: 12.5px;
-                font-weight: 500;
-                padding: 13px 13px;
-                border-radius: 4px;
-                transition: all 0.2s ease;
-                white-space: nowrap;
-                font-family: 'Segoe UI', sans-serif;
-            }
+        /* Sembunyikan scrollbar bawaan browser demi estetika */
+        .navbar-links::-webkit-scrollbar {
+            display: none;
+        }
+        .navbar-links {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
 
-            #siteNavbar a.nav-item:hover {
-                color: #f5b016;
-                background: rgba(245,176,22,0.1);
-            }
+        .navbar-links a {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+    }
+`;
+document.head.appendChild(navbarStyle);
 
-            #siteNavbar a.nav-item.active {
-                color: #f5b016;
-                background: rgba(245,176,22,0.12);
-                font-weight: 700;
-            }
+// ========== 2. DETEKSI OTOMATIS HALAMAN AKTIF (ACTIVE TAB) ==========
+const currentPath = window.location.pathname;
+const getActive = (path) => currentPath.includes(path) ? 'active' : '';
 
-            @media (max-width: 768px) {
-                #siteNavbar {
-                    padding: 0 12px;
-                    overflow-x: auto;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                }
-                #siteNavbar::-webkit-scrollbar { display: none; }
-                .page-wrapper, .page-wrapper-rekap { padding: 8px; }
-            }
-        </style>
-        <nav id="siteNavbar">
-            <div class="nav-brand">Subdit Wil 2 BPB</div>
-            ${navItems.map(item => `
-                <a href="${item.href}"
-                   class="nav-item ${currentPage === item.id ? 'active' : ''}">
-                    ${item.label}
-                </a>
-            `).join('')}
-        </nav>
-    `;
-}
+// Tentukan tab aktif untuk Home/Landing Page
+const isHomeActive = currentPath.endsWith('/') || currentPath.endsWith('index.html') ? 'active' : '';
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadNavbar);
-} else {
-    loadNavbar();
-}
+// ========== 3. INJEKSI HTML NAVBAR ==========
+document.getElementById('navbar').innerHTML = `
+    <div class="navbar-container">
+        <a href="index.html" class="navbar-brand">
+            🚧 Subdit Wil 2 BPB
+        </a>
+        <ul class="navbar-links">
+            <li><a href="index.html" class="${isHomeActive}">🏛️ Home</a></li>
+            <li><a href="notulensi.html" class="${getActive('notulensi.html')}">📋 Notulensi</a></li>
+            <li><a href="notadinas.html" class="${getActive('notadinas.html')}">📄 Nota Dinas / Surat</a></li>
+            <li><a href="rekap.html" class="${getActive('rekap.html')}">📊 Rekap Notulensi</a></li>
+            <li><a href="rekapnotadinas.html" class="${getActive('rekapnotadinas.html')}">📁 Rekap ND & Surat</a></li>
+        </ul>
+    </div>
+`;

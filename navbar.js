@@ -95,3 +95,15 @@ document.getElementById('navbar').innerHTML = `
         </ul>
     </div>
 `;
+
+// ========== INJEKSI FAVICON (LOGO TAB) SECARA OTOMATIS ==========
+(function() {
+    let favicon = document.querySelector("link[rel*='icon']");
+    if (!favicon) {
+        favicon = document.createElement('link');
+        favicon.rel = 'icon';
+        favicon.type = 'image/png';
+        document.head.appendChild(favicon);
+    }
+    favicon.href = 'logo-pu.png';
+})();

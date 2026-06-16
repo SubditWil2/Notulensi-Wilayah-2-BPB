@@ -1,6 +1,13 @@
 // ========== 1. INJEKSI CSS DESAIN TABS CENTERED & RINGKAS ==========
 const navbarStyle = document.createElement('style');
 navbarStyle.innerHTML = `
+    /* Terapkan sticky langsung pada ID pembungkus terluar di HTML */
+    #navbar {
+        position: sticky;
+        top: 0;
+        z-index: 10000;
+    }
+
     .navbar-container {
         background-color: #11223f;
         border-bottom: 3px solid #f5b016;
@@ -8,9 +15,6 @@ navbarStyle.innerHTML = `
         display: flex;
         justify-content: center; /* Pusatkan menu di tengah */
         align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 10000;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
@@ -47,31 +51,26 @@ navbarStyle.innerHTML = `
     /* === RESPONSIVE MOBILE TABS === */
     @media (max-width: 768px) {
         .navbar-container {
-            padding: 8px 10px;
+            padding: 6px 10px;
         }
 
         .navbar-links {
-            justify-content: flex-start; /* Rata kiri di HP untuk geser mulus */
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 2px;
+            justify-content: center; /* Pusatkan menu di HP */
+            overflow-x: visible;
+            white-space: normal;
             display: flex;
-            gap: 6px;
-            -webkit-overflow-scrolling: touch;
+            gap: 12px;
         }
 
-        /* Sembunyikan scrollbar bawaan */
-        .navbar-links::-webkit-scrollbar {
+        /* Menyembunyikan teks menu pada HP */
+        .navbar-links .nav-text {
             display: none;
-        }
-        .navbar-links {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
 
         .navbar-links a {
-            font-size: 12px;
-            padding: 6px 10px;
+            font-size: 18px; /* Ukuran emoji nyaman disentuh */
+            padding: 10px 14px;
+            gap: 0;
         }
     }
 `;
@@ -79,12 +78,8 @@ document.head.appendChild(navbarStyle);
 
 // ========== 2. DETEKSI OTOMATIS HALAMAN AKTIF ==========
 const currentPath = window.location.pathname;
-
-// Mengambil hanya nama file di akhir path (misal: "rekapnotadinas.html")
-// dan mengabaikan parameter query atau hash jika ada
 const currentPage = currentPath.split('/').pop().split('?')[0].split('#')[0];
 
-// Melakukan perbandingan secara presisi (exact match)
 const getActive = (path) => currentPage === path ? 'active' : '';
 const isHomeActive = currentPage === '' || currentPage === 'index.html' ? 'active' : '';
 
@@ -92,11 +87,11 @@ const isHomeActive = currentPage === '' || currentPage === 'index.html' ? 'activ
 document.getElementById('navbar').innerHTML = `
     <div class="navbar-container">
         <ul class="navbar-links">
-            <li><a href="index.html" class="${isHomeActive}">🏛️ Home</a></li>
-            <li><a href="notulensi.html" class="${getActive('notulensi.html')}">📋 Notulensi</a></li>
-            <li><a href="notadinas.html" class="${getActive('notadinas.html')}">📄 ND & Surat</a></li>
-            <li><a href="rekap.html" class="${getActive('rekap.html')}">📊 Rekap Notul</a></li>
-            <li><a href="rekapnotadinas.html" class="${getActive('rekapnotadinas.html')}">📁 Rekap ND & Surat</a></li>
+            <li><a href="index.html" class="${isHomeActive}">🏛️ <span class="nav-text">Home</span></a></li>
+            <li><a href="notulensi.html" class="${getActive('notulensi.html')}">📋 <span class="nav-text">Notulensi</span></a></li>
+            <li><a href="notadinas.html" class="${getActive('notadinas.html')}">📄 <span class="nav-text">ND & Surat</span></a></li>
+            <li><a href="rekap.html" class="${getActive('rekap.html')}">📊 <span class="nav-text">Rekap Notul</span></a></li>
+            <li><a href="rekapnotadinas.html" class="${getActive('rekapnotadinas.html')}">📁 <span class="nav-text">Rekap ND & Surat</span></a></li>
         </ul>
     </div>
 `;

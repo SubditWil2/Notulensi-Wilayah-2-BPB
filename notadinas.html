@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Nota Dinas / Surat</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
             min-height: 100vh;
+            padding: 0;
             position: relative;
         }
+
         body::before {
             content: "";
             position: fixed;
@@ -27,38 +35,36 @@
             z-index: -1;
             pointer-events: none;
         }
+
         .container {
             max-width: 900px;
-            margin: 30px auto;
+            margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             box-shadow: 0 15px 35px rgba(29, 53, 94, 0.12);
             overflow: hidden;
             border: 1px solid rgba(29, 53, 94, 0.1);
         }
+
         .header {
-    background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
-    color: white;
-    padding: 25px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap !important; /* Mengunci posisi kiri-kanan agar TIDAK PERNAH turun ke bawah di desktop */
-    gap: 20px;
-    border-bottom: 5px solid #f5b016;
-}
+            background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 5px solid #f5b016;
+        }
 
-.page-wrapper-rekap .header {
-    padding: 16px 24px;
-    border-bottom-width: 4px;
-}
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    flex-wrap: nowrap !important; /* Mengunci logo & teks judul selalu berdampingan */
-}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+        }
 
         .logo-container {
             width: 80px !important;
@@ -70,20 +76,52 @@
             justify-content: center !important;
             padding: 5px !important;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
-            flex-shrink: 0 !important; /* Mengunci logo agar tidak gepeng di mobile */
+            flex-shrink: 0 !important;
+            /* Mengunci logo agar tidak gepeng di mobile */
         }
+
         .logo-container img {
             width: 100% !important;
             height: auto !important;
             object-fit: contain !important;
         }
-        .header-content h1 { font-size: 24px; margin-bottom: 5px; font-weight: 700; }
-        .header-content p { font-size: 13px; opacity: 0.9; color: #f5b016; font-weight: 600; }
-        .form-content { padding: 35px 40px; }
-        .form-group { margin-bottom: 25px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #1d355e; font-size: 14px; }
-        .required { color: #e74c3c; }
-        input[type="text"], input[type="date"], select {
+
+        .header-content h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header-content p {
+            font-size: 13px;
+            opacity: 0.9;
+            color: #f5b016;
+            font-weight: 600;
+        }
+
+        .form-content {
+            padding: 35px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1d355e;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -93,13 +131,24 @@
             color: #334155;
             transition: all 0.3s ease;
         }
-        input:focus, select:focus {
+
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #1d355e;
-            box-shadow: 0 0 0 3px rgba(245,176,22,0.2);
+            box-shadow: 0 0 0 3px rgba(245, 176, 22, 0.2);
         }
-        .input-with-add { display: flex; gap: 10px; }
-        .input-with-add select, .input-with-add input { flex: 1; }
+
+        .input-with-add {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-with-add select,
+        .input-with-add input {
+            flex: 1;
+        }
+
         .btn-add {
             padding: 12px 20px;
             background: #27ae60;
@@ -111,7 +160,11 @@
             transition: background 0.3s ease;
             white-space: nowrap;
         }
-        .btn-add:hover { background: #219653; }
+
+        .btn-add:hover {
+            background: #219653;
+        }
+
         .btn-cancel-sm {
             background: #94a3b8;
             color: white;
@@ -121,7 +174,11 @@
             padding: 12px 18px;
             font-weight: 600;
         }
-        .btn-cancel-sm:hover { background: #64748b; }
+
+        .btn-cancel-sm:hover {
+            background: #64748b;
+        }
+
         .toggle-group {
             display: flex;
             gap: 20px;
@@ -131,8 +188,16 @@
             margin-bottom: 25px;
             border: 1px solid #e2e8f0;
         }
-        .toggle-option { flex: 1; text-align: center; }
-        .toggle-option input { display: none; }
+
+        .toggle-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .toggle-option input {
+            display: none;
+        }
+
         .toggle-option label {
             display: block;
             padding: 12px;
@@ -146,12 +211,14 @@
             transition: all 0.2s;
             margin-bottom: 0;
         }
+
         .toggle-option input:checked+label {
             background: #1d355e;
             color: white;
             border-color: #f5b016;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
         .button-group {
             display: flex;
             gap: 15px;
@@ -159,6 +226,7 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+
         button[type="submit"] {
             background: #1d355e;
             color: white;
@@ -171,11 +239,13 @@
             transition: all 0.3s ease;
             min-width: 150px;
         }
+
         button[type="submit"]:hover {
             background: #11223f;
             border-color: #f5b016;
             transform: translateY(-1px);
         }
+
         .btn-reset {
             background: #f5b016;
             color: #11223f;
@@ -185,6 +255,7 @@
             font-weight: 600;
             cursor: pointer;
         }
+
         .btn-cancel {
             background: #94a3b8;
             color: white;
@@ -194,6 +265,7 @@
             cursor: pointer;
             font-weight: 600;
         }
+
         .message {
             padding: 12px;
             border-radius: 6px;
@@ -201,9 +273,19 @@
             display: none;
             font-weight: 500;
         }
-        .message.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-        .message.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -211,7 +293,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(17,34,63,0.85);
+            background: rgba(17, 34, 63, 0.85);
             backdrop-filter: blur(5px);
             z-index: 9999;
             display: flex;
@@ -221,7 +303,12 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .modal-box {
             background: white;
             width: 90%;
@@ -230,10 +317,14 @@
             border-radius: 12px;
             text-align: center;
             transform: translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
-        .modal-overlay.active .modal-box { transform: translateY(0); }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+
         .modal-spinner {
             border: 5px solid #f1f5f9;
             border-top: 5px solid #f5b016;
@@ -243,10 +334,27 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .modal-loading-text { color: #1d355e; font-size: 16px; font-weight: 700; }
-        .modal-sub { color: #64748b; font-size: 13px; margin-top: 5px; margin-bottom: 15px; line-height: 1.5; }
-        
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .modal-loading-text {
+            color: #1d355e;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-sub {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
         .btn-open-link {
             display: inline-block;
             background: #27ae60;
@@ -260,8 +368,11 @@
             transition: background 0.3s ease;
             text-align: center;
         }
-        .btn-open-link:hover { background: #219653; }
-        
+
+        .btn-open-link:hover {
+            background: #219653;
+        }
+
         .btn-close-modal {
             background: #f1f5f9;
             color: #64748b;
@@ -274,18 +385,61 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
-        .btn-close-modal:hover { background: #e2e8f0; }
-        
-        .help-text { font-size: 12px; color: #64748b; margin-top: 5px; }
+
+        .btn-close-modal:hover {
+            background: #e2e8f0;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
         @media (max-width: 768px) {
+
+            /* Main header container */
             .header {
-                flex-direction: column;
-                text-align: left; /* Rata kiri */
-                align-items: flex-start; /* Menjajakan logo & teks sejajar kiri */
-                padding: 20px;
-                gap: 15px;
+                flex-direction: row !important;
+                text-align: left !important;
+                align-items: center !important;
+                padding: 15px 20px !important;
+                gap: 15px !important;
             }
 
+            /* Keep the logo and the text block strictly side-by-side */
+            .header-left {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                /* Prevents the text from dropping below the logo */
+                align-items: center !important;
+                gap: 15px !important;
+                /* Reduces horizontal gap on mobile for a better fit */
+            }
+
+            /* Scale down the logo box slightly on mobile so it doesn't push the text away */
+            .logo-container {
+                width: 60px !important;
+                height: 60px !important;
+                padding: 4px !important;
+            }
+
+            /* Adjust the text size on mobile to prevent excessive wrapping */
+            .header-content h1 {
+                font-size: 18px !important;
+                /* Adjusted from 24px */
+                line-height: 1.2 !important;
+                margin-bottom: 3px !important;
+            }
+
+            .header-content p {
+                font-size: 11px !important;
+                /* Adjusted from 13px */
+                line-height: 1.3 !important;
+            }
+
+            /* Rest of your mobile styles */
             .form-content {
                 padding: 20px;
             }
@@ -299,587 +453,643 @@
             .button-group {
                 flex-direction: column;
             }
+
+            /* Penyesuaian area tombol pilihan (toggle) di HP */
+            .toggle-group {
+                gap: 10px !important;
+                /* Mempersempit jarak antar tombol pilihan */
+                padding: 10px !important;
+                /* Mengurangi ruang padding luar */
+                margin-bottom: 20px !important;
+            }
+
+            /* Penyesuaian ukuran font dan padding tombol pilihan di HP */
+            .toggle-option label {
+                font-size: 13px !important;
+                /* Mengecilkan ukuran font dari 15px ke 13px */
+                padding: 10px 6px !important;
+                /* Mengurangi padding tombol agar lebih ramping */
+            }
+
         }
+
         .btn-modal-action {
-            display: block; width: 100%; padding: 12px; border-radius: 8px;
-            font-weight: 700; font-size: 14px; text-align: center;
-            border: none; cursor: pointer; margin-bottom: 10px; text-decoration: none;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-decoration: none;
         }
-        .btn-save-meta { background: #1d355e; color: white; }
+
+        .btn-save-meta {
+            background: #1d355e;
+            color: white;
+        }
     </style>
 </head>
+
 <body>
-<div id="navbar"></div>
-<div class="container">
-    <div class="header">
-        <div class="logo-container">
-            <img src="logo-pu.png" alt="Logo PU">
-        </div>
-        <div class="header-content">
-            <h1>Form Nota Dinas / Surat Undangan</h1>
-            <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan Umum</p>
-        </div>
-    </div>
-    <div class="form-content">
-        <div id="message" class="message"></div>
-        
-        <!-- INDIKATOR LOADING AMBIL DATA MASTER (BARU) -->
-        <div id="loadingMaster" style="display: none; text-align: center; padding: 30px 20px;">
-            <div class="modal-spinner" style="width: 40px; height: 40px; border-width: 4px; margin-bottom: 12px;"></div>
-            <p style="color: #1d355e; font-size: 14px; font-weight: 700;">Memuat database master dari server...</p>
-            <p style="color: #64748b; font-size: 12px; margin-top: 4px;">Menghubungkan ke OneDrive & SharePoint...</p>
-        </div>
-
-
-        <form id="dokumenForm">
-            <div class="toggle-group">
-                <div class="toggle-option">
-                    <input type="radio" name="jenisDokumen" id="notaDinas" value="Nota Dinas" checked>
-                    <label for="notaDinas">📑 Nota Dinas</label>
+    <div id="navbar"></div>
+    <div class="container">
+        <div class="header">
+            <!-- Wrap the logo and text in header-left -->
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="logo-pu.png" alt="Logo PU">
                 </div>
-                <div class="toggle-option">
-                    <input type="radio" name="jenisDokumen" id="suratUndangan" value="Surat Undangan">
-                    <label for="suratUndangan">✉️ Surat Undangan</label>
+                <div class="header-content">
+                    <h1>Form Nota Dinas / Surat Undangan</h1>
+                    <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan
+                        Umum</p>
                 </div>
             </div>
+        </div>
+        <div class="form-content">
+            <div id="message" class="message"></div>
 
-            <div class="form-group">
-                <label for="provinsi">Provinsi <span class="required">*</span></label>
-                <select id="provinsi" required><option value="">-- Pilih Provinsi --</option></select>
+            <!-- INDIKATOR LOADING AMBIL DATA MASTER (BARU) -->
+            <div id="loadingMaster" style="display: none; text-align: center; padding: 30px 20px;">
+                <div class="modal-spinner" style="width: 40px; height: 40px; border-width: 4px; margin-bottom: 12px;">
+                </div>
+                <p style="color: #1d355e; font-size: 14px; font-weight: 700;">Memuat database master dari server...</p>
+                <p style="color: #64748b; font-size: 12px; margin-top: 4px;">Menghubungkan ke OneDrive & SharePoint...
+                </p>
             </div>
 
-            <div class="form-group">
-                <label for="namaKegiatan">Nama Kegiatan <span class="required">*</span></label>
-                <div class="input-with-add">
-                    <select id="namaKegiatan" required><option value="">-- Pilih Nama Kegiatan --</option></select>
-                    <button type="button" id="btnAddKegiatan" class="btn-add">+ Tambah</button>
-                </div>
-                <div id="newKegiatanRow" style="display:none; margin-top:10px;">
-                    <div class="input-with-add">
-                        <input type="text" id="newKegiatanInput" placeholder="Ketik nama kegiatan baru...">
-                        <button type="button" id="btnConfirmKegiatan" class="btn-add">✓ Simpan</button>
-                        <button type="button" id="btnCancelKegiatan" class="btn-cancel-sm">✕ Batal</button>
+
+            <form id="dokumenForm">
+                <div class="toggle-group">
+                    <div class="toggle-option">
+                        <input type="radio" name="jenisDokumen" id="notaDinas" value="Nota Dinas" checked>
+                        <label for="notaDinas">📑 Nota Dinas</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="radio" name="jenisDokumen" id="suratUndangan" value="Surat Undangan">
+                        <label for="suratUndangan">✉️ Surat Undangan</label>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="perihal">Perihal / Judul <span class="required">*</span></label>
-                <input type="text" id="perihal" placeholder="Contoh: Permohonan Data Pendukung (Maks 100 Karakter)..." maxlength="100" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tanggal">Tanggal Dokumen <span class="required">*</span></label>
-                <input type="date" id="tanggal" required>
-            </div>
-
-            <div class="form-group">
-                <label for="namaPembuat">Nama Pembuat <span class="required">*</span></label>
-                <div class="input-with-add">
-                    <select id="namaPembuat" required><option value="">-- Pilih Nama --</option></select>
-                    <button type="button" id="btnAddPembuat" class="btn-add">+ Tambah</button>
+                <div class="form-group">
+                    <label for="provinsi">Provinsi <span class="required">*</span></label>
+                    <select id="provinsi" required>
+                        <option value="">-- Pilih Provinsi --</option>
+                    </select>
                 </div>
-                <div id="newPembuatRow" style="display:none; margin-top:10px;">
+
+                <div class="form-group">
+                    <label for="namaKegiatan">Nama Kegiatan <span class="required">*</span></label>
                     <div class="input-with-add">
-                        <input type="text" id="newPembuatInput" placeholder="Nama lengkap pembuat dokumen">
-                        <button type="button" id="btnConfirmPembuat" class="btn-add">✓ Simpan</button>
-                        <button type="button" id="btnCancelPembuat" class="btn-cancel-sm">✕</button>
+                        <select id="namaKegiatan" required>
+                            <option value="">-- Pilih Nama Kegiatan --</option>
+                        </select>
+                        <button type="button" id="btnAddKegiatan" class="btn-add">+ Tambah</button>
+                    </div>
+                    <div id="newKegiatanRow" style="display:none; margin-top:10px;">
+                        <div class="input-with-add">
+                            <input type="text" id="newKegiatanInput" placeholder="Ketik nama kegiatan baru...">
+                            <button type="button" id="btnConfirmKegiatan" class="btn-add">✓ Simpan</button>
+                            <button type="button" id="btnCancelKegiatan" class="btn-cancel-sm">✕ Batal</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="button-group">
-                <button type="submit">Buat & Simpan</button>
-                <button type="button" class="btn-reset" onclick="resetForm()">Bersihkan</button>
-                <button type="button" class="btn-cancel" onclick="window.location.reload()">Batal</button>
-            </div>
-        </form>
-    </div>
-</div>
+                <div class="form-group">
+                    <label for="perihal">Perihal / Judul <span class="required">*</span></label>
+                    <input type="text" id="perihal"
+                        placeholder="Contoh: Permohonan Data Pendukung (Maks 100 Karakter)..." maxlength="100" required>
+                </div>
 
-<!-- MODAL KONFIRMASI CUSTOM (BARU) -->
-<div id="confirmModal" class="modal-overlay">
-    <div class="modal-box" style="text-align: left; max-width: 450px;">
-        <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
-        <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmModalTitle">Konfirmasi Dokumen</div>
-        <div class="modal-sub" id="confirmModalBody" style="font-size: 13px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-            <!-- Rincian dokumen dinamis akan disisipkan di sini oleh JavaScript -->
-        </div>
-        <button type="button" class="btn-modal-action btn-save-meta" id="btnConfirmYes">Ya, Lanjutkan</button>
-        <button type="button" class="btn-close-modal btn-modal-action" id="btnConfirmNo" style="margin-top: 5px;">Batal</button>
-    </div>
-</div>
+                <div class="form-group">
+                    <label for="tanggal">Tanggal Dokumen <span class="required">*</span></label>
+                    <input type="date" id="tanggal" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="namaPembuat">Nama Pembuat <span class="required">*</span></label>
+                    <div class="input-with-add">
+                        <select id="namaPembuat" required>
+                            <option value="">-- Pilih Nama --</option>
+                        </select>
+                        <button type="button" id="btnAddPembuat" class="btn-add">+ Tambah</button>
+                    </div>
+                    <div id="newPembuatRow" style="display:none; margin-top:10px;">
+                        <div class="input-with-add">
+                            <input type="text" id="newPembuatInput" placeholder="Nama lengkap pembuat dokumen">
+                            <button type="button" id="btnConfirmPembuat" class="btn-add">✓ Simpan</button>
+                            <button type="button" id="btnCancelPembuat" class="btn-cancel-sm">✕</button>
+                        </div>
+                    </div>
+                </div>
 
-<div id="modalOverlay" class="modal-overlay">
-    <div class="modal-box">
-        <div id="modalLoading" style="display: block;">
-            <div class="modal-spinner"></div>
-            <div class="modal-loading-text" id="loadingText">Memproses data...</div>
-        </div>
-        
-        <!-- Tampilan Saat Sukses (Disamakan dengan notulensi.html) -->
-        <div id="modalSuccess" style="display: none;">
-            <span style="font-size: 50px; display: block; margin-bottom: 10px;">✅</span>
-            <div class="modal-loading-text">Dokumen Berhasil Dibuat!</div>
-            <div class="modal-sub">Dokumen baru telah tersusun rapi di OneDrive/SharePoint Server.</div>
-
-            <!-- KOTAK SALIN WHATSAPP -->
-            <div id="waShareContainer" style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <span style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN UNTUK SHARE WHATSAPP:</span>
-                <div id="waTextTemplate" style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;"></div>
-                <button type="button" id="btnCopyWA" class="btn-open-link" style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks WA</button>
-            </div>
-
-            <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄 Buka Dokumen (Word)</a>
-            <button class="btn-close-modal" onclick="closeModal()">Tutup</button>
-        </div>
-        
-        <div id="modalError" style="display: none;">
-            <span style="font-size: 50px;">❌</span>
-            <div class="modal-loading-text" style="color:#e74c3c;">Gagal Memproses</div>
-            <div id="errorText" style="font-size: 13px; margin: 10px 0;"></div>
-            <button class="btn-close-modal" onclick="closeModal()">Kembali</button>
+                <div class="button-group">
+                    <button type="submit">Buat & Simpan</button>
+                    <button type="button" class="btn-reset" onclick="resetForm()">Bersihkan</button>
+                    <button type="button" class="btn-cancel" onclick="window.location.reload()">Batal</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
-<script>
-    // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
-const CACHE_KEY = 'subdit_wil2_master_cache';
-const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+    <!-- MODAL KONFIRMASI CUSTOM (BARU) -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box" style="text-align: left; max-width: 450px;">
+            <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
+            <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmModalTitle">Konfirmasi
+                Dokumen</div>
+            <div class="modal-sub" id="confirmModalBody"
+                style="font-size: 13px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                <!-- Rincian dokumen dinamis akan disisipkan di sini oleh JavaScript -->
+            </div>
+            <button type="button" class="btn-modal-action btn-save-meta" id="btnConfirmYes">Ya, Lanjutkan</button>
+            <button type="button" class="btn-close-modal btn-modal-action" id="btnConfirmNo"
+                style="margin-top: 5px;">Batal</button>
+        </div>
+    </div>
 
-function getCachedData() {
-    const cached = sessionStorage.getItem(CACHE_KEY);
-    const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
-    if (cached && cachedTime) {
-        const age = Date.now() - parseInt(cachedTime, 10);
-        if (age < CACHE_DURATION) {
-            console.log("⚡ Menggunakan data master dari CACHE (Instant)");
-            return JSON.parse(cached);
+
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box">
+            <div id="modalLoading" style="display: block;">
+                <div class="modal-spinner"></div>
+                <div class="modal-loading-text" id="loadingText">Memproses data...</div>
+            </div>
+
+            <!-- Tampilan Saat Sukses (Disamakan dengan notulensi.html) -->
+            <div id="modalSuccess" style="display: none;">
+                <span style="font-size: 50px; display: block; margin-bottom: 10px;">✅</span>
+                <div class="modal-loading-text">Dokumen Berhasil Dibuat!</div>
+                <div class="modal-sub">Dokumen baru telah tersusun rapi di OneDrive/SharePoint Server.</div>
+
+                <!-- KOTAK SALIN WHATSAPP -->
+                <div id="waShareContainer"
+                    style="margin-top: 20px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <span
+                        style="font-size: 11px; color: #1d355e; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">SALIN
+                        UNTUK SHARE WHATSAPP:</span>
+                    <div id="waTextTemplate"
+                        style="font-size: 13px; color: #334155; background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; line-height: 1.5; word-break: break-all; min-height: 50px;">
+                    </div>
+                    <button type="button" id="btnCopyWA" class="btn-open-link"
+                        style="background:#27ae60; margin-top:10px; padding: 8px 15px; font-size: 13px;">📋 Salin Teks
+                        WA</button>
+                </div>
+
+                <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄
+                    Buka Dokumen (Word)</a>
+                <button class="btn-close-modal" onclick="closeModal()">Tutup</button>
+            </div>
+
+            <div id="modalError" style="display: none;">
+                <span style="font-size: 50px;">❌</span>
+                <div class="modal-loading-text" style="color:#e74c3c;">Gagal Memproses</div>
+                <div id="errorText" style="font-size: 13px; margin: 10px 0;"></div>
+                <button class="btn-close-modal" onclick="closeModal()">Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
+        const CACHE_KEY = 'subdit_wil2_master_cache';
+        const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+
+        function getCachedData() {
+            const cached = sessionStorage.getItem(CACHE_KEY);
+            const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
+            if (cached && cachedTime) {
+                const age = Date.now() - parseInt(cachedTime, 10);
+                if (age < CACHE_DURATION) {
+                    console.log("⚡ Menggunakan data master dari CACHE (Instant)");
+                    return JSON.parse(cached);
+                }
+            }
+            return null;
         }
-    }
-    return null;
-}
 
-function setCachedData(data) {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
-    sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-    console.log("💾 Data master baru disimpan ke cache browser.");
-}
-
-function clearCachedData() {
-    sessionStorage.removeItem(CACHE_KEY);
-    sessionStorage.removeItem(CACHE_TIME_KEY);
-    console.log("🧹 Cache dibersihkan karena ada perubahan data.");
-}
-
-
-    // ========== KONFIGURASI ==========
-    const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
-    const FLOW_NOTADINAS_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/052e45dd6d074b06b21a33078bf88d06/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GiilzR8CN-Kh3S808iyGtNm6_XfhVo1qfgBIr8XfUjE';
-
-    // ========== DATA FALLBACK (dari response sukses sebelumnya) ==========
-    const FALLBACK_PROVINSI = [
-        "01. Sulawesi Utara", "02. Sulawesi Tengah", "03. Sulawesi Selatan", "04. Sulawesi Tenggara",
-        "05. Gorontalo", "06. Sulawesi Barat", "07. Bali", "08. Nusa Tenggara Barat", "09. Nusa Tenggara Timur",
-        "10. Maluku", "11. Maluku Utara", "12. Papua", "13. Papua Barat", "14. Papua Barat Daya",
-        "15. Papua Selatan", "16. Papua Tengah", "17. Papua Pegunungan", "18. Vanuatu", "19. Kegiatan Lainnya"
-    ];
-
-    const FALLBACK_KEGIATAN = [
-        { "Provinsi": "16. Papua Tengah", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP Provinsi Papua Tengah" },
-        { "Provinsi": "02. Sulawesi Tengah", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Ombudsman Provinsi Sulawesi Tengah" },
-        { "Provinsi": "19. Kegiatan Lainnya", "Nama Kegiatan": "01. Notulensi" },
-        { "Provinsi": "18. Vanuatu", "Nama Kegiatan": "01. Renovasi Gedung Parlemen dan Manua Centre School di Vanuatu" },
-        { "Provinsi": "08. Nusa Tenggara Barat", "Nama Kegiatan": "03. Pembangunan Gedung DPRD Provinsi NTB" },
-        { "Provinsi": "02. Sulawesi Tengah", "Nama Kegiatan": "04. Pembangunan Gedung AMC Rumah Sakit Anutapura" },
-        { "Provinsi": "17. Papua Pegunungan", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP" },
-        { "Provinsi": "09. Nusa Tenggara Timur", "Nama Kegiatan": "02. PLBN Motaain" },
-        { "Provinsi": "11. Maluku Utara", "Nama Kegiatan": "03. Pembangunan Gedung Kantor BPKP Sofifi" },
-        { "Provinsi": "13. Papua Barat", "Nama Kegiatan": "13. Papua Barat" },
-        { "Provinsi": "03. Sulawesi Selatan", "Nama Kegiatan": "02. Rehabilitasi dan Rekonstruksi BGN dan Prasarana Publik Terdampak Aksi Demonstrasi Provinsi Sulawesi Selatan" },
-        { "Provinsi": "12. Papua", "Nama Kegiatan": "01. Notulensi" }
-    ];
-
-    const state = {
-        kegiatanByProvinsi: {},   // { "Provinsi": ["Kegiatan1", "Kegiatan2"] }
-        selectedProvinsi: '',
-        pembuatList: ["Teuku Zaqirul Haq","Muhamad Adryan Arif F.","Lundu Sihombing","Abdi Nagara","Muarif","Halimatusa'adiyah Anar","Ryngga Dedy Andyka","Kiki Adhi Prasetyo","Dian Puspitasari","M. Naufal Ammar N."]
-    };
-
-    // DOM elements
-    const provinsiSelect = document.getElementById('provinsi');
-    const kegiatanSelect = document.getElementById('namaKegiatan');
-    const btnAddKegiatan = document.getElementById('btnAddKegiatan');
-    const newKegiatanRow = document.getElementById('newKegiatanRow');
-    const newKegiatanInput = document.getElementById('newKegiatanInput');
-    const btnConfirmKegiatan = document.getElementById('btnConfirmKegiatan');
-    const btnCancelKegiatan = document.getElementById('btnCancelKegiatan');
-    const namaPembuatSelect = document.getElementById('namaPembuat');
-    const btnAddPembuat = document.getElementById('btnAddPembuat');
-    const newPembuatRow = document.getElementById('newPembuatRow');
-    const newPembuatInput = document.getElementById('newPembuatInput');
-    const btnConfirmPembuat = document.getElementById('btnConfirmPembuat');
-    const btnCancelPembuat = document.getElementById('btnCancelPembuat');
-    const messageDiv = document.getElementById('message');
-
-    function showMessage(msg, type) {
-        messageDiv.textContent = msg;
-        messageDiv.className = `message ${type}`;
-        messageDiv.style.display = 'block';
-        setTimeout(() => { if(messageDiv) messageDiv.style.display = 'none'; }, 4000);
-    }
-
-    function buildKegiatanMap(kegiatanArray) {
-        state.kegiatanByProvinsi = {};
-        kegiatanArray.forEach(item => {
-            let prov = item.Provinsi || item.provinsi || '';
-            if (!prov) return;
-            let nama = item["Nama Kegiatan"] || item.NamaKegiatan || item.nama_kegiatan || '';
-            if (!nama) return;
-            if (!state.kegiatanByProvinsi[prov]) state.kegiatanByProvinsi[prov] = new Set();
-            state.kegiatanByProvinsi[prov].add(nama);
-        });
-        for (let prov in state.kegiatanByProvinsi) {
-            state.kegiatanByProvinsi[prov] = Array.from(state.kegiatanByProvinsi[prov]).sort();
+        function setCachedData(data) {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            console.log("💾 Data master baru disimpan ke cache browser.");
         }
-        console.log("✅ state.kegiatanByProvinsi setelah build:", state.kegiatanByProvinsi);
-    }
 
-    function updateKegiatanList(provinsi) {
-        kegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
-        const list = state.kegiatanByProvinsi[provinsi] || [];
-        if (list.length === 0) {
-            const opt = document.createElement('option');
-            opt.value = "";
-            opt.textContent = "(Tidak ada kegiatan, silakan tambah baru)";
-            opt.disabled = true;
-            kegiatanSelect.appendChild(opt);
-        } else {
-            list.forEach(keg => {
+        function clearCachedData() {
+            sessionStorage.removeItem(CACHE_KEY);
+            sessionStorage.removeItem(CACHE_TIME_KEY);
+            console.log("🧹 Cache dibersihkan karena ada perubahan data.");
+        }
+
+
+        // ========== KONFIGURASI ==========
+        const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
+        const FLOW_NOTADINAS_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/052e45dd6d074b06b21a33078bf88d06/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GiilzR8CN-Kh3S808iyGtNm6_XfhVo1qfgBIr8XfUjE';
+
+        // ========== DATA FALLBACK (dari response sukses sebelumnya) ==========
+        const FALLBACK_PROVINSI = [
+            "01. Sulawesi Utara", "02. Sulawesi Tengah", "03. Sulawesi Selatan", "04. Sulawesi Tenggara",
+            "05. Gorontalo", "06. Sulawesi Barat", "07. Bali", "08. Nusa Tenggara Barat", "09. Nusa Tenggara Timur",
+            "10. Maluku", "11. Maluku Utara", "12. Papua", "13. Papua Barat", "14. Papua Barat Daya",
+            "15. Papua Selatan", "16. Papua Tengah", "17. Papua Pegunungan", "18. Vanuatu", "19. Kegiatan Lainnya"
+        ];
+
+        const FALLBACK_KEGIATAN = [
+            { "Provinsi": "16. Papua Tengah", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP Provinsi Papua Tengah" },
+            { "Provinsi": "02. Sulawesi Tengah", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Ombudsman Provinsi Sulawesi Tengah" },
+            { "Provinsi": "19. Kegiatan Lainnya", "Nama Kegiatan": "01. Notulensi" },
+            { "Provinsi": "18. Vanuatu", "Nama Kegiatan": "01. Renovasi Gedung Parlemen dan Manua Centre School di Vanuatu" },
+            { "Provinsi": "08. Nusa Tenggara Barat", "Nama Kegiatan": "03. Pembangunan Gedung DPRD Provinsi NTB" },
+            { "Provinsi": "02. Sulawesi Tengah", "Nama Kegiatan": "04. Pembangunan Gedung AMC Rumah Sakit Anutapura" },
+            { "Provinsi": "17. Papua Pegunungan", "Nama Kegiatan": "02. Pembangunan Gedung Kantor Gubernur, DPRD dan MRP" },
+            { "Provinsi": "09. Nusa Tenggara Timur", "Nama Kegiatan": "02. PLBN Motaain" },
+            { "Provinsi": "11. Maluku Utara", "Nama Kegiatan": "03. Pembangunan Gedung Kantor BPKP Sofifi" },
+            { "Provinsi": "13. Papua Barat", "Nama Kegiatan": "13. Papua Barat" },
+            { "Provinsi": "03. Sulawesi Selatan", "Nama Kegiatan": "02. Rehabilitasi dan Rekonstruksi BGN dan Prasarana Publik Terdampak Aksi Demonstrasi Provinsi Sulawesi Selatan" },
+            { "Provinsi": "12. Papua", "Nama Kegiatan": "01. Notulensi" }
+        ];
+
+        const state = {
+            kegiatanByProvinsi: {},   // { "Provinsi": ["Kegiatan1", "Kegiatan2"] }
+            selectedProvinsi: '',
+            pembuatList: ["Teuku Zaqirul Haq", "Muhamad Adryan Arif F.", "Lundu Sihombing", "Abdi Nagara", "Muarif", "Halimatusa'adiyah Anar", "Ryngga Dedy Andyka", "Kiki Adhi Prasetyo", "Dian Puspitasari", "M. Naufal Ammar N."]
+        };
+
+        // DOM elements
+        const provinsiSelect = document.getElementById('provinsi');
+        const kegiatanSelect = document.getElementById('namaKegiatan');
+        const btnAddKegiatan = document.getElementById('btnAddKegiatan');
+        const newKegiatanRow = document.getElementById('newKegiatanRow');
+        const newKegiatanInput = document.getElementById('newKegiatanInput');
+        const btnConfirmKegiatan = document.getElementById('btnConfirmKegiatan');
+        const btnCancelKegiatan = document.getElementById('btnCancelKegiatan');
+        const namaPembuatSelect = document.getElementById('namaPembuat');
+        const btnAddPembuat = document.getElementById('btnAddPembuat');
+        const newPembuatRow = document.getElementById('newPembuatRow');
+        const newPembuatInput = document.getElementById('newPembuatInput');
+        const btnConfirmPembuat = document.getElementById('btnConfirmPembuat');
+        const btnCancelPembuat = document.getElementById('btnCancelPembuat');
+        const messageDiv = document.getElementById('message');
+
+        function showMessage(msg, type) {
+            messageDiv.textContent = msg;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            setTimeout(() => { if (messageDiv) messageDiv.style.display = 'none'; }, 4000);
+        }
+
+        function buildKegiatanMap(kegiatanArray) {
+            state.kegiatanByProvinsi = {};
+            kegiatanArray.forEach(item => {
+                let prov = item.Provinsi || item.provinsi || '';
+                if (!prov) return;
+                let nama = item["Nama Kegiatan"] || item.NamaKegiatan || item.nama_kegiatan || '';
+                if (!nama) return;
+                if (!state.kegiatanByProvinsi[prov]) state.kegiatanByProvinsi[prov] = new Set();
+                state.kegiatanByProvinsi[prov].add(nama);
+            });
+            for (let prov in state.kegiatanByProvinsi) {
+                state.kegiatanByProvinsi[prov] = Array.from(state.kegiatanByProvinsi[prov]).sort();
+            }
+            console.log("✅ state.kegiatanByProvinsi setelah build:", state.kegiatanByProvinsi);
+        }
+
+        function updateKegiatanList(provinsi) {
+            kegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            const list = state.kegiatanByProvinsi[provinsi] || [];
+            if (list.length === 0) {
                 const opt = document.createElement('option');
-                opt.value = keg;
-                opt.textContent = keg;
+                opt.value = "";
+                opt.textContent = "(Tidak ada kegiatan, silakan tambah baru)";
+                opt.disabled = true;
                 kegiatanSelect.appendChild(opt);
+            } else {
+                list.forEach(keg => {
+                    const opt = document.createElement('option');
+                    opt.value = keg;
+                    opt.textContent = keg;
+                    kegiatanSelect.appendChild(opt);
+                });
+            }
+        }
+
+        // Load data master (coba dari PA, gagal pakai fallback)
+        // Load data master (Dengan Manajemen Cache & Spinner Loading)
+        async function loadMasterData() {
+            const loadingDiv = document.getElementById('loadingMaster');
+            const formElement = document.getElementById('dokumenForm');
+
+            // 1. Coba ambil data master dari cache sessionStorage terlebih dahulu
+            let rawData = getCachedData();
+            if (rawData) {
+                prosesMasterData(rawData); // Olah data secara instan (0 detik)
+                // Sembunyikan loading & tampilkan form utama langsung
+                loadingDiv.style.display = 'none';
+                formElement.style.display = 'block';
+                return;
+            }
+
+            // 2. Jika tidak ada di cache, tampilkan loading spinner & fetch dari server
+            loadingDiv.style.display = 'block';
+            formElement.style.display = 'none';
+
+            try {
+                const response = await fetch(GET_DATA_FLOW_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'getData' })
+                });
+                if (response.ok) {
+                    rawData = await response.json();
+                    if (typeof rawData === 'string') rawData = JSON.parse(rawData);
+                    console.log("Response dari PA:", rawData);
+
+                    // Simpan hasil fetch ke cache browser
+                    setCachedData(rawData);
+
+                    prosesMasterData(rawData);
+                } else {
+                    throw new Error("Gagal mengambil data dari server");
+                }
+            } catch (err) {
+                console.warn("Gagal memanggil flow, gunakan fallback:", err);
+                useFallbackProvinsi();
+                useFallbackKegiatan();
+            } finally {
+                // Selesai: Sembunyikan loading, munculkan kembali form utama
+                loadingDiv.style.display = 'none';
+                formElement.style.display = 'block';
+            }
+        }
+
+        // Fungsi Pembantu Baru: Mengolah & memetakan data master ke dropdown UI
+        function prosesMasterData(rawData) {
+            // 1. Provinsi
+            if (rawData.provinsi && Array.isArray(rawData.provinsi)) {
+                provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+                rawData.provinsi.forEach(item => {
+                    let prov = item.Provinsi || item.provinsi;
+                    if (prov) {
+                        let opt = document.createElement('option');
+                        opt.value = prov;
+                        opt.textContent = prov;
+                        provinsiSelect.appendChild(opt);
+                    }
+                });
+            } else {
+                useFallbackProvinsi();
+            }
+
+            // 2. Kegiatan (Dengan parsing string defensif untuk mengantisipasi ][ dari Power Automate)
+            let kegiatanArray = null;
+            if (rawData.masterKegiatanGabungan) {
+                if (typeof rawData.masterKegiatanGabungan === 'string') {
+                    try {
+                        let cleanedString = rawData.masterKegiatanGabungan.trim();
+                        if (cleanedString.includes('][')) {
+                            cleanedString = cleanedString.replace(/\]\s*\[/g, ',');
+                        }
+                        kegiatanArray = JSON.parse(cleanedString);
+                    } catch (e) {
+                        console.warn("Gagal parse masterKegiatanGabungan, lanjut ke fallback:", e);
+                    }
+                } else if (Array.isArray(rawData.masterKegiatanGabungan)) {
+                    kegiatanArray = rawData.masterKegiatanGabungan;
+                }
+            }
+            if (!kegiatanArray && rawData.kegiatan && Array.isArray(rawData.kegiatan)) {
+                kegiatanArray = rawData.kegiatan;
+                console.log("Menggunakan kegiatan (notulensi), jumlah:", kegiatanArray.length);
+            }
+            if (kegiatanArray && kegiatanArray.length > 0) {
+                buildKegiatanMap(kegiatanArray);
+            } else {
+                useFallbackKegiatan();
+            }
+        }
+
+        function useFallbackProvinsi() {
+            provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+            FALLBACK_PROVINSI.forEach(prov => {
+                let opt = document.createElement('option');
+                opt.value = prov;
+                opt.textContent = prov;
+                provinsiSelect.appendChild(opt);
+            });
+            console.log("✅ Fallback provinsi dimuat");
+        }
+
+        function useFallbackKegiatan() {
+            buildKegiatanMap(FALLBACK_KEGIATAN);
+            console.log("✅ Fallback kegiatan dimuat");
+        }
+
+        provinsiSelect.addEventListener('change', (e) => {
+            state.selectedProvinsi = e.target.value;
+            updateKegiatanList(state.selectedProvinsi);
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+        });
+
+        btnAddKegiatan.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!state.selectedProvinsi) {
+                showMessage('Silakan pilih Provinsi terlebih dahulu', 'error');
+                return;
+            }
+            newKegiatanRow.style.display = 'block';
+            newKegiatanInput.focus();
+        });
+        btnCancelKegiatan.addEventListener('click', () => {
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+        });
+        btnConfirmKegiatan.addEventListener('click', () => {
+            const newKeg = newKegiatanInput.value.trim();
+            if (!newKeg) { showMessage('Masukkan nama kegiatan baru', 'error'); return; }
+            if (!state.kegiatanByProvinsi[state.selectedProvinsi]) {
+                state.kegiatanByProvinsi[state.selectedProvinsi] = [];
+            }
+            if (state.kegiatanByProvinsi[state.selectedProvinsi].includes(newKeg)) {
+                showMessage('Kegiatan sudah ada dalam daftar', 'error');
+                return;
+            }
+            state.kegiatanByProvinsi[state.selectedProvinsi].push(newKeg);
+            state.kegiatanByProvinsi[state.selectedProvinsi].sort();
+            updateKegiatanList(state.selectedProvinsi);
+            kegiatanSelect.value = newKeg;
+            newKegiatanRow.style.display = 'none';
+            newKegiatanInput.value = '';
+            showMessage(`Kegiatan "${newKeg}" ditambahkan`, 'success');
+        });
+        newKegiatanInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnConfirmKegiatan.click();
+            if (e.key === 'Escape') btnCancelKegiatan.click();
+        });
+
+        function populatePembuatDropdown() {
+            namaPembuatSelect.innerHTML = '<option value="">-- Pilih Nama Pembuat --</option>';
+            state.pembuatList.forEach(nama => {
+                const opt = document.createElement('option');
+                opt.value = nama;
+                opt.textContent = nama;
+                namaPembuatSelect.appendChild(opt);
             });
         }
-    }
+        btnAddPembuat.addEventListener('click', (e) => {
+            e.preventDefault();
+            newPembuatRow.style.display = 'block';
+            newPembuatInput.focus();
+        });
+        btnCancelPembuat.addEventListener('click', () => {
+            newPembuatRow.style.display = 'none';
+            newPembuatInput.value = '';
+        });
+        btnConfirmPembuat.addEventListener('click', () => {
+            const newName = newPembuatInput.value.trim();
+            if (!newName) { showMessage('Masukkan nama pembuat', 'error'); return; }
+            if (state.pembuatList.includes(newName)) { showMessage('Nama sudah ada', 'error'); return; }
+            state.pembuatList.push(newName);
+            state.pembuatList.sort();
+            populatePembuatDropdown();
+            namaPembuatSelect.value = newName;
+            newPembuatRow.style.display = 'none';
+            newPembuatInput.value = '';
+            showMessage(`Pembuat "${newName}" ditambahkan`, 'success');
+        });
+        newPembuatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnConfirmPembuat.click();
+            if (e.key === 'Escape') btnCancelPembuat.click();
+        });
 
-    // Load data master (coba dari PA, gagal pakai fallback)
-    // Load data master (Dengan Manajemen Cache & Spinner Loading)
-    async function loadMasterData() {
-        const loadingDiv = document.getElementById('loadingMaster');
-        const formElement = document.getElementById('dokumenForm');
-        
-        // 1. Coba ambil data master dari cache sessionStorage terlebih dahulu
-        let rawData = getCachedData();
-        if (rawData) {
-            prosesMasterData(rawData); // Olah data secara instan (0 detik)
-            // Sembunyikan loading & tampilkan form utama langsung
-            loadingDiv.style.display = 'none';
-            formElement.style.display = 'block';
-            return;
+        // Modal Control
+        function openModal(loadingText = "Memproses data...") {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+            document.getElementById('loadingText').textContent = loadingText;
+        }
+        function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+        // Sukses Modal dengan Fitur Preview Dokumen dan Clipboard WhatsApp Share
+        function showModalSuccess(link, perihal = '', jenisDokumen = 'Dokumen') {
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+
+            const shortLink = link || 'Link tidak tersedia';
+            const waText = `Berikut link ${jenisDokumen} - *${perihal}* : ${shortLink}`;
+
+            document.getElementById('waTextTemplate').innerHTML = `Berikut link ${jenisDokumen} <strong>"${perihal}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
+
+            const btnLink = document.getElementById('btnLinkBerkas');
+            if (link) {
+                btnLink.href = link;
+                btnLink.style.display = 'inline-block';
+            } else {
+                btnLink.style.display = 'none';
+            }
+
+            const btnCopy = document.getElementById('btnCopyWA');
+            btnCopy.onclick = function () {
+                navigator.clipboard.writeText(waText).then(() => {
+                    const originalText = btnCopy.innerHTML;
+                    btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
+                    btnCopy.style.background = "#219653";
+
+                    setTimeout(() => {
+                        btnCopy.innerHTML = originalText;
+                        btnCopy.style.background = "#27ae60";
+                    }, 2500);
+                }).catch(err => {
+                    console.error("Gagal menyalin teks: ", err);
+                });
+            };
         }
 
-        // 2. Jika tidak ada di cache, tampilkan loading spinner & fetch dari server
-        loadingDiv.style.display = 'block';
-        formElement.style.display = 'none';
+        function showModalError(msg) {
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalError').style.display = 'block';
+            document.getElementById('errorText').textContent = msg;
+        }
 
-        try {
-            const response = await fetch(GET_DATA_FLOW_URL, {
+        async function submitDokumen(data) {
+            if (FLOW_NOTADINAS_URL.includes('your-powerautomate-url')) {
+                throw new Error("URL Flow Power Automate untuk Nota Dinas belum dikonfigurasi.");
+            }
+            const response = await fetch(FLOW_NOTADINAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'getData' })
+                body: JSON.stringify(data)
             });
-            if (response.ok) {
-                rawData = await response.json();
-                if (typeof rawData === 'string') rawData = JSON.parse(rawData);
-                console.log("Response dari PA:", rawData);
-
-                // Simpan hasil fetch ke cache browser
-                setCachedData(rawData);
-
-                prosesMasterData(rawData);
-            } else {
-                throw new Error("Gagal mengambil data dari server");
-            }
-        } catch (err) {
-            console.warn("Gagal memanggil flow, gunakan fallback:", err);
-            useFallbackProvinsi();
-            useFallbackKegiatan();
-        } finally {
-            // Selesai: Sembunyikan loading, munculkan kembali form utama
-            loadingDiv.style.display = 'none';
-            formElement.style.display = 'block';
-        }
-    }
-
-    // Fungsi Pembantu Baru: Mengolah & memetakan data master ke dropdown UI
-    function prosesMasterData(rawData) {
-        // 1. Provinsi
-        if (rawData.provinsi && Array.isArray(rawData.provinsi)) {
-            provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
-            rawData.provinsi.forEach(item => {
-                let prov = item.Provinsi || item.provinsi;
-                if (prov) {
-                    let opt = document.createElement('option');
-                    opt.value = prov;
-                    opt.textContent = prov;
-                    provinsiSelect.appendChild(opt);
-                }
-            });
-        } else {
-            useFallbackProvinsi();
-        }
-
-        // 2. Kegiatan (Dengan parsing string defensif untuk mengantisipasi ][ dari Power Automate)
-        let kegiatanArray = null;
-        if (rawData.masterKegiatanGabungan) {
-            if (typeof rawData.masterKegiatanGabungan === 'string') {
+            if (!response.ok) {
+                let errMsg = response.statusText;
                 try {
-                    let cleanedString = rawData.masterKegiatanGabungan.trim();
-                    if (cleanedString.includes('][')) {
-                        cleanedString = cleanedString.replace(/\]\s*\[/g, ',');
-                    }
-                    kegiatanArray = JSON.parse(cleanedString);
-                } catch(e) {
-                    console.warn("Gagal parse masterKegiatanGabungan, lanjut ke fallback:", e);
-                }
-            } else if (Array.isArray(rawData.masterKegiatanGabungan)) {
-                kegiatanArray = rawData.masterKegiatanGabungan;
+                    const errText = await response.text();
+                    errMsg = errText || errMsg;
+                } catch (e) { }
+                throw new Error(`Gagal mengirim ke PA (${response.status}): ${errMsg}`);
             }
-        }
-        if (!kegiatanArray && rawData.kegiatan && Array.isArray(rawData.kegiatan)) {
-            kegiatanArray = rawData.kegiatan;
-            console.log("Menggunakan kegiatan (notulensi), jumlah:", kegiatanArray.length);
-        }
-        if (kegiatanArray && kegiatanArray.length > 0) {
-            buildKegiatanMap(kegiatanArray);
-        } else {
-            useFallbackKegiatan();
-        }
-    }
-
-    function useFallbackProvinsi() {
-        provinsiSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
-        FALLBACK_PROVINSI.forEach(prov => {
-            let opt = document.createElement('option');
-            opt.value = prov;
-            opt.textContent = prov;
-            provinsiSelect.appendChild(opt);
-        });
-        console.log("✅ Fallback provinsi dimuat");
-    }
-
-    function useFallbackKegiatan() {
-        buildKegiatanMap(FALLBACK_KEGIATAN);
-        console.log("✅ Fallback kegiatan dimuat");
-    }
-
-    provinsiSelect.addEventListener('change', (e) => {
-        state.selectedProvinsi = e.target.value;
-        updateKegiatanList(state.selectedProvinsi);
-        newKegiatanRow.style.display = 'none';
-        newKegiatanInput.value = '';
-    });
-
-    btnAddKegiatan.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!state.selectedProvinsi) {
-            showMessage('Silakan pilih Provinsi terlebih dahulu', 'error');
-            return;
-        }
-        newKegiatanRow.style.display = 'block';
-        newKegiatanInput.focus();
-    });
-    btnCancelKegiatan.addEventListener('click', () => {
-        newKegiatanRow.style.display = 'none';
-        newKegiatanInput.value = '';
-    });
-    btnConfirmKegiatan.addEventListener('click', () => {
-        const newKeg = newKegiatanInput.value.trim();
-        if (!newKeg) { showMessage('Masukkan nama kegiatan baru', 'error'); return; }
-        if (!state.kegiatanByProvinsi[state.selectedProvinsi]) {
-            state.kegiatanByProvinsi[state.selectedProvinsi] = [];
-        }
-        if (state.kegiatanByProvinsi[state.selectedProvinsi].includes(newKeg)) {
-            showMessage('Kegiatan sudah ada dalam daftar', 'error');
-            return;
-        }
-        state.kegiatanByProvinsi[state.selectedProvinsi].push(newKeg);
-        state.kegiatanByProvinsi[state.selectedProvinsi].sort();
-        updateKegiatanList(state.selectedProvinsi);
-        kegiatanSelect.value = newKeg;
-        newKegiatanRow.style.display = 'none';
-        newKegiatanInput.value = '';
-        showMessage(`Kegiatan "${newKeg}" ditambahkan`, 'success');
-    });
-    newKegiatanInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') btnConfirmKegiatan.click();
-        if (e.key === 'Escape') btnCancelKegiatan.click();
-    });
-
-    function populatePembuatDropdown() {
-        namaPembuatSelect.innerHTML = '<option value="">-- Pilih Nama Pembuat --</option>';
-        state.pembuatList.forEach(nama => {
-            const opt = document.createElement('option');
-            opt.value = nama;
-            opt.textContent = nama;
-            namaPembuatSelect.appendChild(opt);
-        });
-    }
-    btnAddPembuat.addEventListener('click', (e) => {
-        e.preventDefault();
-        newPembuatRow.style.display = 'block';
-        newPembuatInput.focus();
-    });
-    btnCancelPembuat.addEventListener('click', () => {
-        newPembuatRow.style.display = 'none';
-        newPembuatInput.value = '';
-    });
-    btnConfirmPembuat.addEventListener('click', () => {
-        const newName = newPembuatInput.value.trim();
-        if (!newName) { showMessage('Masukkan nama pembuat', 'error'); return; }
-        if (state.pembuatList.includes(newName)) { showMessage('Nama sudah ada', 'error'); return; }
-        state.pembuatList.push(newName);
-        state.pembuatList.sort();
-        populatePembuatDropdown();
-        namaPembuatSelect.value = newName;
-        newPembuatRow.style.display = 'none';
-        newPembuatInput.value = '';
-        showMessage(`Pembuat "${newName}" ditambahkan`, 'success');
-    });
-    newPembuatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') btnConfirmPembuat.click();
-        if (e.key === 'Escape') btnCancelPembuat.click();
-    });
-
-    // Modal Control
-    function openModal(loadingText = "Memproses data...") {
-        document.getElementById('modalOverlay').classList.add('active');
-        document.getElementById('modalLoading').style.display = 'block';
-        document.getElementById('modalSuccess').style.display = 'none';
-        document.getElementById('modalError').style.display = 'none';
-        document.getElementById('loadingText').textContent = loadingText;
-    }
-    function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
-    
-    // Sukses Modal dengan Fitur Preview Dokumen dan Clipboard WhatsApp Share
-    function showModalSuccess(link, perihal = '', jenisDokumen = 'Dokumen') {
-        document.getElementById('modalLoading').style.display = 'none';
-        document.getElementById('modalSuccess').style.display = 'block';
-
-        const shortLink = link || 'Link tidak tersedia';
-        const waText = `Berikut link ${jenisDokumen} - *${perihal}* : ${shortLink}`;
-        
-        document.getElementById('waTextTemplate').innerHTML = `Berikut link ${jenisDokumen} <strong>"${perihal}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
-
-        const btnLink = document.getElementById('btnLinkBerkas');
-        if (link) {
-            btnLink.href = link;
-            btnLink.style.display = 'inline-block';
-        } else {
-            btnLink.style.display = 'none';
+            return await response.json();
         }
 
-        const btnCopy = document.getElementById('btnCopyWA');
-        btnCopy.onclick = function () {
-            navigator.clipboard.writeText(waText).then(() => {
-                const originalText = btnCopy.innerHTML;
-                btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
-                btnCopy.style.background = "#219653";
+        const form = document.getElementById('dokumenForm');
+        // Fungsi Pembantu: Modal Konfirmasi Berbasis Promise (Custom)
+        function showCustomConfirm(title, messageHtml) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirmModal');
+                document.getElementById('confirmModalTitle').textContent = title;
+                document.getElementById('confirmModalBody').innerHTML = messageHtml;
 
-                setTimeout(() => {
-                    btnCopy.innerHTML = originalText;
-                    btnCopy.style.background = "#27ae60";
-                }, 2500);
-            }).catch(err => {
-                console.error("Gagal menyalin teks: ", err);
+                modal.classList.add('active');
+
+                const btnYes = document.getElementById('btnConfirmYes');
+                const btnNo = document.getElementById('btnConfirmNo');
+
+                const handleYes = () => {
+                    modal.classList.remove('active');
+                    cleanup();
+                    resolve(true);
+                };
+                const handleNo = () => {
+                    modal.classList.remove('active');
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    btnYes.removeEventListener('click', handleYes);
+                    btnNo.removeEventListener('click', handleNo);
+                };
+
+                btnYes.addEventListener('click', handleYes);
+                btnNo.addEventListener('click', handleNo);
             });
-        };
-    }
-    
-    function showModalError(msg) {
-        document.getElementById('modalLoading').style.display = 'none';
-        document.getElementById('modalError').style.display = 'block';
-        document.getElementById('errorText').textContent = msg;
-    }
-
-    async function submitDokumen(data) {
-        if (FLOW_NOTADINAS_URL.includes('your-powerautomate-url')) {
-            throw new Error("URL Flow Power Automate untuk Nota Dinas belum dikonfigurasi.");
         }
-        const response = await fetch(FLOW_NOTADINAS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        if (!response.ok) {
-            let errMsg = response.statusText;
-            try {
-                const errText = await response.text();
-                errMsg = errText || errMsg;
-            } catch(e) {}
-            throw new Error(`Gagal mengirim ke PA (${response.status}): ${errMsg}`);
-        }
-        return await response.json();
-    }
 
-    const form = document.getElementById('dokumenForm');
-    // Fungsi Pembantu: Modal Konfirmasi Berbasis Promise (Custom)
-    function showCustomConfirm(title, messageHtml) {
-        return new Promise((resolve) => {
-            const modal = document.getElementById('confirmModal');
-            document.getElementById('confirmModalTitle').textContent = title;
-            document.getElementById('confirmModalBody').innerHTML = messageHtml;
-            
-            modal.classList.add('active');
-            
-            const btnYes = document.getElementById('btnConfirmYes');
-            const btnNo = document.getElementById('btnConfirmNo');
-            
-            const handleYes = () => {
-                modal.classList.remove('active');
-                cleanup();
-                resolve(true);
-            };
-            const handleNo = () => {
-                modal.classList.remove('active');
-                cleanup();
-                resolve(false);
-            };
-            
-            const cleanup = () => {
-                btnYes.removeEventListener('click', handleYes);
-                btnNo.removeEventListener('click', handleNo);
-            };
-            
-            btnYes.addEventListener('click', handleYes);
-            btnNo.addEventListener('click', handleNo);
-        });
-    }
+        // ========== PROSES SUBMIT DOKUMEN ==========
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const jenisDokumen = document.querySelector('input[name="jenisDokumen"]:checked').value;
+            const provinsi = provinsiSelect.value;
+            const namaKegiatan = kegiatanSelect.value;
+            const perihal = document.getElementById('perihal').value.trim();
+            const tanggalInput = document.getElementById('tanggal').value; // Menghasilkan "2026-06-15"
+            const tanggal = tanggalInput.replace(/-/g, '.'); // Diubah menjadi "2026.06.15"
+            const namaPembuat = namaPembuatSelect.value;
 
-    // ========== PROSES SUBMIT DOKUMEN ==========
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const jenisDokumen = document.querySelector('input[name="jenisDokumen"]:checked').value;
-        const provinsi = provinsiSelect.value;
-        const namaKegiatan = kegiatanSelect.value;
-        const perihal = document.getElementById('perihal').value.trim();
-        const tanggalInput = document.getElementById('tanggal').value; // Menghasilkan "2026-06-15"
-        const tanggal = tanggalInput.replace(/-/g, '.'); // Diubah menjadi "2026.06.15"
-        const namaPembuat = namaPembuatSelect.value;
+            if (!provinsi) { showMessage('Pilih provinsi', 'error'); return; }
+            if (!namaKegiatan) { showMessage('Pilih atau tambah kegiatan', 'error'); return; }
+            if (!perihal) { showMessage('Isi perihal/judul dokumen', 'error'); return; }
+            if (!tanggal) { showMessage('Pilih tanggal', 'error'); return; }
+            if (!namaPembuat) { showMessage('Pilih nama pembuat', 'error'); return; }
 
-        if (!provinsi) { showMessage('Pilih provinsi', 'error'); return; }
-        if (!namaKegiatan) { showMessage('Pilih atau tambah kegiatan', 'error'); return; }
-        if (!perihal) { showMessage('Isi perihal/judul dokumen', 'error'); return; }
-        if (!tanggal) { showMessage('Pilih tanggal', 'error'); return; }
-        if (!namaPembuat) { showMessage('Pilih nama pembuat', 'error'); return; }
-
-        // Menyusun tampilan rincian HTML di dalam modal
-        const confirmBodyHtml = `
+            // Menyusun tampilan rincian HTML di dalam modal
+            const confirmBodyHtml = `
             <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
             <strong>Provinsi:</strong> ${provinsi}<br>
             <strong>Kegiatan:</strong> ${namaKegiatan}<br>
@@ -888,68 +1098,69 @@ function clearCachedData() {
             <strong>Pembuat:</strong> ${namaPembuat}
         `;
 
-        // Menampilkan modal konfirmasi custom berbasis Promise
-        const yakin = await showCustomConfirm(`Buat ${jenisDokumen} Baru?`, confirmBodyHtml);
-        if (!yakin) return; // Hentikan proses jika memilih "Batal"
+            // Menampilkan modal konfirmasi custom berbasis Promise
+            const yakin = await showCustomConfirm(`Buat ${jenisDokumen} Baru?`, confirmBodyHtml);
+            if (!yakin) return; // Hentikan proses jika memilih "Batal"
 
-        openModal(`Membuat ${jenisDokumen}...`);
-        try {
-            const payload = {
-                jenisDokumen, provinsi, namaKegiatan, perihal, tanggal, namaPembuat,
-                timestamp: new Date().toISOString()
-            };
-            const responseData = await submitDokumen(payload);
-            const documentLink = responseData.linkBerkas || responseData.fileLink || '';
-            
-            clearCachedData();
-            // Tampilkan modal sukses terlebih dahulu sebelum me-reset field input
-            showModalSuccess(documentLink, perihal, jenisDokumen);
-            resetForm();
-        } catch (err) {
-            console.error(err);
-            showModalError(err.message || "Terjadi kesalahan. Coba lagi.");
-        }
-    });
+            openModal(`Membuat ${jenisDokumen}...`);
+            try {
+                const payload = {
+                    jenisDokumen, provinsi, namaKegiatan, perihal, tanggal, namaPembuat,
+                    timestamp: new Date().toISOString()
+                };
+                const responseData = await submitDokumen(payload);
+                const documentLink = responseData.linkBerkas || responseData.fileLink || '';
 
-    function resetForm() {
-        document.getElementById('perihal').value = '';
-        document.getElementById('tanggal').value = '';
-        namaPembuatSelect.value = '';
-        document.getElementById('notaDinas').checked = true;
-        provinsiSelect.value = '';
-        kegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
-        state.selectedProvinsi = '';
-        newKegiatanRow.style.display = 'none';
-        newPembuatRow.style.display = 'none';
-        newKegiatanInput.value = '';
-        newPembuatInput.value = '';
-        messageDiv.style.display = 'none';
-    }
+                clearCachedData();
+                // Tampilkan modal sukses terlebih dahulu sebelum me-reset field input
+                showModalSuccess(documentLink, perihal, jenisDokumen);
+                resetForm();
+            } catch (err) {
+                console.error(err);
+                showModalError(err.message || "Terjadi kesalahan. Coba lagi.");
+            }
+        });
 
-    // Inisialisasi
-    window.addEventListener('DOMContentLoaded', async () => {
-        await loadMasterData();
-        populatePembuatDropdown();
-        
-        // --- BARU: DETEKSI URL PARAMETER (?type=surat) UNTUK INTEGRASI LANDING PAGE ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const docType = urlParams.get('type');
-        if (docType === 'surat') {
-            document.getElementById('suratUndangan').checked = true;
-        } else {
+        function resetForm() {
+            document.getElementById('perihal').value = '';
+            document.getElementById('tanggal').value = '';
+            namaPembuatSelect.value = '';
             document.getElementById('notaDinas').checked = true;
+            provinsiSelect.value = '';
+            kegiatanSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
+            state.selectedProvinsi = '';
+            newKegiatanRow.style.display = 'none';
+            newPembuatRow.style.display = 'none';
+            newKegiatanInput.value = '';
+            newPembuatInput.value = '';
+            messageDiv.style.display = 'none';
         }
 
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('tanggal').value = today;
-        
-        if (Object.keys(state.kegiatanByProvinsi).length === 0) {
-            showMessage("Tidak ada data kegiatan. Silakan tambah kegiatan baru.", "error");
-        } else {
-            console.log("Siap digunakan, jumlah provinsi:", Object.keys(state.kegiatanByProvinsi).length);
-        }
-    });
-</script>
-<script src="navbar.js"></script>
+        // Inisialisasi
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadMasterData();
+            populatePembuatDropdown();
+
+            // --- BARU: DETEKSI URL PARAMETER (?type=surat) UNTUK INTEGRASI LANDING PAGE ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const docType = urlParams.get('type');
+            if (docType === 'surat') {
+                document.getElementById('suratUndangan').checked = true;
+            } else {
+                document.getElementById('notaDinas').checked = true;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggal').value = today;
+
+            if (Object.keys(state.kegiatanByProvinsi).length === 0) {
+                showMessage("Tidak ada data kegiatan. Silakan tambah kegiatan baru.", "error");
+            } else {
+                console.log("Siap digunakan, jumlah provinsi:", Object.keys(state.kegiatanByProvinsi).length);
+            }
+        });
+    </script>
+    <script src="navbar.js"></script>
 </body>
+
 </html>

@@ -561,9 +561,10 @@
 
                 <div class="form-group">
                     <label for="perihal">Perihal / Judul <span class="required">*</span></label>
-                    <input type="text" id="perihal"
-                        placeholder="Ketikkan perihal lengkap di sini..." maxlength="500" required>
-                        <div class="help-text">Perihal akan muncul lengkap di dokumen, namun nama file akan diringkas otomatis.</div>
+                    <input type="text" id="perihal" placeholder="Ketikkan perihal lengkap di sini..." maxlength="500"
+                        required>
+                    <div class="help-text">Perihal akan muncul lengkap di dokumen, namun nama file akan diringkas
+                        otomatis.</div>
                 </div>
 
                 <div class="form-group">
@@ -587,6 +588,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="lampiran">Dokumen Pendukung <span style="font-weight: normal; color: #64748b;">(Opsional
+                            - Maks. 5MB per berkas)</span></label>
+                    <!-- Hidden input file yang asli -->
+                    <input type="file" id="lampiran" multiple style="display: none;" onchange="handleFileSelect(event)">
+
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-add" onclick="document.getElementById('lampiran').click()">📂
+                            Pilih Berkas</button>
+                        <span id="fileCountText" class="help-text" style="margin-top: 0; font-weight: 600;">Belum ada
+                            berkas dipilih</span>
+                    </div>
+
+                    <!-- Kontainer daftar berkas pilihan user -->
+                    <div id="fileListContainer" class="file-list-container"></div>
+                </div>
+
 
                 <div class="button-group">
                     <button type="submit">Buat & Simpan</button>
@@ -778,7 +797,6 @@
             }
         }
 
-        // Load data master (coba dari PA, gagal pakai fallback)
         // Load data master (Dengan Manajemen Cache & Spinner Loading)
         async function loadMasterData() {
             const loadingDiv = document.getElementById('loadingMaster');
@@ -1018,6 +1036,85 @@
             document.getElementById('errorText').textContent = msg;
         }
 
+        // State untuk menyimpan daftar file yang siap dikirim
+        let selectedFiles = [];
+
+        // Fungsi untuk membaca dan mengonversi berkas ke format Base64 secara asinkron
+        const fileToBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                // Mengambil string datanya saja tanpa header metadata (e.g. data:application/pdf;base64,)
+                const base64Data = reader.result.split(',')[1];
+                resolve({
+                    namaFile: file.name,
+                    kontenFile: base64Data
+                });
+            };
+            reader.onerror = error => reject(error);
+        });
+
+        // Mengelola pemilihan file dari komputer/HP
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            const MAX_SIZE_MB = 5;
+
+            // Validasi ukuran masing-masing file
+            const oversizedFiles = files.filter(f => f.size > MAX_SIZE_MB * 1024 * 1024);
+            if (oversizedFiles.length > 0) {
+                showMessage(`Gagal memilih berkas: "${oversizedFiles[0].name}" melebihi batas maksimal ${MAX_SIZE_MB}MB`, 'error');
+                // Reset input file agar user bisa memilih kembali
+                event.target.value = '';
+                return;
+            }
+
+            // Gabungkan dengan file yang sudah dipilih sebelumnya
+            selectedFiles = [...selectedFiles, ...files];
+            renderFileList();
+
+            // Reset nilai input agar user bisa memilih file yang sama jika tidak sengaja dihapus
+            event.target.value = '';
+        }
+
+        // Menampilkan daftar berkas terpilih secara dinamis ke UI
+        function renderFileList() {
+            const container = document.getElementById('fileListContainer');
+            const textCount = document.getElementById('fileCountText');
+            container.innerHTML = '';
+
+            if (selectedFiles.length === 0) {
+                textCount.textContent = 'Belum ada berkas dipilih';
+                return;
+            }
+
+            textCount.textContent = `${selectedFiles.length} berkas siap diunggah`;
+
+            selectedFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-list-item';
+
+                const sizeKB = (file.size / 1024).toFixed(1);
+                const sizeStr = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB} KB`;
+
+                item.innerHTML = `
+            <div class="file-info">
+                <span>📄 ${file.name}</span>
+                <span class="file-size">(${sizeStr})</span>
+            </div>
+            <button type="button" class="remove-file" onclick="removeSelectedFile(${index})">✕</button>
+        `;
+                container.appendChild(item);
+            });
+        }
+
+        // Menghapus berkas dari daftar sebelum submit
+        function removeSelectedFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFileList();
+        }
+
+
+
         async function submitDokumen(data) {
             if (FLOW_NOTADINAS_URL.includes('your-powerautomate-url')) {
                 throw new Error("URL Flow Power Automate untuk Nota Dinas belum dikonfigurasi.");
@@ -1072,15 +1169,15 @@
             });
         }
 
-        // ========== PROSES SUBMIT DOKUMEN ==========
+       // ========== PROSES SUBMIT DOKUMEN ==========
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const jenisDokumen = document.querySelector('input[name="jenisDokumen"]:checked').value;
             const provinsi = provinsiSelect.value;
             const namaKegiatan = kegiatanSelect.value;
             const perihal = document.getElementById('perihal').value.trim();
-            const tanggalInput = document.getElementById('tanggal').value; // Menghasilkan "2026-06-15"
-            const tanggal = tanggalInput.replace(/-/g, '.'); // Diubah menjadi "2026.06.15"
+            const tanggalInput = document.getElementById('tanggal').value; 
+            const tanggal = tanggalInput.replace(/-/g, '.'); 
             const namaPembuat = namaPembuatSelect.value;
 
             if (!provinsi) { showMessage('Pilih provinsi', 'error'); return; }
@@ -1089,36 +1186,45 @@
             if (!tanggal) { showMessage('Pilih tanggal', 'error'); return; }
             if (!namaPembuat) { showMessage('Pilih nama pembuat', 'error'); return; }
 
-            // Menyusun tampilan rincian HTML di dalam modal
+            // Menyusun tampilan rincian HTML di dalam modal konfirmasi
             const confirmBodyHtml = `
-            <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
-            <strong>Provinsi:</strong> ${provinsi}<br>
-            <strong>Kegiatan:</strong> ${namaKegiatan}<br>
-            <strong>Perihal:</strong> ${perihal}<br>
-            <strong>Tanggal:</strong> ${tanggal.split('.').reverse().join('/')}<br>
-            <strong>Pembuat:</strong> ${namaPembuat}
-        `;
+                <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
+                <strong>Provinsi:</strong> ${provinsi}<br>
+                <strong>Kegiatan:</strong> ${namaKegiatan}<br>
+                <strong>Perihal:</strong> ${perihal}<br>
+                <strong>Tanggal:</strong> ${tanggal.split('.').reverse().join('/')}<br>
+                <strong>Pembuat:</strong> ${namaPembuat}<br>
+                <strong>Jumlah Lampiran:</strong> ${selectedFiles.length} berkas
+            `;
 
-            // Menampilkan modal konfirmasi custom berbasis Promise
             const yakin = await showCustomConfirm(`Buat ${jenisDokumen} Baru?`, confirmBodyHtml);
-            if (!yakin) return; // Hentikan proses jika memilih "Batal"
+            if (!yakin) return; 
 
-            openModal(`Membuat ${jenisDokumen}...`);
+            openModal(`Memproses ${jenisDokumen} & Lampiran...`);
+            
             try {
+                // === KONVERSI SEMUA BERKAS LAMPIRAN KE BASE64 (BARU) ===
+                let lampiranArray = [];
+                if (selectedFiles.length > 0) {
+                    const conversionPromises = selectedFiles.map(file => fileToBase64(file));
+                    lampiranArray = await Promise.all(conversionPromises);
+                }
+
                 const payload = {
                     jenisDokumen, provinsi, namaKegiatan, perihal, tanggal, namaPembuat,
+                    lampiran: lampiranArray, // Mengirimkan berkas lampiran (bernilai array kosong jika tidak ada)
                     timestamp: new Date().toISOString()
                 };
+                
                 const responseData = await submitDokumen(payload);
                 const documentLink = responseData.linkBerkas || responseData.fileLink || '';
 
                 clearCachedData();
-                // Tampilkan modal sukses terlebih dahulu sebelum me-reset field input
                 showModalSuccess(documentLink, perihal, jenisDokumen);
                 resetForm();
             } catch (err) {
                 console.error(err);
-                showModalError(err.message || "Terjadi kesalahan. Coba lagi.");
+                showModalError(err.message || "Terjadi kesalahan saat memproses data.");
             }
         });
 
@@ -1134,6 +1240,12 @@
             newPembuatRow.style.display = 'none';
             newKegiatanInput.value = '';
             newPembuatInput.value = '';
+            
+            // Bersihkan file state & UI lampiran (BARU)
+            selectedFiles = [];
+            renderFileList();
+            document.getElementById('lampiran').value = '';
+            
             messageDiv.style.display = 'none';
         }
 

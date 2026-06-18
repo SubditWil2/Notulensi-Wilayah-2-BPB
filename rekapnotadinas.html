@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard Rekap Nota Dinas & Surat</title>
+
+    <!-- PUSTAKA GRATIS UNTUK EKSTRAKSI DOKUMEN DI BROWSER (ZERO COST) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -76,7 +81,7 @@
             justify-content: center !important;
             padding: 5px !important;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
-            flex-shrink: 0 !important; /* Mengunci logo agar tidak gepeng di mobile */
+            flex-shrink: 0 !important;
         }
         .logo-container img {
             width: 100% !important;
@@ -324,6 +329,63 @@
             display: none;
         }
 
+        /* TOMBOL OCR GAYA PUPR */
+        .btn-ocr {
+            background: white !important;
+            color: #1d355e !important;
+            border: 2px solid #1d355e !important;
+            padding: 10px 18px !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+            font-size: 13px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            transition: all 0.3s ease !important;
+            margin-top: 12px !important;
+            width: 100%;
+        }
+
+        .btn-ocr:hover {
+            background: #1d355e !important;
+            color: white !important;
+        }
+
+        .btn-ocr:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+
+        .ocr-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: none;
+            text-align: left;
+        }
+
+        .ocr-processing {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .ocr-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .ocr-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
         /* ========= RESPONSIVE MOBILE ========= */
         @media (max-width: 1024px) {
             .filter-section {
@@ -333,12 +395,12 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 0 !important; /* Menghilangkan gap sekeliling di HP */
+                padding: 0 !important;
             }
 
             .container {
-                border-radius: 0 !important; /* Membuat container rata mulus ke pinggir layar */
-                border: none !important; /* Menghilangkan border pinggir */
+                border-radius: 0 !important;
+                border: none !important;
             }
 
             .dashboard-content {
@@ -655,37 +717,56 @@
             </div>
         </div>
 
-        <!-- MODAL KELOLA (Upload Berkas Final & Isi Nomor Surat) -->
+        <!-- MODAL KELOLA (Upload Berkas Final & Isi Nomor & Tanggal Surat) -->
         <div id="kelolaModal" class="modal-overlay">
-            <div class="modal-box">
+            <div class="modal-box" style="position: relative;">
+                
+                <!-- Tombol Silang (X) di Pojok Kanan Atas -->
+                <button type="button" onclick="closeKelolaModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: color 0.2s;" onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='#94a3b8'">✕</button>
+
                 <div id="kelolaMenuState">
                     <div style="font-size:40px; margin-bottom: 8px;">⚙️</div>
                     <div class="modal-title" id="kelolaTitle">Kelola Berkas</div>
-                    <div class="modal-sub" id="kelolaSub">Pembaruan Nomor & Unggah Berkas Final</div>
+                    <div class="modal-sub" id="kelolaSub">Pembaruan Nomor, Tanggal & Unggah Berkas Final</div>
 
-                    <form id="metaForm" onsubmit="executeMetaUpdate(event)"
+                    <form id="metaForm" onsubmit="window.executeMetaUpdate(event)"
                         style="text-align: left; margin-bottom: 15px;">
-                        <!-- Input Nomor Surat -->
+                        
+                        <!-- 1. AREA UPLOAD FILE (Sekarang di paling atas) -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nomor Surat Resmi</label>
-                            <input type="text" id="modalNomorSurat" placeholder="Contoh: UM.0102-W2/..." required>
-                        </div>
-
-                        <!-- Upload File Final -->
-                        <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
-                                (PDF/Word bertanda tangan)</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final (PDF/Word bertanda tangan)</label>
                             <div class="modal-upload-area" id="modalUploadArea"
                                 onclick="document.getElementById('modalFileFinal').click()">
                                 <span style="font-size: 24px; display:block; margin-bottom: 4px;">📂</span>
                                 <span style="font-size: 12px; font-weight: 600; color:#1d355e;"
                                     id="modalUploadLabel">Pilih file final...</span>
                             </div>
-                            <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx" style="display:none;"
-                                onchange="handleFileFinalSelect(this.files[0])">
+                            <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none;"
+                                onchange="window.handleFileFinalSelect(this.files[0])">
                             <div class="modal-upload-feedback" id="modalUploadFeedback">✓ Berkas terpilih</div>
                         </div>
 
+                        <!-- 2. TOMBOL OCR & STATUSNYA (Tepat di bawah area upload) -->
+                        <div id="ocrActionArea" style="display:none; margin-bottom: 15px;">
+                            <button type="button" id="btnOCR" class="btn-ocr" onclick="window.runOCR()">
+                                <span>🔍</span> Baca Berkas Otomatis (AI)
+                            </button>
+                        </div>
+                        <div id="ocrStatusBox" class="ocr-status" style="margin-bottom: 15px;"></div>
+
+                        <!-- 3. INPUT NOMOR SURAT (Hasil OCR akan mengisi kolom ini) -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nomor Surat Resmi</label>
+                            <input type="text" id="modalNomorSurat" placeholder="Contoh: UM.0102-W2/..." required>
+                        </div>
+
+                        <!-- 4. INPUT TANGGAL SURAT (Hasil OCR akan mengisi kolom ini) -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen Final</label>
+                            <input type="date" id="modalTanggalSurat" required>
+                        </div>
+
+                        <!-- 5. TOMBOL SIMPAN (Di paling bawah) -->
                         <button type="submit" class="btn-modal-action btn-save-meta">✓ Simpan Perubahan</button>
                     </form>
 
@@ -695,7 +776,9 @@
                         <a href="#" target="_blank" id="btnBukaFinal" class="btn-modal-action btn-final"
                             style="color:white; display:none;">✅ Buka File Final</a>
                     </div>
-                    <button class="btn-close-modal btn-modal-action" onclick="closeKelolaModal()">Tutup</button>
+                    
+                    <!-- Tombol Tutup dengan Type Eksplisit -->
+                    <button type="button" class="btn-close-modal btn-modal-action" onclick="closeKelolaModal()">Tutup</button>
                 </div>
 
                 <div id="kelolaLoadingState" style="display: none;">
@@ -758,523 +841,808 @@
             </div>
         </div>
 
-
         <script>
+            // Inisialisasi pdf.js worker
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
             // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
-        const CACHE_KEY = 'subdit_wil2_master_cache';
-        const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
-        const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+            const CACHE_KEY = 'subdit_wil2_master_cache';
+            const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
+            const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
 
-        function getCachedData() {
-            const cached = sessionStorage.getItem(CACHE_KEY);
-            const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
-            if (cached && cachedTime) {
-                const age = Date.now() - parseInt(cachedTime, 10);
-                if (age < CACHE_DURATION) {
-                    console.log("⚡ Menggunakan data master dari CACHE (Instant)");
-                    return JSON.parse(cached);
-                }
-            }
-            return null;
-        }
-
-        function setCachedData(data) {
-            sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
-            sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-            console.log("💾 Data master baru disimpan ke cache browser.");
-        }
-
-        function clearCachedData() {
-            sessionStorage.removeItem(CACHE_KEY);
-            sessionStorage.removeItem(CACHE_TIME_KEY);
-            console.log("🧹 Cache dibersihkan karena ada perubahan data.");
-        }
-
-        (function () {
-            // ========== KONFIGURASI FLOW POWER AUTOMATE ==========
-            const CONFIG = {
-                getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
-                // URL flow untuk memproses hapus dokumen ND-Surat
-                deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
-                // URL flow untuk update Nomor Surat & upload File Final
-                updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/199ee6565eb64bde8d1da4e59a16cc79/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VVrxAkygkw8iZl0_r2pAGv746gtKb3_EcTJWez0IoRA'
-            };
-
-            let databaseND = [];
-            let activeDeleteData = { provinsi: '', namaKegiatan: '', perihal: '', pathND: '', rowElement: null };
-            let activeKelolaData = { provinsi: '', namaKegiatan: '', perihal: '', nomorSurat: '', pathND: '', linkFile: '', linkFinal: '', rowElement: null };
-            let selectedFileFinalData = { base64: '', nama: '', tipe: '' };
-
-            let filterIsVisible = window.innerWidth > 768;
-
-            // Mendapatkan data properti dengan toleransi nama kolom
-            function getValue(row, keys) {
-                for (let k of keys) if (row[k] !== undefined && row[k] !== null) return row[k];
-                let cleanKeys = keys.map(k => k.toLowerCase().replace(/[\s_]|_x0020_/g, ''));
-                for (let key of Object.keys(row)) {
-                    let ck = key.toLowerCase().replace(/[\s_]|_x0020_/g, '');
-                    if (cleanKeys.includes(ck)) return row[key];
+            function getCachedData() {
+                const cached = sessionStorage.getItem(CACHE_KEY);
+                const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
+                if (cached && cachedTime) {
+                    const age = Date.now() - parseInt(cachedTime, 10);
+                    if (age < CACHE_DURATION) {
+                        console.log("⚡ Menggunakan data master dari CACHE (Instant)");
+                        return JSON.parse(cached);
+                    }
                 }
                 return null;
             }
 
-            window.toggleFilter = function () {
-                filterIsVisible = !filterIsVisible;
-                updateFilterView();
-            };
-
-            function updateFilterView() {
-                const area = document.getElementById('filterArea');
-                const icon = document.getElementById('filterIcon');
-                if (filterIsVisible) {
-                    area.style.display = 'grid';
-                    icon.innerText = '▲';
-                } else {
-                    area.style.display = 'none';
-                    icon.innerText = '▼';
-                }
+            function setCachedData(data) {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
+                sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+                console.log("💾 Data master baru disimpan ke cache browser.");
             }
 
-            // Memuat dashboard data
-            // Memuat dashboard data
-            async function loadDashboardData() {
-                // 1. Cek apakah ada data di cache
-                let rawData = getCachedData();
-                if (rawData) {
-                    // Pastikan spinner dimatikan saat load dari cache
-                    document.getElementById('loading').style.display = 'none'; 
-                    prosesDashboardData(rawData); // Tampilkan instan
-                    return;
-                }
-
-                // 2. Jika tidak ada cache, fetch dari server
-                document.getElementById('loading').style.display = 'block';
-                document.getElementById('filterArea').style.display = 'none';
-                document.getElementById('tableArea').style.display = 'none';
-                document.getElementById('filterToggleContainer').style.display = 'none';
-
-                try {
-                    let resp = await fetch(CONFIG.getDataFlowUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getData' }) });
-                    if (!resp.ok) throw new Error('Gagal menghubungi server');
-                    rawData = await resp.json();
-                    if (typeof rawData === 'string') rawData = JSON.parse(rawData);
-
-                    setCachedData(rawData); // Simpan ke cache
-                    prosesDashboardData(rawData);
-                    hideMessage();
-                } catch (e) {
-                    showMessage('Peringatan: ' + e.message, 'error');
-                } finally {
-                    document.getElementById('loading').style.display = 'none';
-                }
+            function clearCachedData() {
+                sessionStorage.removeItem(CACHE_KEY);
+                sessionStorage.removeItem(CACHE_TIME_KEY);
+                console.log("🧹 Cache dibersihkan karena ada perubahan data.");
             }
 
-            // Fungsi pengolahan visual tabel & filter (Cukup ditulis SATU KALI saja)
-            function prosesDashboardData(rawData) {
-                databaseND = rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || rawData.notaDinas || [];
+            (function () {
+                // ========== KONFIGURASI FLOW POWER AUTOMATE ==========
+                const CONFIG = {
+                    getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
+                    deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
+                    updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/199ee6565eb64bde8d1da4e59a16cc79/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VVrxAkygkw8iZl0_r2pAGv746gtKb3_EcTJWez0IoRA'
+                };
 
-                databaseND.sort((a, b) => {
-                    let tglB = getValue(b, ['Tanggal', 'tanggal']) || '';
-                    let tglA = getValue(a, ['Tanggal', 'tanggal']) || '';
-                    return tglB.localeCompare(tglA);
-                });
+                let databaseND = [];
+                let activeDeleteData = { provinsi: '', namaKegiatan: '', perihal: '', pathND: '', rowElement: null };
+                
+                // Ditambahkan field tanggalDokumen untuk penyesuaian metadata
+                let activeKelolaData = { provinsi: '', namaKegiatan: '', perihal: '', nomorSurat: '', tanggalDokumen: '', pathND: '', linkFile: '', linkFinal: '', rowElement: null };
+                
+                // Ditambahkan key rawFile untuk mempermudah pemindaian OCR lokal
+                let selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
 
-                buildProvinsiFilter(rawData.provinsi || rawData.Provinsi_Master || []);
-                buildPICFilter();
-                applyFilters();
+                // API Key Gemini diinisialisasi dari database flow
+                let GEMINI_API_KEY = '';
+                let GEMINI_API_KEYS = [];
 
-                document.getElementById('filterToggleContainer').style.display = 'flex';
-                updateFilterView();
-                document.getElementById('tableArea').style.display = 'block';
-            }
+                let filterIsVisible = window.innerWidth > 768;
 
-            // Fungsi pengolahan visual tabel & filter (Sudah dibersihkan dari duplikasi)
-            function prosesDashboardData(rawData) {
-                databaseND = rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || rawData.notaDinas || [];
-
-                databaseND.sort((a, b) => {
-                    let tglB = getValue(b, ['Tanggal', 'tanggal']) || '';
-                    let tglA = getValue(a, ['Tanggal', 'tanggal']) || '';
-                    return tglB.localeCompare(tglA);
-                });
-
-                buildProvinsiFilter(rawData.provinsi || rawData.Provinsi_Master || []);
-                buildPICFilter();
-                applyFilters();
-
-                document.getElementById('filterToggleContainer').style.display = 'flex';
-                updateFilterView();
-                document.getElementById('tableArea').style.display = 'block';
-            }
-
-            function buildProvinsiFilter(provinsiMaster) {
-                let sel = document.getElementById('filterProvinsi');
-                sel.innerHTML = '<option value="">-- Semua Provinsi --</option>';
-                let set = new Set();
-                provinsiMaster.forEach(row => {
-                    let p = getValue(row, ['Provinsi', 'provinsi']);
-                    if (p) set.add(p.toString().trim());
-                });
-                Array.from(set).sort().forEach(p => {
-                    let opt = document.createElement('option');
-                    opt.value = p; opt.textContent = p;
-                    sel.appendChild(opt);
-                });
-            }
-
-            function buildPICFilter() {
-                let set = new Set();
-                databaseND.forEach(row => {
-                    let n = getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']);
-                    if (n && n !== '-') set.add(n);
-                });
-                let sel = document.getElementById('filterPIC');
-                sel.innerHTML = '<option value="">-- Semua PIC --</option>';
-                Array.from(set).sort().forEach(n => {
-                    let opt = document.createElement('option');
-                    opt.value = n; opt.textContent = n; // <-- DIPERBAIKI: Menggunakan variabel iterator 'n' yang benar
-                    sel.appendChild(opt);
-                });
-            }
-
-            window.applyFilters = function () {
-                let search = document.getElementById('searchBar').value.toLowerCase();
-                let jenis = document.getElementById('filterJenis').value;
-                let prov = document.getElementById('filterProvinsi').value;
-                let tglDari = document.getElementById('filterTanggalDari').value;
-                let tglSampai = document.getElementById('filterTanggalSampai').value;
-                let pic = document.getElementById('filterPIC').value;
-
-                let filtered = [...databaseND];
-
-                if (search) {
-                    filtered = filtered.filter(row => {
-                        let nomor = (getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '').toLowerCase();
-                        let perihal = (getValue(row, ['Perihal', 'perihal']) || '').toLowerCase();
-                        let kegiatan = (getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '').toLowerCase();
-                        return nomor.includes(search) || perihal.includes(search) || kegiatan.includes(search);
-                    });
-                }
-                if (jenis) filtered = filtered.filter(row => (getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || '') === jenis);
-                if (prov) filtered = filtered.filter(row => (getValue(row, ['Provinsi', 'provinsi']) || '') === prov);
-                if (tglDari || tglSampai) {
-                    filtered = filtered.filter(row => {
-                        let tglRaw = getValue(row, ['Tanggal', 'tanggal']) || '';
-                        if (!tglRaw) return false;
-                        let norm = tglRaw.replace(/\./g, '-');
-                        if (tglDari && norm < tglDari) return false;
-                        if (tglSampai && norm > tglSampai) return false;
-                        return true;
-                    });
-                }
-                if (pic) filtered = filtered.filter(row => (getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']) || '') === pic);
-
-                renderTable(filtered);
-            }
-
-            function renderTable(data) {
-                let tbody = document.getElementById('tableBody');
-                tbody.innerHTML = '';
-
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; color: #64748b;">Data rekap dokumen tidak ditemukan.</td></tr>';
-                    return;
-                }
-
-                data.forEach((row, idx) => {
-                    let jenis = getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || 'Nota Dinas';
-                    let tgl = getValue(row, ['Tanggal', 'tanggal']) || '-';
-                    let nomor = getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '';
-                    let prov = getValue(row, ['Provinsi', 'provinsi']) || '-';
-                    let keg = getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '-';
-                    let perihal = getValue(row, ['Perihal', 'perihal']) || '-';
-                    let pic = getValue(row, ['PIC', 'pic', 'namaPembuat']) || '-';
-                    let linkFile = getValue(row, ['Link File', 'linkFile']) || '';
-                    let linkFinal = getValue(row, ['Link Final', 'linkFinal']) || '';
-                    let pathND = getValue(row, ['Path ND - Surat', 'pathNDSurat', 'pathND']) || '';
-
-                    let formatted = tgl;
-                    if (tgl.includes('.')) {
-                        let parts = tgl.split('.');
-                        if (parts.length === 3) formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                // Mendapatkan data properti dengan toleransi nama kolom
+                function getValue(row, keys) {
+                    for (let k of keys) if (row[k] !== undefined && row[k] !== null) return row[k];
+                    let cleanKeys = keys.map(k => k.toLowerCase().replace(/[\s_]|_x0020_/g, ''));
+                    for (let key of Object.keys(row)) {
+                        let ck = key.toLowerCase().replace(/[\s_]|_x0020_/g, '');
+                        if (cleanKeys.includes(ck)) return row[key];
                     }
+                    return null;
+                }
 
-                    let badgeClass = jenis === 'Nota Dinas' ? 'badge-nd' : 'badge-surat';
-                    
-                    let displayNomor = '';
-                    if (nomor) {
-                        displayNomor = linkFinal 
-                            ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>` 
-                            : nomor;
+                window.toggleFilter = function () {
+                    filterIsVisible = !filterIsVisible;
+                    updateFilterView();
+                };
+
+                function updateFilterView() {
+                    const area = document.getElementById('filterArea');
+                    const icon = document.getElementById('filterIcon');
+                    if (filterIsVisible) {
+                        area.style.display = 'grid';
+                        icon.innerText = '▲';
                     } else {
-                        displayNomor = '<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>';
+                        area.style.display = 'none';
+                        icon.innerText = '▼';
+                    }
+                }
+
+                // Memuat dashboard data
+                async function loadDashboardData() {
+                    // 1. Cek apakah ada data di cache
+                    let rawData = getCachedData();
+                    if (rawData) {
+                        document.getElementById('loading').style.display = 'none'; 
+                        prosesDashboardData(rawData); 
+                        return;
                     }
 
-                    let safePerihal = perihal.replace(/'/g, "\\'");
-                    let safePath = pathND.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+                    // 2. Jika tidak ada cache, fetch dari server
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('filterArea').style.display = 'none';
+                    document.getElementById('tableArea').style.display = 'none';
+                    document.getElementById('filterToggleContainer').style.display = 'none';
 
-                    let tr = document.createElement('tr');
-                    tr.innerHTML = `
-                <td data-label="No" style="text-align:center;">${idx + 1}</td>
-                <td data-label="Jenis"><span class="badge ${badgeClass}">${jenis}</span></td>
-                <td data-label="Tanggal">${formatted}</td>
-                <td data-label="Nomor Surat">${displayNomor}</td>
-                <td data-label="Provinsi">${prov}</td>
-                <td data-label="Nama Kegiatan">${keg}</td>
-                <td data-label="Perihal / Judul">${linkFinal ? `<a href="${linkFinal}" target="_blank" class="document-title-link">🔗 ${perihal}</a>` : perihal}</td>
-                <td data-label="PIC">${pic}</td>
-                <td data-label="Aksi">
-                    <div class="action-cell">
-                        ${linkFile ? `<a href="${linkFile}" target="_blank" class="btn-action btn-draft" title="Buka Draft Word">📝</a>` : ''}
-                        ${linkFinal ? `<a href="${linkFinal}" target="_blank" class="btn-action btn-final" title="Buka Berkas Final">✅</a>` : ''}
-                        <button onclick="window.openKelolaModal('${prov}','${keg}','${safePerihal}','${nomor}','${safePath}','${linkFile}','${linkFinal}',this)" class="btn-action btn-kelola" title="Kelola / Update Berkas">⚙️</button>
-                        <button onclick="window.confirmDelete('${prov}','${keg}','${safePerihal}','${safePath}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
-                    </div>
-                </td>
-            `;
-                    tbody.appendChild(tr);
-                });
-            }
+                    try {
+                        let resp = await fetch(CONFIG.getDataFlowUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getData' }) });
+                        if (!resp.ok) throw new Error('Gagal menghubungi server');
+                        rawData = await resp.json();
+                        if (typeof rawData === 'string') rawData = JSON.parse(rawData);
 
-            // ========== OPEN KELOLA MODAL ==========
-            window.openKelolaModal = function (prov, keg, perihal, nomor, path, linkWord, linkFinal, btn) {
-                activeKelolaData = {
-                    provinsi: prov, namaKegiatan: keg, perihal: perihal,
-                    nomorSurat: nomor, pathND: path, linkFile: linkWord, linkFinal: linkFinal,
-                    rowElement: btn.closest('tr')
-                };
-
-                document.getElementById('kelolaTitle').innerHTML = 'Kelola: ' + (perihal.length > 35 ? perihal.substring(0, 35) + '...' : perihal);
-                document.getElementById('kelolaSub').innerHTML = `${prov} - <span style="color:#1d355e; font-weight:600;">${keg}</span>`;
-
-                document.getElementById('modalNomorSurat').value = nomor || '';
-
-                document.getElementById('modalFileFinal').value = '';
-                document.getElementById('modalUploadFeedback').style.display = 'none';
-                document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
-                selectedFileFinalData = { base64: '', nama: '', tipe: '' };
-
-                let draftBtn = document.getElementById('btnBukaDraft');
-                if (linkWord) {
-                    draftBtn.href = linkWord;
-                    draftBtn.style.display = 'inline-block';
-                } else {
-                    draftBtn.style.display = 'none';
+                        setCachedData(rawData); 
+                        prosesDashboardData(rawData);
+                        hideMessage();
+                    } catch (e) {
+                        showMessage('Peringatan: ' + e.message, 'error');
+                    } finally {
+                        document.getElementById('loading').style.display = 'none';
+                    }
                 }
 
-                let finalBtn = document.getElementById('btnBukaFinal');
-                if (linkFinal && linkFinal !== 'null') {
-                    finalBtn.href = linkFinal;
-                    finalBtn.style.display = 'inline-block';
-                } else {
-                    finalBtn.style.display = 'none';
-                }
+                // Pengolahan data tunggal (Telah dieliminasi dari duplikasi)
+                function prosesDashboardData(rawData) {
+                    // Ekstraksi API Key Gemini otomatis dari database OneDrive
+                    GEMINI_API_KEYS = [];
+                    const geminiKeyRaw = rawData.geminiKey || [];
+                    const keyArray = Array.isArray(geminiKeyRaw) ? geminiKeyRaw : [geminiKeyRaw];
 
-                document.getElementById('kelolaModal').classList.add('active');
-                document.getElementById('kelolaMenuState').style.display = 'block';
-                document.getElementById('kelolaLoadingState').style.display = 'none';
-            };
+                    keyArray.forEach(row => {
+                        const nama = row.NamaSetting || row.namaSetting || row.namasetting || '';
+                        const nilai = row.Nilai || row.nilai || '';
 
-            window.closeKelolaModal = function () {
-                document.getElementById('kelolaModal').classList.remove('active');
-            };
-
-            window.handleFileFinalSelect = async function (file) {
-                const feedback = document.getElementById('modalUploadFeedback');
-                const label = document.getElementById('modalUploadLabel');
-                feedback.style.display = 'none';
-
-                if (!file) return;
-
-                try {
-                    const base64 = await toBase64(file);
-                    selectedFileFinalData = { base64, nama: file.name, tipe: file.type };
-                    label.textContent = file.name;
-                    feedback.style.display = 'block';
-                    feedback.style.color = '#27ae60';
-                    feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
-                } catch (e) {
-                    feedback.style.display = 'block';
-                    feedback.style.color = '#e74c3c';
-                    feedback.textContent = 'Gagal memproses file.';
-                }
-            };
-
-            const uploadArea = document.getElementById('modalUploadArea');
-            uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#1d355e'; });
-            uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#cbd5e1'; });
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#cbd5e1';
-                if (e.dataTransfer.files[0]) {
-                    document.getElementById('modalFileFinal').files = e.dataTransfer.files;
-                    window.handleFileFinalSelect(e.dataTransfer.files[0]);
-                }
-            });
-
-            // ========== EXECUTE UPDATE DATA ==========
-            function showCustomUpdateConfirm(title, messageHtml) {
-                return new Promise((resolve) => {
-                    const modal = document.getElementById('confirmUpdateModal');
-                    document.getElementById('confirmUpdateTitle').textContent = title;
-                    document.getElementById('confirmUpdateBody').innerHTML = messageHtml;
-
-                    modal.classList.add('active');
-
-                    const btnYes = document.getElementById('btnUpdateYes');
-                    const btnNo = document.getElementById('btnUpdateNo');
-
-                    const handleYes = () => {
-                        modal.classList.remove('active');
-                        cleanup();
-                        resolve(true);
-                    };
-                    const handleNo = () => {
-                        modal.classList.remove('active');
-                        cleanup();
-                        resolve(false);
-                    };
-
-                    const cleanup = () => {
-                        btnYes.removeEventListener('click', handleYes);
-                        btnNo.removeEventListener('click', handleNo);
-                    };
-
-                    btnYes.addEventListener('click', handleYes);
-                    btnNo.addEventListener('click', handleNo);
-                });
-            }
-
-            window.executeMetaUpdate = async function (event) {
-                event.preventDefault();
-
-                const nomorSuratBaru = document.getElementById('modalNomorSurat').value.trim();
-                const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file baru';
-
-                const confirmHtml = `
-                    <strong>Perihal:</strong> ${activeKelolaData.perihal}<br>
-                    <strong>Nomor Surat Baru:</strong> ${nomorSuratBaru}<br>
-                    <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
-                    <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
-                `;
-
-                const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
-                if (!yakin) return; 
-
-                document.getElementById('kelolaMenuState').style.display = 'none';
-                document.getElementById('kelolaLoadingState').style.display = 'block';
-
-                const payload = {
-                    action: 'updateMeta',
-                    nomorSurat: nomorSuratBaru,
-                    provinsi: activeKelolaData.provinsi,
-                    namaKegiatan: activeKelolaData.namaKegiatan,
-                    pathND: activeKelolaData.pathND,
-                    fileFinalBase64: selectedFileFinalData.base64 || '',
-                    fileFinalNama: selectedFileFinalData.nama || '',
-                    fileFinalTipe: selectedFileFinalData.tipe || ''
-                };
-
-                try {
-                    let res = await fetch(CONFIG.updateNDFlowUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        if (nama.toLowerCase().includes('geminiapi') && nilai.toString().trim()) {
+                            GEMINI_API_KEYS.push(nilai.toString().trim());
+                            console.log(`🔑 Key dimuat: ${nama}`);
+                        }
                     });
 
-                    if (!res.ok) throw new Error('Gagal memperbarui data di server.');
-                    clearCachedData();
-                    await loadDashboardData();
-                    closeKelolaModal();
-                    showMessage('Data dokumen berhasil diperbarui.', 'info');
-                } catch (err) {
-                    console.error(err);
-                    alert('Gagal memperbarui: ' + err.message);
-                    document.getElementById('kelolaLoadingState').style.display = 'none';
+                    GEMINI_API_KEY = GEMINI_API_KEYS[0] || '';
+                    console.log(`🔑 ${GEMINI_API_KEYS.length} API Key berhasil dimuat.`);
+
+                    databaseND = rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || rawData.notaDinas || [];
+
+                    databaseND.sort((a, b) => {
+                        let tglB = getValue(b, ['Tanggal', 'tanggal']) || '';
+                        let tglA = getValue(a, ['Tanggal', 'tanggal']) || '';
+                        return tglB.localeCompare(tglA);
+                    });
+
+                    buildProvinsiFilter(rawData.provinsi || rawData.Provinsi_Master || []);
+                    buildPICFilter();
+                    applyFilters();
+
+                    document.getElementById('filterToggleContainer').style.display = 'flex';
+                    updateFilterView();
+                    document.getElementById('tableArea').style.display = 'block';
+                }
+
+                // Ekstraksi Pengiriman API Gemini
+                const MODELS_FALLBACK = [
+                    'gemini-3.1-flash-lite',
+                    'gemini-3.5-flash',
+                    'gemini-2.5-flash'
+                ];
+
+                async function geminiRequest(payload, models = MODELS_FALLBACK) {
+                    for (const model of models) {
+                        for (const apiKey of GEMINI_API_KEYS) {
+                            let response;
+                            try {
+                                response = await fetch(
+                                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                                    {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify(payload),
+                                    }
+                                );
+                            } catch (networkErr) {
+                                console.warn(`⚠️ Network error: ${networkErr.message}, skip...`);
+                                continue;
+                            }
+
+                            if (response.status === 429 || response.status === 503) {
+                                console.warn(`⚠️ key ...${apiKey.slice(-6)} + ${model} → ${response.status}, skip...`);
+                                continue;
+                            }
+
+                            if (!response.ok) {
+                                const errJson = await response.json().catch(() => ({}));
+                                throw new Error(errJson.error?.message || `HTTP ${response.status}`);
+                            }
+
+                            const result = await response.json();
+                            console.log(`✅ Berhasil: model=${model}, key=...${apiKey.slice(-6)}`);
+                            return result;
+                        }
+                    }
+                    throw new Error('Semua API key dan model tidak tersedia. Coba beberapa saat lagi.');
+                }
+
+                function buildProvinsiFilter(provinsiMaster) {
+                    let sel = document.getElementById('filterProvinsi');
+                    sel.innerHTML = '<option value="">-- Semua Provinsi --</option>';
+                    let set = new Set();
+                    provinsiMaster.forEach(row => {
+                        let p = getValue(row, ['Provinsi', 'provinsi']);
+                        if (p) set.add(p.toString().trim());
+                    });
+                    Array.from(set).sort().forEach(p => {
+                        let opt = document.createElement('option');
+                        opt.value = p; opt.textContent = p;
+                        sel.appendChild(opt);
+                    });
+                }
+
+                function buildPICFilter() {
+                    let set = new Set();
+                    databaseND.forEach(row => {
+                        let n = getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']);
+                        if (n && n !== '-') set.add(n);
+                    });
+                    let sel = document.getElementById('filterPIC');
+                    sel.innerHTML = '<option value="">-- Semua PIC --</option>';
+                    Array.from(set).sort().forEach(n => {
+                        let opt = document.createElement('option');
+                        opt.value = n; opt.textContent = n; 
+                        sel.appendChild(opt);
+                    });
+                }
+
+                window.applyFilters = function () {
+                    let search = document.getElementById('searchBar').value.toLowerCase();
+                    let jenis = document.getElementById('filterJenis').value;
+                    let prov = document.getElementById('filterProvinsi').value;
+                    let tglDari = document.getElementById('filterTanggalDari').value;
+                    let tglSampai = document.getElementById('filterTanggalSampai').value;
+                    let pic = document.getElementById('filterPIC').value;
+
+                    let filtered = [...databaseND];
+
+                    if (search) {
+                        filtered = filtered.filter(row => {
+                            let nomor = (getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '').toLowerCase();
+                            let perihal = (getValue(row, ['Perihal', 'perihal']) || '').toLowerCase();
+                            let kegiatan = (getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '').toLowerCase();
+                            return nomor.includes(search) || perihal.includes(search) || kegiatan.includes(search);
+                        });
+                    }
+                    if (jenis) filtered = filtered.filter(row => (getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || '') === jenis);
+                    if (prov) filtered = filtered.filter(row => (getValue(row, ['Provinsi', 'provinsi']) || '') === prov);
+                    if (tglDari || tglSampai) {
+                        filtered = filtered.filter(row => {
+                            let tglRaw = getValue(row, ['Tanggal', 'tanggal']) || '';
+                            if (!tglRaw) return false;
+                            let norm = tglRaw.replace(/\./g, '-');
+                            if (tglDari && norm < tglDari) return false;
+                            if (tglSampai && norm > tglSampai) return false;
+                            return true;
+                        });
+                    }
+                    if (pic) filtered = filtered.filter(row => (getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']) || '') === pic);
+
+                    renderTable(filtered);
+                }
+
+                function renderTable(data) {
+                    let tbody = document.getElementById('tableBody');
+                    tbody.innerHTML = '';
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; color: #64748b;">Data rekap dokumen tidak ditemukan.</td></tr>';
+                        return;
+                    }
+
+                    data.forEach((row, idx) => {
+                        let jenis = getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || 'Nota Dinas';
+                        let tgl = getValue(row, ['Tanggal', 'tanggal']) || '-';
+                        let nomor = getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '';
+                        let prov = getValue(row, ['Provinsi', 'provinsi']) || '-';
+                        let keg = getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '-';
+                        let perihal = getValue(row, ['Perihal', 'perihal']) || '-';
+                        let pic = getValue(row, ['PIC', 'pic', 'namaPembuat']) || '-';
+                        let linkFile = getValue(row, ['Link File', 'linkFile']) || '';
+                        let linkFinal = getValue(row, ['Link Final', 'linkFinal']) || '';
+                        let pathND = getValue(row, ['Path ND - Surat', 'pathNDSurat', 'pathND']) || '';
+
+                        let formatted = tgl;
+                        let safeTgl = tgl;
+                        if (tgl.includes('.')) {
+                            let parts = tgl.split('.');
+                            if (parts.length === 3) {
+                                formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                                safeTgl = `${parts[0]}-${parts[1]}-${parts[2]}`; // format YYYY-MM-DD
+                            }
+                        }
+
+                        let badgeClass = jenis === 'Nota Dinas' ? 'badge-nd' : 'badge-surat';
+                        
+                        let displayNomor = '';
+                        if (nomor) {
+                            displayNomor = linkFinal 
+                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>` 
+                                : nomor;
+                        } else {
+                            displayNomor = '<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>';
+                        }
+
+                        let safePerihal = perihal.replace(/'/g, "\\'");
+                        let safePath = pathND.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td data-label="No" style="text-align:center;">${idx + 1}</td>
+                            <td data-label="Jenis"><span class="badge ${badgeClass}">${jenis}</span></td>
+                            <td data-label="Tanggal">${formatted}</td>
+                            <td data-label="Nomor Surat">${displayNomor}</td>
+                            <td data-label="Provinsi">${prov}</td>
+                            <td data-label="Nama Kegiatan">${keg}</td>
+                            <td data-label="Perihal / Judul">${linkFinal ? `<a href="${linkFinal}" target="_blank" class="document-title-link">🔗 ${perihal}</a>` : perihal}</td>
+                            <td data-label="PIC">${pic}</td>
+                            <td data-label="Aksi">
+                                <div class="action-cell">
+                                    ${linkFile ? `<a href="${linkFile}" target="_blank" class="btn-action btn-draft" title="Buka Draft Word">📝</a>` : ''}
+                                    ${linkFinal ? `<a href="${linkFinal}" target="_blank" class="btn-action btn-final" title="Buka Berkas Final">✅</a>` : ''}
+                                    <button onclick="window.openKelolaModal('${prov}','${keg}','${safePerihal}','${nomor}','${safePath}','${linkFile}','${linkFinal}',this,'${safeTgl}')" class="btn-action btn-kelola" title="Kelola / Update Berkas">⚙️</button>
+                                    <button onclick="window.confirmDelete('${prov}','${keg}','${safePerihal}','${safePath}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                // ========== OPEN KELOLA MODAL ==========
+                window.openKelolaModal = function (prov, keg, perihal, nomor, path, linkWord, linkFinal, btn, tglAsli) {
+                    activeKelolaData = {
+                        provinsi: prov, namaKegiatan: keg, perihal: perihal,
+                        nomorSurat: nomor, tanggalDokumen: tglAsli, pathND: path, linkFile: linkWord, linkFinal: linkFinal,
+                        rowElement: btn.closest('tr')
+                    };
+
+                    document.getElementById('kelolaTitle').innerHTML = 'Kelola: ' + (perihal.length > 35 ? perihal.substring(0, 35) + '...' : perihal);
+                    document.getElementById('kelolaSub').innerHTML = `${prov} - <span style="color:#1d355e; font-weight:600;">${keg}</span>`;
+
+                    document.getElementById('modalNomorSurat').value = nomor || '';
+                    
+                    // Isi nilai default tanggal dengan format YYYY-MM-DD
+                    if (tglAsli && tglAsli !== '-') {
+                        document.getElementById('modalTanggalSurat').value = tglAsli;
+                    } else {
+                        document.getElementById('modalTanggalSurat').value = '';
+                    }
+
+                    document.getElementById('modalFileFinal').value = '';
+                    document.getElementById('modalUploadFeedback').style.display = 'none';
+                    document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
+                    
+                    // Sembunyikan tombol & status OCR di awal pembukaan modal
+                    document.getElementById('ocrActionArea').style.display = 'none';
+                    const ocrStatusBox = document.getElementById('ocrStatusBox');
+                    if (ocrStatusBox) {
+                        ocrStatusBox.style.display = 'none';
+                        ocrStatusBox.textContent = '';
+                    }
+
+                    selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
+
+                    let draftBtn = document.getElementById('btnBukaDraft');
+                    if (linkWord) {
+                        draftBtn.href = linkWord;
+                        draftBtn.style.display = 'inline-block';
+                    } else {
+                        draftBtn.style.display = 'none';
+                    }
+
+                    let finalBtn = document.getElementById('btnBukaFinal');
+                    if (linkFinal && linkFinal !== 'null') {
+                        finalBtn.href = linkFinal;
+                        finalBtn.style.display = 'inline-block';
+                    } else {
+                        finalBtn.style.display = 'none';
+                    }
+
+                    document.getElementById('kelolaModal').classList.add('active');
                     document.getElementById('kelolaMenuState').style.display = 'block';
-                }
-            };
+                    document.getElementById('kelolaLoadingState').style.display = 'none';
+                };
 
-            // ========== DELETE MODAL & PROCESS ==========
-            window.confirmDelete = function (prov, keg, perihal, path, btn) {
-                activeDeleteData = { provinsi: prov, namaKegiatan: keg, perihal: perihal, pathND: path, rowElement: btn.closest('tr') };
-                document.getElementById('deleteTargetText').innerHTML = `"${perihal}"<br><span style="font-size:12px; font-weight:normal; color:#64748b;">(${prov})</span>`;
-                document.getElementById('deleteModal').classList.add('active');
-                document.getElementById('modalConfirmState').style.display = 'block';
-                document.getElementById('modalLoadingState').style.display = 'none';
-                document.getElementById('modalSuccessState').style.display = 'none';
-                document.getElementById('modalErrorState').style.display = 'none';
-            };
-            window.closeDeleteModal = function () { document.getElementById('deleteModal').classList.remove('active'); };
-            window.resetDeleteModal = function () {
-                document.getElementById('modalConfirmState').style.display = 'block';
-                document.getElementById('modalLoadingState').style.display = 'none';
-                document.getElementById('modalSuccessState').style.display = 'none';
-                document.getElementById('modalErrorState').style.display = 'none';
-            };
+                window.closeKelolaModal = function () {
+                    document.getElementById('kelolaModal').classList.remove('active');
+                };
 
-            window.executeDelete = async function (opt) {
-                document.getElementById('modalConfirmState').style.display = 'none';
-                document.getElementById('modalLoadingState').style.display = 'block';
-                document.getElementById('loadingDeleteSub').innerText = opt === 'all' ? 'Menghapus data di server & file...' : 'Menghapus data di Excel saja...';
+                window.handleFileFinalSelect = async function (file) {
+                    const feedback = document.getElementById('modalUploadFeedback');
+                    const label = document.getElementById('modalUploadLabel');
+                    const ocrActionArea = document.getElementById('ocrActionArea');
+                    const ocrStatusBox = document.getElementById('ocrStatusBox');
+                    feedback.style.display = 'none';
+                    ocrActionArea.style.display = 'none';
+                    if (ocrStatusBox) ocrStatusBox.style.display = 'none';
 
-                try {
-                    let res = await fetch(CONFIG.deleteNDFlowUrl, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            provinsi: activeDeleteData.provinsi,
-                            namaKegiatan: activeDeleteData.namaKegiatan,
-                            perihal: activeDeleteData.perihal,
-                            pathND: activeDeleteData.pathND,
-                            deleteOption: opt
-                        })
-                    });
-                    if (!res.ok) throw new Error('Gagal memproses penghapusan data.');
-                    if (activeDeleteData.rowElement) activeDeleteData.rowElement.remove();
+                    if (!file) return;
 
-                    document.getElementById('modalLoadingState').style.display = 'none';
-                    document.getElementById('modalSuccessState').style.display = 'block';
-                    document.getElementById('successDeleteSub').innerHTML = opt === 'all' ? 'Riwayat database & file di SharePoint berhasil dihapus.' : 'Riwayat database berhasil dihapus.';
-                    clearCachedData();
-                    await loadDashboardData();
-                } catch (err) {
-                    document.getElementById('modalLoadingState').style.display = 'none';
-                    document.getElementById('modalErrorState').style.display = 'block';
-                    document.getElementById('deleteErrorText').innerText = err.message || "Gagal memproses ke server.";
-                }
-            };
+                    try {
+                        const base64 = await toBase64(file);
+                        selectedFileFinalData = { base64, nama: file.name, tipe: file.type, rawFile: file };
+                        label.textContent = file.name;
+                        feedback.style.display = 'block';
+                        feedback.style.color = '#27ae60';
+                        feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
+                        
+                        // Tampilkan tombol OCR ketika berkas terpilih
+                        ocrActionArea.style.display = 'block';
+                    } catch (e) {
+                        feedback.style.display = 'block';
+                        feedback.style.color = '#e74c3c';
+                        feedback.textContent = 'Gagal memproses file.';
+                    }
+                };
 
-            function toBase64(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result.split(',')[1]);
-                    reader.onerror = error => reject(error);
+                // Inisialisasi Area Drag Over & Drop
+                const uploadArea = document.getElementById('modalUploadArea');
+                uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#1d355e'; });
+                uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#cbd5e1'; });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#cbd5e1';
+                    if (e.dataTransfer.files[0]) {
+                        document.getElementById('modalFileFinal').files = e.dataTransfer.files;
+                        window.handleFileFinalSelect(e.dataTransfer.files[0]);
+                    }
                 });
-            }
 
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
+                // ========== OCR LOGIK PROSESING via GEMINI ==========
+                function setOCRStatus(status, message) {
+                    const statusBox = document.getElementById('ocrStatusBox');
+                    if (!statusBox) return;
 
-            function showMessage(msg, type) {
-                let d = document.getElementById('message');
-                d.textContent = msg;
-                d.className = 'message ' + type;
-                d.style.display = 'block';
-                setTimeout(() => d.style.display = 'none', 5000);
-            }
-            function hideMessage() { document.getElementById('message').style.display = 'none'; }
+                    statusBox.style.display = 'block';
+                    statusBox.textContent = message;
 
-            window.addEventListener('load', loadDashboardData);
-        })();
-    </script>
+                    statusBox.className = 'ocr-status';
+                    if (status === 'processing') statusBox.classList.add('ocr-processing');
+                    if (status === 'success') statusBox.classList.add('ocr-success');
+                    if (status === 'error') statusBox.classList.add('ocr-error');
+                }
 
+                // ========== FUNGSI PEMBANTU AUTOPRECISE MATCHING ==========
+                
+                // Mencari kunci JSON secara fleksibel (tidak sensitif huruf besar/kecil & mengabaikan spasi/garis bawah)
+                function getFlexibleValue(obj, targetKeys) {
+                    if (!obj) return null;
+                    const cleanTargets = targetKeys.map(k => k.toLowerCase().replace(/[\s_-]/g, ''));
+                    for (const [key, val] of Object.entries(obj)) {
+                        const cleanKey = key.toLowerCase().replace(/[\s_-]/g, '');
+                        if (cleanTargets.includes(cleanKey)) {
+                            return val;
+                        }
+                    }
+                    return null;
+                }
+
+                // Menormalisasi berbagai format penulisan tanggal dari AI menjadi standar YYYY-MM-DD
+                function normalizeToYYYYMMDD(dateStr) {
+                    if (!dateStr) return '';
+                    dateStr = dateStr.toString().trim();
+                    
+                    // Jika sudah berformat YYYY-MM-DD
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                        return dateStr;
+                    }
+                    
+                    // Jika berformat YYYY.MM.DD
+                    if (/^\d{4}\.\d{2}\.\d{2}$/.test(dateStr)) {
+                        return dateStr.replace(/\./g, '-');
+                    }
+
+                    // Jika berformat DD-MM-YYYY atau DD/MM/YYYY atau DD.MM.YYYY
+                    const dmyMatch = dateStr.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+                    if (dmyMatch) {
+                        const day = dmyMatch[1].padStart(2, '0');
+                        const month = dmyMatch[2].padStart(2, '0');
+                        const year = dmyMatch[3];
+                        return `${year}-${month}-${day}`;
+                    }
+
+                    // Konversi nama bulan bahasa Indonesia
+                    const monthsId = {
+                        januari: '01', februari: '02', maret: '03', april: '04', mei: '05', juni: '06',
+                        juli: '07', agustus: '08', september: '09', oktober: '10', november: '11', desember: '12',
+                        jan: '01', feb: '02', mar: '03', apr: '04', mei: '05', jun: '06',
+                        jul: '07', agt: '08', sep: '09', okt: '10', nov: '11', des: '12'
+                    };
+
+                    const cleanedStr = dateStr.toLowerCase().replace(/,/g, '');
+                    const words = cleanedStr.split(/\s+/);
+                    
+                    // Format: DD NamaBulan YYYY (misal: 15 Juni 2026)
+                    if (words.length === 3) {
+                        const day = words[0].padStart(2, '0');
+                        const monthName = words[1];
+                        const year = words[2];
+                        
+                        if (monthsId[monthName] && /^\d{4}$/.test(year)) {
+                            return `${year}-${monthsId[monthName]}-${day}`;
+                        }
+                    }
+                    
+                    // Fallback menggunakan Parser JavaScript Date bawaan
+                    try {
+                        const parsed = new Date(dateStr);
+                        if (!isNaN(parsed.getTime())) {
+                            const y = parsed.getFullYear();
+                            const m = String(parsed.getMonth() + 1).padStart(2, '0');
+                            const d = String(parsed.getDate()).padStart(2, '0');
+                            return `${y}-${m}-${d}`;
+                        }
+                    } catch (e) {}
+
+                    return '';
+                }
+
+                // ========== FUNGSI RUN OCR YANG TELAH DIOPTIMALKAN (NATIVE VISION) ==========
+                window.runOCR = async function() {
+                    const file = selectedFileFinalData.rawFile;
+                    const btn = document.getElementById('btnOCR');
+                    if (!file) {
+                        alert("Berkas belum diunggah!");
+                        return;
+                    }
+
+                    const originalHTML = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="modal-spinner" style="width:16px; height:16px; border-width:2px; margin:0 5px 0 0; display:inline-block; vertical-align:middle;"></span> Memindai...';
+                    setOCRStatus('processing', '🔍 Sedang memindai surat/dokumen dengan AI...');
+
+                    try {
+                        const ext = file.name.split('.').pop().toLowerCase();
+                        let extractedText = "";
+
+                        // Ekstraksi lokal HANYA jika berkas Word (.docx) karena inline_data tidak mendukung .docx
+                        if (ext === 'docx') {
+                            const arrayBuffer = await file.arrayBuffer();
+                            const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+                            extractedText = result.value;
+                        }
+
+                        // Memperkuat instruksi pencarian nomor dan tanggal surat resmi
+                        let promptText = "Analisis dokumen ini dengan saksama. Temukan:\n" +
+                            "1. Nomor surat resmi (biasanya memiliki pola kode klasifikasi seperti HM, UM, KP, PL, PR, atau sejenisnya, contoh: UM.0102-W2/...).\n" +
+                            "2. Tanggal dokumen/surat resmi ini ditandatangani atau dikeluarkan.\n\n" +
+                            "Kembalikan jawaban Anda HANYA dalam format JSON bersih berikut:\n" +
+                            "{\n" +
+                            "  \"nomorSurat\": \"NOMOR_SURAT_YANG_DITEMUKAN\",\n" +
+                            "  \"tanggalSurat\": \"YYYY-MM-DD\"\n" +
+                            "}\n" +
+                            "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
+
+                        let payloadContents = [];
+                        
+                        if (ext === 'docx') {
+                            payloadContents = [{
+                                parts: [{ text: promptText + "\nBerikut teks dari dokumen Word:\n" + extractedText }]
+                            }];
+                        } else {
+                            // Untuk PDF & Gambar, kirim secara visual menggunakan inline_data agar AI bisa memindai layout kop surat & tanda tangan secara akurat
+                            const base64Data = selectedFileFinalData.base64;
+                            payloadContents = [{
+                                parts: [
+                                    { text: promptText },
+                                    { inline_data: { mime_type: file.type, data: base64Data } }
+                                ]
+                            }];
+                        }
+
+                        const OCR_MODELS = [
+                            'gemini-3.1-flash-lite',
+                            'gemini-3.5-flash',
+                            'gemini-2.5-flash'
+                        ];
+
+                        const result = await geminiRequest(
+                            {
+                                contents: payloadContents,
+                                generationConfig: {
+                                    temperature: 0.1
+                                }
+                            },
+                            OCR_MODELS
+                        );
+
+                        const rawText = result.candidates[0].content.parts[0].text;
+                        const cleanJSON = rawText.replace(/```json|```/g, '').trim();
+                        
+                        console.log("=== Hasil Pembacaan Mentah Gemini ===", cleanJSON);
+                        
+                        const data = JSON.parse(cleanJSON);
+
+                        // Ekstraksi kunci secara fleksibel
+                        const nomorDitemukan = getFlexibleValue(data, ['nomorSurat', 'nomor_surat', 'nomor', 'noSurat', 'no_surat', 'no', 'number']);
+                        const tanggalDitemukan = getFlexibleValue(data, ['tanggalSurat', 'tanggal_surat', 'tanggal', 'tglSurat', 'tgl_surat', 'tgl', 'date', 'tanggalDokumen']);
+
+                        if (nomorDitemukan) {
+                            document.getElementById('modalNomorSurat').value = nomorDitemukan;
+                        }
+                        if (tanggalDitemukan) {
+                            const formattedDate = normalizeToYYYYMMDD(tanggalDitemukan);
+                            if (formattedDate) {
+                                document.getElementById('modalTanggalSurat').value = formattedDate;
+                            }
+                        }
+
+                        setOCRStatus('success', '✅ Data surat berhasil dibaca otomatis.');
+
+                    } catch (err) {
+                        console.error("OCR Error:", err);
+                        setOCRStatus('error', '❌ Gagal menganalisis dokumen: ' + err.message);
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHTML;
+                    }
+                };
+
+                // ========== EXECUTE UPDATE DATA ==========
+                function showCustomUpdateConfirm(title, messageHtml) {
+                    return new Promise((resolve) => {
+                        const modal = document.getElementById('confirmUpdateModal');
+                        document.getElementById('confirmUpdateTitle').textContent = title;
+                        document.getElementById('confirmUpdateBody').innerHTML = messageHtml;
+
+                        modal.classList.add('active');
+
+                        const btnYes = document.getElementById('btnUpdateYes');
+                        const btnNo = document.getElementById('btnUpdateNo');
+
+                        const handleYes = () => {
+                            modal.classList.remove('active');
+                            cleanup();
+                            resolve(true);
+                        };
+                        const handleNo = () => {
+                            modal.classList.remove('active');
+                            cleanup();
+                            resolve(false);
+                        };
+
+                        const cleanup = () => {
+                            btnYes.removeEventListener('click', handleYes);
+                            btnNo.removeEventListener('click', handleNo);
+                        };
+
+                        btnYes.addEventListener('click', handleYes);
+                        btnNo.addEventListener('click', handleNo);
+                    });
+                }
+
+                window.executeMetaUpdate = async function (event) {
+                    event.preventDefault();
+
+                    const nomorSuratBaru = document.getElementById('modalNomorSurat').value.trim();
+                    const tanggalSuratBaru = document.getElementById('modalTanggalSurat').value; // format YYYY-MM-DD
+                    const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file baru';
+
+                    // Standardisasi format tanggal dari YYYY-MM-DD menjadi YYYY.MM.DD
+                    const formattedTanggalExcel = tanggalSuratBaru.replace(/-/g, '.');
+
+                    const confirmHtml = `
+                        <strong>Perihal:</strong> ${activeKelolaData.perihal}<br>
+                        <strong>Nomor Surat Baru:</strong> ${nomorSuratBaru}<br>
+                        <strong>Tanggal Dokumen Baru:</strong> ${tanggalSuratBaru.split('-').reverse().join('/')}<br>
+                        <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
+                        <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
+                    `;
+
+                    const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
+                    if (!yakin) return; 
+
+                    document.getElementById('kelolaMenuState').style.display = 'none';
+                    document.getElementById('kelolaLoadingState').style.display = 'block';
+
+                    const payload = {
+                        action: 'updateMeta',
+                        nomorSurat: nomorSuratBaru,
+                        tanggalDokumen: formattedTanggalExcel, // Payload Parameter Baru
+                        provinsi: activeKelolaData.provinsi,
+                        namaKegiatan: activeKelolaData.namaKegiatan,
+                        pathND: activeKelolaData.pathND,
+                        fileFinalBase64: selectedFileFinalData.base64 || '',
+                        fileFinalNama: selectedFileFinalData.nama || '',
+                        fileFinalTipe: selectedFileFinalData.tipe || ''
+                    };
+
+                    try {
+                        let res = await fetch(CONFIG.updateNDFlowUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!res.ok) throw new Error('Gagal memperbarui data di server.');
+                        clearCachedData();
+                        await loadDashboardData();
+                        closeKelolaModal();
+                        showMessage('Data dokumen berhasil diperbarui.', 'info');
+                    } catch (err) {
+                        console.error(err);
+                        alert('Gagal memperbarui: ' + err.message);
+                        document.getElementById('kelolaLoadingState').style.display = 'none';
+                        document.getElementById('kelolaMenuState').style.display = 'block';
+                    }
+                };
+
+                // ========== DELETE MODAL & PROCESS ==========
+                window.confirmDelete = function (prov, keg, perihal, path, btn) {
+                    activeDeleteData = { provinsi: prov, namaKegiatan: keg, perihal: perihal, pathND: path, rowElement: btn.closest('tr') };
+                    document.getElementById('deleteTargetText').innerHTML = `"${perihal}"<br><span style="font-size:12px; font-weight:normal; color:#64748b;">(${prov})</span>`;
+                    document.getElementById('deleteModal').classList.add('active');
+                    document.getElementById('modalConfirmState').style.display = 'block';
+                    document.getElementById('modalLoadingState').style.display = 'none';
+                    document.getElementById('modalSuccessState').style.display = 'none';
+                    document.getElementById('modalErrorState').style.display = 'none';
+                };
+                window.closeDeleteModal = function () { document.getElementById('deleteModal').classList.remove('active'); };
+                window.resetDeleteModal = function () {
+                    document.getElementById('modalConfirmState').style.display = 'block';
+                    document.getElementById('modalLoadingState').style.display = 'none';
+                    document.getElementById('modalSuccessState').style.display = 'none';
+                    document.getElementById('modalErrorState').style.display = 'none';
+                };
+
+                window.executeDelete = async function (opt) {
+                    document.getElementById('modalConfirmState').style.display = 'none';
+                    document.getElementById('modalLoadingState').style.display = 'block';
+                    document.getElementById('loadingDeleteSub').innerText = opt === 'all' ? 'Menghapus data di server & file...' : 'Menghapus data di Excel saja...';
+
+                    try {
+                        let res = await fetch(CONFIG.deleteNDFlowUrl, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                provinsi: activeDeleteData.provinsi,
+                                namaKegiatan: activeDeleteData.namaKegiatan,
+                                perihal: activeDeleteData.perihal,
+                                pathND: activeDeleteData.pathND,
+                                deleteOption: opt
+                            })
+                        });
+                        if (!res.ok) throw new Error('Gagal memproses penghapusan data.');
+                        if (activeDeleteData.rowElement) activeDeleteData.rowElement.remove();
+
+                        document.getElementById('modalLoadingState').style.display = 'none';
+                        document.getElementById('modalSuccessState').style.display = 'block';
+                        document.getElementById('successDeleteSub').innerHTML = opt === 'all' ? 'Riwayat database & file di SharePoint berhasil dihapus.' : 'Riwayat database berhasil dihapus.';
+                        clearCachedData();
+                        await loadDashboardData();
+                    } catch (err) {
+                        document.getElementById('modalLoadingState').style.display = 'none';
+                        document.getElementById('modalErrorState').style.display = 'block';
+                        document.getElementById('deleteErrorText').innerText = err.message || "Gagal memproses ke server.";
+                    }
+                };
+
+                function toBase64(file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.onerror = error => reject(error);
+                    });
+                }
+
+                function formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                }
+
+                function showMessage(msg, type) {
+                    let d = document.getElementById('message');
+                    d.textContent = msg;
+                    d.className = 'message ' + type;
+                    d.style.display = 'block';
+                    setTimeout(() => d.style.display = 'none', 5000);
+                }
+                function hideMessage() { document.getElementById('message').style.display = 'none'; }
+
+                window.addEventListener('load', loadDashboardData);
+
+                // Menutup modal kelola secara otomatis ketika pengguna mengklik area luar modal (background gelap)
+                document.getElementById('kelolaModal').addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        window.closeKelolaModal();
+                    }
+                });
+
+                // Menutup modal hapus secara otomatis ketika pengguna mengklik area luar modal (background gelap)
+                document.getElementById('deleteModal').addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        window.closeDeleteModal();
+                    }
+                });
+
+            })();
+        </script>
     </div>
     <script src="navbar.js"></script>
 </body>

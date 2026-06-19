@@ -592,7 +592,7 @@
 
                 <div class="form-group">
                     <label for="lampiran">Dokumen Pendukung <span style="font-weight: normal; color: #64748b;">(Opsional
-                            - Maks. 5MB per berkas)</span></label>
+                            - Maks. 100MB per berkas)</span></label>
                     <!-- Hidden input file yang asli -->
                     <input type="file" id="lampiran" multiple style="display: none;" onchange="handleFileSelect(event)">
 
@@ -1058,7 +1058,7 @@
         // Mengelola pemilihan file dari komputer/HP
         function handleFileSelect(event) {
             const files = Array.from(event.target.files);
-            const MAX_SIZE_MB = 5;
+            const MAX_SIZE_MB = 100;
 
             // Validasi ukuran masing-masing file
             const oversizedFiles = files.filter(f => f.size > MAX_SIZE_MB * 1024 * 1024);

@@ -83,6 +83,7 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
             flex-shrink: 0 !important;
         }
+
         .logo-container img {
             width: 100% !important;
             height: auto !important;
@@ -308,17 +309,17 @@
         .modal-upload-area {
             border: 2px dashed #cbd5e1;
             border-radius: 8px;
-            padding: 15px;
+            padding: 10px; /* Dikurangi dari 15px agar area upload tidak terlalu tinggi */
             text-align: center;
             background: #f8fafc;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 6px;
             transition: all 0.2s;
         }
-
-        .modal-upload-area:hover {
-            border-color: #1d355e;
-            background: #f1f5f9;
+        
+        /* Hanya memperkecil ikon folder (span pertama) */
+        .modal-upload-area span:first-child {
+            font-size: 20px !important; /* Mengecilkan ikon folder dari 24px */
         }
 
         .modal-upload-feedback {
@@ -498,38 +499,48 @@
             }
         }
 
-        /* MODALS */
+        /* CONTAINER UTAMA MODAL (OVERLAY) */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(17, 34, 63, 0.85);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
+            background: rgba(17, 34, 63, 0.7);
+            /* Background gelap transparan */
+            backdrop-filter: blur(4px);
+            display: none;
+
+            /* SOLUSI VERTICAL ALIGNMENT & SCROLL */
+            align-items: flex-start;
+            /* Mulai dari atas agar tidak terpotong jika layar pendek */
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s;
-            padding: 16px;
+            overflow-y: auto;
+            /* Izinkan seluruh halaman di-scroll jika modal sangat tinggi */
+            padding: 60px 0;
+            /* Jarak aman atas dan bawah agar tidak mepet tepi layar */
+            box-sizing: border-box;
+
+            /* SOLUSI LAPISAN (Z-INDEX) */
+            z-index: 999999 !important;
+            /* Pastikan angka ini di atas z-index navbar Anda */
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            display: flex;
         }
 
+        /* KOTAK PUTIH MODAL (BOX) */
         .modal-box {
             background: white;
-            width: 100%;
-            max-width: 450px;
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 16px 20px; /* Dikurangi dari 20px 24px agar lebih padat */
+            border-radius: 12px;
+            width: 90%;
+            max-width: 390px; /* Dipersempit dari 420px agar proporsional */
+            margin: auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            position: relative;
         }
 
         .modal-spinner {
@@ -565,14 +576,14 @@
         .btn-modal-action {
             display: block;
             width: 100%;
-            padding: 12px;
+            padding: 10px; /* Dikurangi dari 12px agar tinggi tombol lebih ramping */
             border-radius: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px; /* Diturunkan sedikit dari 14px agar seimbang */
             text-align: center;
             border: none;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Lebih rapat jarak antar tombol dari 10px */
             text-decoration: none;
         }
 
@@ -624,6 +635,21 @@
             font-size: 14px;
             color: #64748b;
         }
+
+        /* PERAMPINGAN SPESIFIK KOLOM INPUT DI DALAM MODAL */
+        .modal-box .filter-group {
+            margin-bottom: 10px !important; /* Jarak vertikal antar input dipersempit dari 15px */
+        }
+        
+        .modal-box .filter-group label {
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+        }
+        
+        .modal-box .filter-group input {
+            padding: 8px 10px !important; /* Membuat kolom input lebih tipis dan ramping */
+            font-size: 13px !important;
+        }
     </style>
 </head>
 
@@ -637,7 +663,8 @@
                     <div class="logo-container"><img src="logo-pu.png" alt="Logo PU"></div>
                     <div class="header-content">
                         <h1>Rekap Nota Dinas & Surat</h1>
-                        <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan Umum</p>
+                        <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan
+                            Umum</p>
                     </div>
                 </div>
                 <a href="notadinas.html" class="btn-back">📑 Buat Baru</a>
@@ -720,9 +747,11 @@
         <!-- MODAL KELOLA (Upload Berkas Final & Isi Nomor & Tanggal Surat) -->
         <div id="kelolaModal" class="modal-overlay">
             <div class="modal-box" style="position: relative;">
-                
+
                 <!-- Tombol Silang (X) di Pojok Kanan Atas -->
-                <button type="button" onclick="closeKelolaModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: color 0.2s;" onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='#94a3b8'">✕</button>
+                <button type="button" onclick="closeKelolaModal()"
+                    style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: color 0.2s;"
+                    onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='#94a3b8'">✕</button>
 
                 <div id="kelolaMenuState">
                     <div style="font-size:40px; margin-bottom: 8px;">⚙️</div>
@@ -731,18 +760,19 @@
 
                     <form id="metaForm" onsubmit="window.executeMetaUpdate(event)"
                         style="text-align: left; margin-bottom: 15px;">
-                        
+
                         <!-- 1. AREA UPLOAD FILE (Sekarang di paling atas) -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final (PDF/Word bertanda tangan)</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
+                                (PDF/Word bertanda tangan)</label>
                             <div class="modal-upload-area" id="modalUploadArea"
                                 onclick="document.getElementById('modalFileFinal').click()">
                                 <span style="font-size: 24px; display:block; margin-bottom: 4px;">📂</span>
                                 <span style="font-size: 12px; font-weight: 600; color:#1d355e;"
                                     id="modalUploadLabel">Pilih file final...</span>
                             </div>
-                            <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none;"
-                                onchange="window.handleFileFinalSelect(this.files[0])">
+                            <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                style="display:none;" onchange="window.handleFileFinalSelect(this.files[0])">
                             <div class="modal-upload-feedback" id="modalUploadFeedback">✓ Berkas terpilih</div>
                         </div>
 
@@ -762,7 +792,8 @@
 
                         <!-- 4. INPUT TANGGAL SURAT (Hasil OCR akan mengisi kolom ini) -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen Final</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen
+                                Final</label>
                             <input type="date" id="modalTanggalSurat" required>
                         </div>
 
@@ -776,9 +807,10 @@
                         <a href="#" target="_blank" id="btnBukaFinal" class="btn-modal-action btn-final"
                             style="color:white; display:none;">✅ Buka File Final</a>
                     </div>
-                    
+
                     <!-- Tombol Tutup dengan Type Eksplisit -->
-                    <button type="button" class="btn-close-modal btn-modal-action" onclick="closeKelolaModal()">Tutup</button>
+                    <button type="button" class="btn-close-modal btn-modal-action"
+                        onclick="closeKelolaModal()">Tutup</button>
                 </div>
 
                 <div id="kelolaLoadingState" style="display: none;">
@@ -885,10 +917,10 @@
 
                 let databaseND = [];
                 let activeDeleteData = { provinsi: '', namaKegiatan: '', perihal: '', pathND: '', rowElement: null };
-                
+
                 // Ditambahkan field tanggalDokumen untuk penyesuaian metadata
                 let activeKelolaData = { provinsi: '', namaKegiatan: '', perihal: '', nomorSurat: '', tanggalDokumen: '', pathND: '', linkFile: '', linkFinal: '', rowElement: null };
-                
+
                 // Ditambahkan key rawFile untuk mempermudah pemindaian OCR lokal
                 let selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
 
@@ -931,8 +963,8 @@
                     // 1. Cek apakah ada data di cache
                     let rawData = getCachedData();
                     if (rawData) {
-                        document.getElementById('loading').style.display = 'none'; 
-                        prosesDashboardData(rawData); 
+                        document.getElementById('loading').style.display = 'none';
+                        prosesDashboardData(rawData);
                         return;
                     }
 
@@ -948,7 +980,7 @@
                         rawData = await resp.json();
                         if (typeof rawData === 'string') rawData = JSON.parse(rawData);
 
-                        setCachedData(rawData); 
+                        setCachedData(rawData);
                         prosesDashboardData(rawData);
                         hideMessage();
                     } catch (e) {
@@ -1063,7 +1095,7 @@
                     sel.innerHTML = '<option value="">-- Semua PIC --</option>';
                     Array.from(set).sort().forEach(n => {
                         let opt = document.createElement('option');
-                        opt.value = n; opt.textContent = n; 
+                        opt.value = n; opt.textContent = n;
                         sel.appendChild(opt);
                     });
                 }
@@ -1135,11 +1167,11 @@
                         }
 
                         let badgeClass = jenis === 'Nota Dinas' ? 'badge-nd' : 'badge-surat';
-                        
+
                         let displayNomor = '';
                         if (nomor) {
-                            displayNomor = linkFinal 
-                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>` 
+                            displayNomor = linkFinal
+                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>`
                                 : nomor;
                         } else {
                             displayNomor = '<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>';
@@ -1183,7 +1215,7 @@
                     document.getElementById('kelolaSub').innerHTML = `${prov} - <span style="color:#1d355e; font-weight:600;">${keg}</span>`;
 
                     document.getElementById('modalNomorSurat').value = nomor || '';
-                    
+
                     // Isi nilai default tanggal dengan format YYYY-MM-DD
                     if (tglAsli && tglAsli !== '-') {
                         document.getElementById('modalTanggalSurat').value = tglAsli;
@@ -1194,7 +1226,7 @@
                     document.getElementById('modalFileFinal').value = '';
                     document.getElementById('modalUploadFeedback').style.display = 'none';
                     document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
-                    
+
                     // Sembunyikan tombol & status OCR di awal pembukaan modal
                     document.getElementById('ocrActionArea').style.display = 'none';
                     const ocrStatusBox = document.getElementById('ocrStatusBox');
@@ -1248,7 +1280,7 @@
                         feedback.style.display = 'block';
                         feedback.style.color = '#27ae60';
                         feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
-                        
+
                         // Tampilkan tombol OCR ketika berkas terpilih
                         ocrActionArea.style.display = 'block';
                     } catch (e) {
@@ -1286,7 +1318,7 @@
                 }
 
                 // ========== FUNGSI PEMBANTU AUTOPRECISE MATCHING ==========
-                
+
                 // Mencari kunci JSON secara fleksibel (tidak sensitif huruf besar/kecil & mengabaikan spasi/garis bawah)
                 function getFlexibleValue(obj, targetKeys) {
                     if (!obj) return null;
@@ -1304,12 +1336,12 @@
                 function normalizeToYYYYMMDD(dateStr) {
                     if (!dateStr) return '';
                     dateStr = dateStr.toString().trim();
-                    
+
                     // Jika sudah berformat YYYY-MM-DD
                     if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
                         return dateStr;
                     }
-                    
+
                     // Jika berformat YYYY.MM.DD
                     if (/^\d{4}\.\d{2}\.\d{2}$/.test(dateStr)) {
                         return dateStr.replace(/\./g, '-');
@@ -1334,18 +1366,18 @@
 
                     const cleanedStr = dateStr.toLowerCase().replace(/,/g, '');
                     const words = cleanedStr.split(/\s+/);
-                    
+
                     // Format: DD NamaBulan YYYY (misal: 15 Juni 2026)
                     if (words.length === 3) {
                         const day = words[0].padStart(2, '0');
                         const monthName = words[1];
                         const year = words[2];
-                        
+
                         if (monthsId[monthName] && /^\d{4}$/.test(year)) {
                             return `${year}-${monthsId[monthName]}-${day}`;
                         }
                     }
-                    
+
                     // Fallback menggunakan Parser JavaScript Date bawaan
                     try {
                         const parsed = new Date(dateStr);
@@ -1355,13 +1387,13 @@
                             const d = String(parsed.getDate()).padStart(2, '0');
                             return `${y}-${m}-${d}`;
                         }
-                    } catch (e) {}
+                    } catch (e) { }
 
                     return '';
                 }
 
                 // ========== FUNGSI RUN OCR YANG TELAH DIOPTIMALKAN (NATIVE VISION) ==========
-                window.runOCR = async function() {
+                window.runOCR = async function () {
                     const file = selectedFileFinalData.rawFile;
                     const btn = document.getElementById('btnOCR');
                     if (!file) {
@@ -1397,7 +1429,7 @@
                             "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
 
                         let payloadContents = [];
-                        
+
                         if (ext === 'docx') {
                             payloadContents = [{
                                 parts: [{ text: promptText + "\nBerikut teks dari dokumen Word:\n" + extractedText }]
@@ -1431,9 +1463,9 @@
 
                         const rawText = result.candidates[0].content.parts[0].text;
                         const cleanJSON = rawText.replace(/```json|```/g, '').trim();
-                        
+
                         console.log("=== Hasil Pembacaan Mentah Gemini ===", cleanJSON);
-                        
+
                         const data = JSON.parse(cleanJSON);
 
                         // Ekstraksi kunci secara fleksibel
@@ -1513,7 +1545,7 @@
                     `;
 
                     const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
-                    if (!yakin) return; 
+                    if (!yakin) return;
 
                     document.getElementById('kelolaMenuState').style.display = 'none';
                     document.getElementById('kelolaLoadingState').style.display = 'block';
@@ -1628,14 +1660,14 @@
                 window.addEventListener('load', loadDashboardData);
 
                 // Menutup modal kelola secara otomatis ketika pengguna mengklik area luar modal (background gelap)
-                document.getElementById('kelolaModal').addEventListener('click', function(e) {
+                document.getElementById('kelolaModal').addEventListener('click', function (e) {
                     if (e.target === this) {
                         window.closeKelolaModal();
                     }
                 });
 
                 // Menutup modal hapus secara otomatis ketika pengguna mengklik area luar modal (background gelap)
-                document.getElementById('deleteModal').addEventListener('click', function(e) {
+                document.getElementById('deleteModal').addEventListener('click', function (e) {
                     if (e.target === this) {
                         window.closeDeleteModal();
                     }

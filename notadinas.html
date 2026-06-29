@@ -574,6 +574,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="targetJenjang">Target Penandatangan Akhir <span class="required">*</span></label>
+                    <select id="targetJenjang" required>
+                        <option value="Kasubdit">Kasubdit</option>
+                        <option value="Direktur">Direktur</option>
+                        <option value="Dirjen">Dirjen</option>
+                        <option value="Menteri">Menteri</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="namaPembuat">Nama Pembuat <span class="required">*</span></label>
                     <div class="input-with-add">
                         <select id="namaPembuat" required>
@@ -1213,6 +1223,7 @@
 
                 const payload = {
                     jenisDokumen, provinsi, namaKegiatan, perihal, tanggal, namaPembuat,
+                    targetJenjang: document.getElementById('targetJenjang').value, // TAMBAHKAN BARIS INI (BARU)
                     lampiran: lampiranArray, // Mengirimkan berkas lampiran (bernilai array kosong jika tidak ada)
                     timestamp: new Date().toISOString()
                 };

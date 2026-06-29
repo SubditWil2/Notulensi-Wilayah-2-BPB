@@ -219,6 +219,18 @@
             color: #92400e;
         }
 
+        .badge-proses {
+            background: #fffbeb !important;
+            color: #d97706 !important;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-final {
+            background: #ecfdf5 !important;
+            color: #059669 !important;
+            border: 1px solid #a7f3d0;
+        }
+
         /* TABLE */
         .table-container {
             width: 100%;
@@ -262,64 +274,101 @@
             text-decoration: underline;
         }
 
-        .action-cell {
-            display: flex;
-            gap: 6px;
-            align-items: center;
+        /* DROPDOWN MENU KELOLA (⁝) */
+        .dropdown-actions {
+            position: relative;
+            display: inline-block;
         }
 
-        .btn-action {
-            display: inline-flex;
+        .btn-dropdown-toggle {
+            background: #f1f5f9;
+            color: #1d355e;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #1d355e;
-            color: white;
-            padding: 8px 10px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-dropdown-toggle:hover {
+            background: #e2e8f0;
+        }
+
+        .dropdown-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 36px;
+            background-color: white;
+            min-width: 170px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .dropdown-menu-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            text-align: left;
+            background: none;
             border: none;
+            font-size: 13px;
+            color: #334155;
+            text-decoration: none;
             cursor: pointer;
-            min-width: 32px;
-            min-height: 32px;
+            box-sizing: border-box;
+            font-family: inherit;
         }
 
-        .btn-action:hover {
-            opacity: 0.85;
+        .dropdown-item:hover {
+            background-color: #f1f5f9;
+            color: #1d355e;
         }
 
-        .btn-draft {
-            background-color: #34495e !important;
+        .dropdown-item.delete-item {
+            color: #e74c3c;
+            border-top: 1px solid #f1f5f9;
         }
 
-        .btn-final {
-            background-color: #27ae60 !important;
-        }
-
-        .btn-kelola {
-            background-color: #2980b9 !important;
-        }
-
-        .btn-delete {
-            background-color: #e74c3c;
+        .dropdown-item.delete-item:hover {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
 
         /* UPLOAD FIELD IN MODAL */
         .modal-upload-area {
             border: 2px dashed #cbd5e1;
             border-radius: 8px;
-            padding: 10px; /* Dikurangi dari 15px agar area upload tidak terlalu tinggi */
+            padding: 10px;
+            /* Diperkecil dari 15px agar lebih padat */
             text-align: center;
             background: #f8fafc;
             cursor: pointer;
             margin-top: 6px;
             transition: all 0.2s;
         }
-        
-        /* Hanya memperkecil ikon folder (span pertama) */
+
+        .modal-upload-area:hover {
+            border-color: #1d355e;
+            background: #f1f5f9;
+        }
+
+        /* Memperkecil ikon folder di area upload */
         .modal-upload-area span:first-child {
-            font-size: 20px !important; /* Mengecilkan ikon folder dari 24px */
+            font-size: 20px !important;
         }
 
         .modal-upload-feedback {
@@ -377,23 +426,152 @@
 
         .ocr-success {
             background: #d1fae5;
-            color: #065f46;
+            color: #059669;
             border: 1px solid #a7f3d0;
         }
 
         .ocr-error {
             background: #fee2e2;
-            color: #991b1b;
+            color: #e74c3c;
             border: 1px solid #fca5a5;
         }
 
-        /* ========= RESPONSIVE MOBILE ========= */
-        @media (max-width: 1024px) {
-            .filter-section {
-                grid-template-columns: repeat(3, 1fr);
+        /* PERAMPINGAN SPESIFIK KOLOM INPUT DI DALAM MODAL */
+        .modal-box .filter-group {
+            margin-bottom: 10px !important;
+            /* Jarak vertikal antar input dipersempit dari 15px */
+        }
+
+        .modal-box .filter-group label {
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+        }
+
+        .modal-box .filter-group input,
+        .modal-box .filter-group select {
+            padding: 8px 10px !important;
+            /* Membuat kolom input lebih tipis dan ramping */
+            font-size: 13px !important;
+        }
+
+        /* CONTAINER UTAMA MODAL (OVERLAY) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 34, 63, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 60px 0;
+            box-sizing: border-box;
+            z-index: 999999 !important;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* KOTAK PUTIH MODAL (BOX) DI HP */
+        .modal-box {
+            background: white !important;
+            /* MEMAKSA LATAR BELAKANG PUTIH BERSIH (BARU) */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+            /* MEMAKSA BAYANGAN KARTU (BARU) */
+            width: 90% !important;
+            max-width: 380px !important;
+            height: auto !important;
+            max-height: 90vh !important;
+            border-radius: 12px !important;
+            padding: 16px 20px !important;
+            display: block !important;
+            overflow-y: auto !important;
+            margin: auto !important;
+            /* Memastikan kotak putih berada tepat di tengah layar */
+        }
+
+        .modal-spinner {
+            border: 4px solid #f1f5f9;
+            border-top: 4px solid #f5b016;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            margin: 0 auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
         }
 
+        .btn-modal-action {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            /* Dikurangi dari 12px agar lebih ramping */
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            /* Diturunkan sedikit agar seimbang */
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 8px;
+            /* Lebih rapat jarak antar tombol dari 10px */
+            text-decoration: none;
+        }
+
+        .btn-save-meta {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-delete-excel {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-delete-excel:hover {
+            background: #d97706;
+        }
+
+        .btn-save-meta:hover {
+            background: #219653;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-close-modal {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-close-modal:hover {
+            background: #e2e8f0;
+        }
+
+        /* RESPONSIVITAS MOBILE (DIPERBARUI LENGKAP) */
         @media (max-width: 768px) {
             body {
                 padding: 0 !important;
@@ -433,6 +611,7 @@
                 justify-content: space-between;
             }
 
+            /* === MENGEMBALIKAN LOGIKA RESPONSIVE TABLE KARTU HP === */
             table,
             thead,
             tbody,
@@ -487,119 +666,55 @@
                 font-size: 12px;
             }
 
-            .action-cell {
-                gap: 6px;
-                justify-content: flex-end;
+            /* Perapian khusus kolom aksi tiga titik di HP */
+            td.action-column {
+                padding: 10px 8px !important;
+                /* Menghilangkan sela padding kiri 38% */
+                justify-content: flex-end !important;
+                border-bottom: 0 !important;
+            }
+
+            td.action-column::before {
+                content: "" !important;
+                /* Menghilangkan label kosong di HP */
+            }
+
+            /* MODAL RESPONSIVE */
+            .modal-box {
                 width: 100%;
+                height: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
             }
 
-            .btn-action {
-                padding: 8px 12px;
-                font-size: 13px;
+            .btn-modal-action {
+                padding: 10px !important;
+                /* Lebih ramping */
+                font-size: 13px !important;
+                /* Seimbang dengan ukuran form */
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-bottom: 8px !important;
+                /* Lebih rapat vertikal */
             }
-        }
 
-        /* CONTAINER UTAMA MODAL (OVERLAY) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(17, 34, 63, 0.7);
-            /* Background gelap transparan */
-            backdrop-filter: blur(4px);
-            display: none;
-
-            /* SOLUSI VERTICAL ALIGNMENT & SCROLL */
-            align-items: flex-start;
-            /* Mulai dari atas agar tidak terpotong jika layar pendek */
-            justify-content: center;
-            overflow-y: auto;
-            /* Izinkan seluruh halaman di-scroll jika modal sangat tinggi */
-            padding: 60px 0;
-            /* Jarak aman atas dan bawah agar tidak mepet tepi layar */
-            box-sizing: border-box;
-
-            /* SOLUSI LAPISAN (Z-INDEX) */
-            z-index: 999999 !important;
-            /* Pastikan angka ini di atas z-index navbar Anda */
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        /* KOTAK PUTIH MODAL (BOX) */
-        .modal-box {
-            background: white;
-            padding: 16px 20px; /* Dikurangi dari 20px 24px agar lebih padat */
-            border-radius: 12px;
-            width: 90%;
-            max-width: 390px; /* Dipersempit dari 420px agar proporsional */
-            margin: auto;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .modal-spinner {
-            border: 4px solid #f1f5f9;
-            border-top: 4px solid #f5b016;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+            .modal-box .filter-group input,
+            .modal-box .filter-group select {
+                padding: 8px 10px !important;
+                /* Lebih ramping */
+                font-size: 13px !important;
+                /* Ukuran teks seimbang & proporsional */
             }
-        }
 
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1d355e;
-            margin-bottom: 8px;
-        }
-
-        .modal-sub {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .btn-modal-action {
-            display: block;
-            width: 100%;
-            padding: 10px; /* Dikurangi dari 12px agar tinggi tombol lebih ramping */
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 13px; /* Diturunkan sedikit dari 14px agar seimbang */
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 8px; /* Lebih rapat jarak antar tombol dari 10px */
-            text-decoration: none;
-        }
-
-        .btn-save-meta {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-delete-excel {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn-delete-all {
-            background: #e74c3c;
-            color: white;
+            /* Mencegah menu melayang (dropdown) terpotong di kiri layar HP */
+            .dropdown-menu-content {
+                left: 0 !important;
+                right: auto !important;
+            }
         }
 
         .btn-close-modal {
@@ -636,19 +751,30 @@
             color: #64748b;
         }
 
-        /* PERAMPINGAN SPESIFIK KOLOM INPUT DI DALAM MODAL */
-        .modal-box .filter-group {
-            margin-bottom: 10px !important; /* Jarak vertikal antar input dipersempit dari 15px */
+        /* KOLOM AKSI KHUSUS DESKTOP (Ramping & Merapat Kanan) */
+        .action-column {
+            text-align: right !important;
+            width: 50px !important;
+            padding-right: 16px !important;
         }
-        
-        .modal-box .filter-group label {
-            font-size: 12px !important;
-            margin-bottom: 4px !important;
+
+        /* KELAS WARNA TOMBOL DRAFT DAN FINAL YANG DIKEMBALIKAN (BARU) */
+        .btn-draft {
+            background-color: #34495e !important;
+            color: white !important;
         }
-        
-        .modal-box .filter-group input {
-            padding: 8px 10px !important; /* Membuat kolom input lebih tipis dan ramping */
-            font-size: 13px !important;
+
+        .btn-draft:hover {
+            background-color: #2c3e50 !important;
+        }
+
+        .btn-final {
+            background-color: #27ae60 !important;
+            color: white !important;
+        }
+
+        .btn-final:hover {
+            background-color: #219653 !important;
         }
     </style>
 </head>
@@ -735,7 +861,7 @@
                                 <th>Nama Kegiatan</th>
                                 <th>Perihal / Judul</th>
                                 <th>PIC</th>
-                                <th style="width:160px; text-align:center;">Aksi</th>
+                                <th style="width:50px; text-align:right;"></th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -754,14 +880,26 @@
                     onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='#94a3b8'">✕</button>
 
                 <div id="kelolaMenuState">
-                    <div style="font-size:40px; margin-bottom: 8px;">⚙️</div>
-                    <div class="modal-title" id="kelolaTitle">Kelola Berkas</div>
-                    <div class="modal-sub" id="kelolaSub">Pembaruan Nomor, Tanggal & Unggah Berkas Final</div>
+                    <div style="font-size:36px; text-align: center; margin-bottom: 10px;">⚙️</div>
+                    <div class="modal-title" id="kelolaTitle"
+                        style="text-align: center; font-weight: 700; font-size: 15px; color: #1d355e; line-height: 1.4; margin-bottom: 6px;">
+                        Kelola Berkas</div>
+                    <div class="modal-sub" id="kelolaSub"
+                        style="text-align: center; font-size: 11px; color: #64748b; font-weight: normal; margin-bottom: 16px; line-height: 1.4;">
+                        Detail Provinsi dan Kegiatan</div>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 16px;">
+
+
+                    <!-- KONTANER RIWAYAT SEJARAH DOKUMEN BERJENJANG (BARU) -->
+                    <div id="modalHistoryContainer" style="display: none; margin-bottom: 15px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
+                        <div style="font-size: 12px; font-weight: 700; color: #1d355e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">📂 Riwayat Dokumen Berjenjang:</div>
+                        <div id="modalHistoryList" style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;"></div>
+                    </div>
 
                     <form id="metaForm" onsubmit="window.executeMetaUpdate(event)"
                         style="text-align: left; margin-bottom: 15px;">
 
-                        <!-- 1. AREA UPLOAD FILE (Sekarang di paling atas) -->
+                        <!-- 1. AREA UPLOAD FILE -->
                         <div class="filter-group" style="margin-bottom: 15px;">
                             <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
                                 (PDF/Word bertanda tangan)</label>
@@ -776,7 +914,7 @@
                             <div class="modal-upload-feedback" id="modalUploadFeedback">✓ Berkas terpilih</div>
                         </div>
 
-                        <!-- 2. TOMBOL OCR & STATUSNYA (Tepat di bawah area upload) -->
+                        <!-- 2. TOMBOL OCR & STATUSNYA -->
                         <div id="ocrActionArea" style="display:none; margin-bottom: 15px;">
                             <button type="button" id="btnOCR" class="btn-ocr" onclick="window.runOCR()">
                                 <span>🔍</span> Baca Berkas Otomatis (AI)
@@ -784,20 +922,40 @@
                         </div>
                         <div id="ocrStatusBox" class="ocr-status" style="margin-bottom: 15px;"></div>
 
-                        <!-- 3. INPUT NOMOR SURAT (Hasil OCR akan mengisi kolom ini) -->
+                        <!-- 2.5. DROPDOWN JENJANG PENANDATANGAN (BARU) -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Jenjang Penandatangan Saat
+                                Ini</label>
+                            <select id="modalJenjangSurat" required onchange="window.updateModalFields(this.value)">
+                                <option value="Kasubdit">Kasubdit</option>
+                                <option value="Direktur">Direktur</option>
+                                <option value="Dirjen">Dirjen</option>
+                                <option value="Menteri">Menteri</option>
+                            </select>
+                        </div>
+
+                        <!-- NEW INPUT: PERIHAL SURAT BERJENJANG (BARU) -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Perihal / Judul Surat
+                                Khusus Jenjang Ini</label>
+                            <input type="text" id="modalPerihalSurat" placeholder="Ketik perihal khusus tingkat ini..."
+                                required>
+                        </div>
+
+                        <!-- 3. INPUT NOMOR SURAT -->
                         <div class="filter-group" style="margin-bottom: 15px;">
                             <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nomor Surat Resmi</label>
                             <input type="text" id="modalNomorSurat" placeholder="Contoh: UM.0102-W2/..." required>
                         </div>
 
-                        <!-- 4. INPUT TANGGAL SURAT (Hasil OCR akan mengisi kolom ini) -->
+                        <!-- 4. INPUT TANGGAL SURAT -->
                         <div class="filter-group" style="margin-bottom: 15px;">
                             <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen
                                 Final</label>
                             <input type="date" id="modalTanggalSurat" required>
                         </div>
 
-                        <!-- 5. TOMBOL SIMPAN (Di paling bawah) -->
+                        <!-- 5. TOMBOL SIMPAN -->
                         <button type="submit" class="btn-modal-action btn-save-meta">✓ Simpan Perubahan</button>
                     </form>
 
@@ -806,9 +964,12 @@
                             style="color:white; display:none;">📝 Buka Draft Word</a>
                         <a href="#" target="_blank" id="btnBukaFinal" class="btn-modal-action btn-final"
                             style="color:white; display:none;">✅ Buka File Final</a>
+                        <!-- TOMBOL BUKA FOLDER BARU (BARU) -->
+                        <a href="#" target="_blank" id="btnBukaFolder" class="btn-modal-action"
+                            style="color:white; display:none; background-color: #2980b9 !important;">📂 Buka Folder
+                            Berkas (OneDrive)</a>
                     </div>
 
-                    <!-- Tombol Tutup dengan Type Eksplisit -->
                     <button type="button" class="btn-close-modal btn-modal-action"
                         onclick="closeKelolaModal()">Tutup</button>
                 </div>
@@ -912,14 +1073,14 @@
                 const CONFIG = {
                     getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
                     deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
-                    updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/199ee6565eb64bde8d1da4e59a16cc79/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VVrxAkygkw8iZl0_r2pAGv746gtKb3_EcTJWez0IoRA'
+                    updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ffd07244a37a4f2bb999472b2e5f61c1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GE4Av5hFskT3u42oH8PpFzkjYhTRGJFBNe8uuOCxDVA'
                 };
 
                 let databaseND = [];
                 let activeDeleteData = { provinsi: '', namaKegiatan: '', perihal: '', pathND: '', rowElement: null };
 
                 // Ditambahkan field tanggalDokumen untuk penyesuaian metadata
-                let activeKelolaData = { provinsi: '', namaKegiatan: '', perihal: '', nomorSurat: '', tanggalDokumen: '', pathND: '', linkFile: '', linkFinal: '', rowElement: null };
+                let activeKelolaData = {};
 
                 // Ditambahkan key rawFile untuk mempermudah pemindaian OCR lokal
                 let selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
@@ -960,7 +1121,6 @@
 
                 // Memuat dashboard data
                 async function loadDashboardData() {
-                    // 1. Cek apakah ada data di cache
                     let rawData = getCachedData();
                     if (rawData) {
                         document.getElementById('loading').style.display = 'none';
@@ -968,7 +1128,6 @@
                         return;
                     }
 
-                    // 2. Jika tidak ada cache, fetch dari server
                     document.getElementById('loading').style.display = 'block';
                     document.getElementById('filterArea').style.display = 'none';
                     document.getElementById('tableArea').style.display = 'none';
@@ -990,9 +1149,7 @@
                     }
                 }
 
-                // Pengolahan data tunggal (Telah dieliminasi dari duplikasi)
                 function prosesDashboardData(rawData) {
-                    // Ekstraksi API Key Gemini otomatis dari database OneDrive
                     GEMINI_API_KEYS = [];
                     const geminiKeyRaw = rawData.geminiKey || [];
                     const keyArray = Array.isArray(geminiKeyRaw) ? geminiKeyRaw : [geminiKeyRaw];
@@ -1027,7 +1184,6 @@
                     document.getElementById('tableArea').style.display = 'block';
                 }
 
-                // Ekstraksi Pengiriman API Gemini
                 const MODELS_FALLBACK = [
                     'gemini-3.1-flash-lite',
                     'gemini-3.5-flash',
@@ -1135,6 +1291,20 @@
                     renderTable(filtered);
                 }
 
+                // TOGGLE DROPDOWN ⁝ (BARU)
+                window.toggleActionDropdown = function (idx, event) {
+                    event.stopPropagation();
+                    document.querySelectorAll('.dropdown-menu-content').forEach(el => {
+                        if (el.id !== `dropdownMenu-${idx}`) el.classList.remove('show');
+                    });
+                    document.getElementById(`dropdownMenu-${idx}`).classList.toggle('show');
+                };
+
+                // Tutup dropdown jika mengklik area luar
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('.dropdown-menu-content').forEach(el => el.classList.remove('show'));
+                });
+
                 function renderTable(data) {
                     let tbody = document.getElementById('tableBody');
                     tbody.innerHTML = '';
@@ -1154,6 +1324,7 @@
                         let pic = getValue(row, ['PIC', 'pic', 'namaPembuat']) || '-';
                         let linkFile = getValue(row, ['Link File', 'linkFile']) || '';
                         let linkFinal = getValue(row, ['Link Final', 'linkFinal']) || '';
+                        let linkFolder = getValue(row, ['Link_Folder', 'linkFolder', 'link_folder']) || '';
                         let pathND = getValue(row, ['Path ND - Surat', 'pathNDSurat', 'pathND']) || '';
 
                         let formatted = tgl;
@@ -1168,13 +1339,21 @@
 
                         let badgeClass = jenis === 'Nota Dinas' ? 'badge-nd' : 'badge-surat';
 
+                        // Ambil Status & Jenjang Baru dari Database (BARU)
+                        let jenjang = getValue(row, ['Jenjang Terakhir', 'jenjangTerakhir', 'jenjang']) || 'Kasubdit';
+                        let statusDok = getValue(row, ['Status Dokumen', 'statusDokumen', 'status']) || 'Proses';
+
+                        // Logika Penentuan Badge Status (BARU)
+                        let statusBadgeClass = statusDok === 'Final' ? 'badge-final' : 'badge-proses';
+                        let statusLabel = statusDok === 'Final' ? `✅ Final (${jenjang})` : `⏳ Proses (${jenjang})`;
+
                         let displayNomor = '';
                         if (nomor) {
                             displayNomor = linkFinal
-                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a>`
-                                : nomor;
+                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a> <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`
+                                : `${nomor} <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`;
                         } else {
-                            displayNomor = '<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>';
+                            displayNomor = `<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span> <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`;
                         }
 
                         let safePerihal = perihal.replace(/'/g, "\\'");
@@ -1190,12 +1369,19 @@
                             <td data-label="Nama Kegiatan">${keg}</td>
                             <td data-label="Perihal / Judul">${linkFinal ? `<a href="${linkFinal}" target="_blank" class="document-title-link">🔗 ${perihal}</a>` : perihal}</td>
                             <td data-label="PIC">${pic}</td>
-                            <td data-label="Aksi">
-                                <div class="action-cell">
-                                    ${linkFile ? `<a href="${linkFile}" target="_blank" class="btn-action btn-draft" title="Buka Draft Word">📝</a>` : ''}
-                                    ${linkFinal ? `<a href="${linkFinal}" target="_blank" class="btn-action btn-final" title="Buka Berkas Final">✅</a>` : ''}
-                                    <button onclick="window.openKelolaModal('${prov}','${keg}','${safePerihal}','${nomor}','${safePath}','${linkFile}','${linkFinal}',this,'${safeTgl}')" class="btn-action btn-kelola" title="Kelola / Update Berkas">⚙️</button>
-                                    <button onclick="window.confirmDelete('${prov}','${keg}','${safePerihal}','${safePath}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
+                            <td class="action-column">
+                                <div class="dropdown-actions">
+                                    <button class="btn-dropdown-toggle" onclick="window.toggleActionDropdown(${idx}, event)">⁝</button>
+                                    <div id="dropdownMenu-${idx}" class="dropdown-menu-content">
+                                    ${linkFile ? `<a href="${linkFile}" target="_blank" class="dropdown-item">📝 Buka Draft Word</a>` : ''}
+                                    ${linkFinal ? `<a href="${linkFinal}" target="_blank" class="dropdown-item">✅ Buka File Final</a>` : ''}
+                                    
+                                    <!-- PILIHAN BUKA FOLDER LANGSUNG DI DROPDOWN (BARU) -->
+                                    ${linkFolder ? `<a href="${linkFolder}" target="_blank" class="dropdown-item" style="color: #2980b9; font-weight: 600; border-top: 1px solid #f1f5f9;">📂 Buka Folder Berkas</a>` : ''}
+                                    
+                                    <button onclick="window.openKelolaModal('${safePath}', this)" class="dropdown-item" style="border-top: 1px solid #f1f5f9;">⚙️ Kelola Berkas</button>
+                                    <button onclick="window.confirmDelete('${prov}','${keg}','${safePerihal}','${safePath}',this)" class="dropdown-item delete-item">🗑️ Hapus Data</button>
+                                    </div>
                                 </div>
                             </td>
                         `;
@@ -1203,31 +1389,136 @@
                     });
                 }
 
-                // ========== OPEN KELOLA MODAL ==========
-                window.openKelolaModal = function (prov, keg, perihal, nomor, path, linkWord, linkFinal, btn, tglAsli) {
+                // Fungsi Pembantu: Mengisi otomatis kolom Nomor, Tanggal, dan Perihal di modal berdasarkan jenjang (BARU)
+                window.updateModalFields = function (jenjang) {
+                    if (!activeKelolaData) return;
+
+                    if (jenjang === 'Kasubdit') {
+                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_ksd;
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_ksd ? activeKelolaData.tgl_ksd.replace(/\./g, '-') : '';
+                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_ksd || activeKelolaData.perihal;
+                    } else if (jenjang === 'Direktur') {
+                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_dir;
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dir ? activeKelolaData.tgl_dir.replace(/\./g, '-') : '';
+                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dir || activeKelolaData.perihal;
+                    } else if (jenjang === 'Dirjen') {
+                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_dj;
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dj ? activeKelolaData.tgl_dj.replace(/\./g, '-') : '';
+                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dj || activeKelolaData.perihal;
+                    } else if (jenjang === 'Menteri') {
+                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_men;
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_men ? activeKelolaData.tgl_men.replace(/\./g, '-') : '';
+                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_men || activeKelolaData.perihal;
+                    }
+                };
+
+                // ========== OPEN KELOLA MODAL (DIPERBARUI DENGAN PENCARIAN BARIS AMAN) ==========
+                window.openKelolaModal = function (pathKey, btn) {
+                    // Mencegah bug indexing saat filter aktif dengan mencari row berdasarkan primary-key 'pathND' (BARU)
+                    const row = databaseND.find(r => getValue(r, ['Path ND - Surat', 'pathNDSurat', 'pathND']) === pathKey);
+                    if (!row) {
+                        alert("Gagal memuat data kelola berkas.");
+                        return;
+                    }
+
                     activeKelolaData = {
-                        provinsi: prov, namaKegiatan: keg, perihal: perihal,
-                        nomorSurat: nomor, tanggalDokumen: tglAsli, pathND: path, linkFile: linkWord, linkFinal: linkFinal,
-                        rowElement: btn.closest('tr')
+                        provinsi: getValue(row, ['Provinsi', 'provinsi']) || '-',
+                        namaKegiatan: getValue(row, ['Nama Kegiatan', 'namaKegiatan']) || '-',
+                        perihal: getValue(row, ['Perihal', 'perihal']) || '-',
+                        pathND: getValue(row, ['Path ND - Surat', 'pathNDSurat', 'pathND']) || '',
+                        linkFile: getValue(row, ['Link File', 'linkFile']) || '',
+                        linkFinal: getValue(row, ['Link Final', 'linkFinal']) || '',
+                        rowElement: btn.closest('tr'),
+
+                        // Membaca data kavling lama agar tidak terhapus (BARU)
+                        no_ksd: getValue(row, ['No_Kasubdit']) || '',
+                        tgl_ksd: getValue(row, ['Tgl_Kasubdit']) || '',
+                        perihal_ksd: getValue(row, ['Perihal_Kasubdit']) || '',
+                        link_ksd: getValue(row, ['Link_Kasubdit']) || '',
+
+                        no_dir: getValue(row, ['No_Direktur']) || '',
+                        tgl_dir: getValue(row, ['Tgl_Direktur']) || '',
+                        perihal_dir: getValue(row, ['Perihal_Direktur']) || '',
+                        link_dir: getValue(row, ['Link_Direktur']) || '',
+
+                        no_dj: getValue(row, ['No_Dirjen']) || '',
+                        tgl_dj: getValue(row, ['Tgl_Dirjen']) || '',
+                        perihal_dj: getValue(row, ['Perihal_Dirjen']) || '',
+                        link_dj: getValue(row, ['Link_Dirjen']) || '',
+
+                        no_men: getValue(row, ['No_Menteri']) || '',
+                        tgl_men: getValue(row, ['Tgl_Menteri']) || '',
+                        perihal_men: getValue(row, ['Perihal_Menteri']) || '',
+                        link_men: getValue(row, ['Link_Menteri']) || '',
+
+                        jenjang: getValue(row, ['Jenjang Terakhir', 'jenjangTerakhir', 'jenjang']) || 'Kasubdit',
+                        statusDokumen: getValue(row, ['Status Dokumen', 'statusDokumen', 'status']) || 'Proses',
+                        linkFolder: getValue(row, ['Link_Folder', 'linkFolder', 'link_folder']) || '', // BARU
+                        targetJenjang: getValue(row, ['Target_Jenjang', 'targetJenjang', 'target_jenjang']) || 'Direktur' // Membaca target jenjang dari Excel (BARU)
                     };
 
-                    document.getElementById('kelolaTitle').innerHTML = 'Kelola: ' + (perihal.length > 35 ? perihal.substring(0, 35) + '...' : perihal);
-                    document.getElementById('kelolaSub').innerHTML = `${prov} - <span style="color:#1d355e; font-weight:600;">${keg}</span>`;
+                    // Menampilkan perihal secara utuh dan tebal (BARU)
+                    document.getElementById('kelolaTitle').innerHTML = activeKelolaData.perihal;
 
-                    document.getElementById('modalNomorSurat').value = nomor || '';
+                    // Menampilkan provinsi dan nama kegiatan dengan font kecil tanpa bold (BARU)
+                    document.getElementById('kelolaSub').innerHTML = `${activeKelolaData.provinsi} — ${activeKelolaData.namaKegiatan}`;
 
-                    // Isi nilai default tanggal dengan format YYYY-MM-DD
-                    if (tglAsli && tglAsli !== '-') {
-                        document.getElementById('modalTanggalSurat').value = tglAsli;
+                    // Set nilai dropdown Jenjang dengan normalisasi huruf kapital agar tidak blank (BARU)
+                    let jenjangFormatAman = activeKelolaData.jenjang;
+                    if (jenjangFormatAman) {
+                        jenjangFormatAman = jenjangFormatAman.charAt(0).toUpperCase() + jenjangFormatAman.slice(1).toLowerCase();
+                    }
+                    const validOptions = ['Kasubdit', 'Direktur', 'Dirjen', 'Menteri'];
+                    document.getElementById('modalJenjangSurat').value = validOptions.includes(jenjangFormatAman) ? jenjangFormatAman : 'Kasubdit';
+                    activeKelolaData.jenjang = document.getElementById('modalJenjangSurat').value;
+
+                    // Set nilai-nilai form berdasarkan jenjang terpilih (BARU)
+                    window.updateModalFields(activeKelolaData.jenjang);
+
+                    // --- GENERATE RIWAYAT SEJARAH DOKUMEN SECARA DINAMIS (BARU) ---
+                    const historyContainer = document.getElementById('modalHistoryContainer');
+                    const historyList = document.getElementById('modalHistoryList');
+                    historyList.innerHTML = '';
+                    let hasHistory = false;
+
+                    // Susun array untuk memindai kavling mana saja yang sudah pernah terisi nomor suratnya
+                    const levels = [
+                        { label: 'Kasubdit', no: activeKelolaData.no_ksd, tgl: activeKelolaData.tgl_ksd, link: activeKelolaData.link_ksd },
+                        { label: 'Direktur', no: activeKelolaData.no_dir, tgl: activeKelolaData.tgl_dir, link: activeKelolaData.link_dir },
+                        { label: 'Dirjen', no: activeKelolaData.no_drj, tgl: activeKelolaData.tgl_drj, link: activeKelolaData.link_drj },
+                        { label: 'Menteri', no: activeKelolaData.no_men, tgl: activeKelolaData.tgl_men, link: activeKelolaData.link_men }
+                    ];
+
+                    levels.forEach(lvl => {
+                        if (lvl.no) {
+                            hasHistory = true;
+                            // Format tanggal YYYY.MM.DD menjadi DD/MM/YYYY untuk tampilan
+                            const tglFormatted = lvl.tgl ? lvl.tgl.split('.').reverse().join('/') : '-';
+                            
+                            const itemHtml = `
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px; margin-bottom: 4px;">
+                                    <div style="max-width: 80%; line-height: 1.3;">
+                                        <strong style="color: #1d355e;">${lvl.label}:</strong> 
+                                        <span style="color: #475569; display: block; margin-top: 2px;">${lvl.no} (${tglFormatted})</span>
+                                    </div>
+                                    ${lvl.link ? `<a href="${lvl.link}" target="_blank" style="color: #27ae60; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; font-size: 11px;">📄 Buka</a>` : '<span style="color: #94a3b8; font-style: italic;">No File</span>'}
+                                </div>
+                            `;
+                            historyList.innerHTML += itemHtml;
+                        }
+                    });
+
+                    // Tampilkan kotak riwayat hanya jika memang sudah ada minimal satu jenjang yang terisi
+                    if (hasHistory) {
+                        historyContainer.style.display = 'block';
                     } else {
-                        document.getElementById('modalTanggalSurat').value = '';
+                        historyContainer.style.display = 'none';
                     }
 
                     document.getElementById('modalFileFinal').value = '';
                     document.getElementById('modalUploadFeedback').style.display = 'none';
                     document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
 
-                    // Sembunyikan tombol & status OCR di awal pembukaan modal
                     document.getElementById('ocrActionArea').style.display = 'none';
                     const ocrStatusBox = document.getElementById('ocrStatusBox');
                     if (ocrStatusBox) {
@@ -1238,19 +1529,28 @@
                     selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
 
                     let draftBtn = document.getElementById('btnBukaDraft');
-                    if (linkWord) {
-                        draftBtn.href = linkWord;
-                        draftBtn.style.display = 'inline-block';
+                    if (activeKelolaData.linkFile) {
+                        draftBtn.href = activeKelolaData.linkFile;
+                        draftBtn.style.display = 'block'; // Diubah menjadi block agar melebar penuh
                     } else {
                         draftBtn.style.display = 'none';
                     }
 
                     let finalBtn = document.getElementById('btnBukaFinal');
-                    if (linkFinal && linkFinal !== 'null') {
-                        finalBtn.href = linkFinal;
-                        finalBtn.style.display = 'inline-block';
+                    if (activeKelolaData.linkFinal && activeKelolaData.linkFinal !== 'null') {
+                        finalBtn.href = activeKelolaData.linkFinal;
+                        finalBtn.style.display = 'block';
                     } else {
                         finalBtn.style.display = 'none';
+                    }
+
+                    // Tampilkan tombol Buka Folder OneDrive jika tautannya ada di Excel (BARU)
+                    let folderBtn = document.getElementById('btnBukaFolder');
+                    if (activeKelolaData.linkFolder) {
+                        folderBtn.href = activeKelolaData.linkFolder;
+                        folderBtn.style.display = 'block';
+                    } else {
+                        folderBtn.style.display = 'none';
                     }
 
                     document.getElementById('kelolaModal').classList.add('active');
@@ -1281,45 +1581,20 @@
                         feedback.style.color = '#27ae60';
                         feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
 
-                        // Tampilkan tombol OCR ketika berkas terpilih
                         ocrActionArea.style.display = 'block';
                     } catch (e) {
-                        feedback.style.display = 'block';
-                        feedback.style.color = '#e74c3c';
-                        feedback.textContent = 'Gagal memproses file.';
+                        console.error(e);
                     }
                 };
 
-                // Inisialisasi Area Drag Over & Drop
-                const uploadArea = document.getElementById('modalUploadArea');
-                uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#1d355e'; });
-                uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#cbd5e1'; });
-                uploadArea.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    uploadArea.style.borderColor = '#cbd5e1';
-                    if (e.dataTransfer.files[0]) {
-                        document.getElementById('modalFileFinal').files = e.dataTransfer.files;
-                        window.handleFileFinalSelect(e.dataTransfer.files[0]);
-                    }
-                });
-
-                // ========== OCR LOGIK PROSESING via GEMINI ==========
-                function setOCRStatus(status, message) {
-                    const statusBox = document.getElementById('ocrStatusBox');
-                    if (!statusBox) return;
-
-                    statusBox.style.display = 'block';
-                    statusBox.textContent = message;
-
-                    statusBox.className = 'ocr-status';
-                    if (status === 'processing') statusBox.classList.add('ocr-processing');
-                    if (status === 'success') statusBox.classList.add('ocr-success');
-                    if (status === 'error') statusBox.classList.add('ocr-error');
+                function setOcrStatus(message, type) {
+                    const box = document.getElementById('ocrStatusBox');
+                    box.style.display = 'block';
+                    box.textContent = message;
+                    box.className = 'ocr-status ' + (type === 'processing' ? 'ocr-processing' : type === 'success' ? 'ocr-success' : 'ocr-error');
                 }
 
-                // ========== FUNGSI PEMBANTU AUTOPRECISE MATCHING ==========
-
-                // Mencari kunci JSON secara fleksibel (tidak sensitif huruf besar/kecil & mengabaikan spasi/garis bawah)
+                // ========== FUNGSI PEMBANTU AUTOPRECISE MATCHING (BARU) ==========
                 function getFlexibleValue(obj, targetKeys) {
                     if (!obj) return null;
                     const cleanTargets = targetKeys.map(k => k.toLowerCase().replace(/[\s_-]/g, ''));
@@ -1332,7 +1607,9 @@
                     return null;
                 }
 
-                // Menormalisasi berbagai format penulisan tanggal dari AI menjadi standar YYYY-MM-DD
+
+
+                // ========== FUNGSI PEMBANTU NORMALISASI TANGGAL (BARU) ==========
                 function normalizeToYYYYMMDD(dateStr) {
                     if (!dateStr) return '';
                     dateStr = dateStr.toString().trim();
@@ -1385,14 +1662,14 @@
                             const y = parsed.getFullYear();
                             const m = String(parsed.getMonth() + 1).padStart(2, '0');
                             const d = String(parsed.getDate()).padStart(2, '0');
-                            return `${y}-${m}-${d}`;
+                            return `${y}.${m}.${d}`;
                         }
                     } catch (e) { }
 
                     return '';
                 }
 
-                // ========== FUNGSI RUN OCR YANG TELAH DIOPTIMALKAN (NATIVE VISION) ==========
+                // ========== OCR LOGIK PROSESING via GEMINI (DIPERBARUI DENGAN JENJANG & PERIHAL) ==========
                 window.runOCR = async function () {
                     const file = selectedFileFinalData.rawFile;
                     const btn = document.getElementById('btnOCR');
@@ -1404,27 +1681,30 @@
                     const originalHTML = btn.innerHTML;
                     btn.disabled = true;
                     btn.innerHTML = '<span class="modal-spinner" style="width:16px; height:16px; border-width:2px; margin:0 5px 0 0; display:inline-block; vertical-align:middle;"></span> Memindai...';
-                    setOCRStatus('processing', '🔍 Sedang memindai surat/dokumen dengan AI...');
+                    setOcrStatus('processing', '🔍 Sedang memindai surat/dokumen dengan AI...');
 
                     try {
                         const ext = file.name.split('.').pop().toLowerCase();
                         let extractedText = "";
 
-                        // Ekstraksi lokal HANYA jika berkas Word (.docx) karena inline_data tidak mendukung .docx
                         if (ext === 'docx') {
                             const arrayBuffer = await file.arrayBuffer();
                             const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
                             extractedText = result.value;
                         }
 
-                        // Memperkuat instruksi pencarian nomor dan tanggal surat resmi
+                        // MEMPERKUAT PROMPT UNTUK EKSTRAKSI MULTI-LEVEL DINAMIS (BARU)
                         let promptText = "Analisis dokumen ini dengan saksama. Temukan:\n" +
                             "1. Nomor surat resmi (biasanya memiliki pola kode klasifikasi seperti HM, UM, KP, PL, PR, atau sejenisnya, contoh: UM.0102-W2/...).\n" +
-                            "2. Tanggal dokumen/surat resmi ini ditandatangani atau dikeluarkan.\n\n" +
+                            "2. Tanggal dokumen/surat resmi ini ditandatangani atau dikeluarkan.\n" +
+                            "3. Perihal atau judul surat secara utuh dan tepat.\n" +
+                            "4. Jenjang penandatangan (Wajib salah satu dari: 'Kasubdit', 'Direktur', 'Dirjen', atau 'Menteri') berdasarkan nama jabatan penandatangan di bagian tanda tangan (misal jika ditandatangani 'Direktur Jenderal', kembalikan 'Dirjen'. Jika oleh 'Direktur Bina Penataan...', kembalikan 'Direktur'. Jika oleh 'Kasubdit', kembalikan 'Kasubdit').\n\n" +
                             "Kembalikan jawaban Anda HANYA dalam format JSON bersih berikut:\n" +
                             "{\n" +
                             "  \"nomorSurat\": \"NOMOR_SURAT_YANG_DITEMUKAN\",\n" +
-                            "  \"tanggalSurat\": \"YYYY-MM-DD\"\n" +
+                            "  \"tanggalSurat\": \"YYYY.MM.DD\",\n" +
+                            "  \"perihalSurat\": \"PERIHAL_YANG_DITEMUKAN\",\n" +
+                            "  \"jenjangSurat\": \"Kasubdit/Direktur/Dirjen/Menteri\"\n" +
                             "}\n" +
                             "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
 
@@ -1435,7 +1715,6 @@
                                 parts: [{ text: promptText + "\nBerikut teks dari dokumen Word:\n" + extractedText }]
                             }];
                         } else {
-                            // Untuk PDF & Gambar, kirim secara visual menggunakan inline_data agar AI bisa memindai layout kop surat & tanda tangan secara akurat
                             const base64Data = selectedFileFinalData.base64;
                             payloadContents = [{
                                 parts: [
@@ -1469,9 +1748,23 @@
                         const data = JSON.parse(cleanJSON);
 
                         // Ekstraksi kunci secara fleksibel
-                        const nomorDitemukan = getFlexibleValue(data, ['nomorSurat', 'nomor_surat', 'nomor', 'noSurat', 'no_surat', 'no', 'number']);
-                        const tanggalDitemukan = getFlexibleValue(data, ['tanggalSurat', 'tanggal_surat', 'tanggal', 'tglSurat', 'tgl_surat', 'tgl', 'date', 'tanggalDokumen']);
+                        const nomorDitemukan = getFlexibleValue(data, ['nomorSurat', 'nomor_surat', 'nomor', 'noSurat', 'no_surat']);
+                        const tanggalDitemukan = getFlexibleValue(data, ['tanggalSurat', 'tanggal_surat', 'tanggal', 'date']);
+                        const perihalDitemukan = getFlexibleValue(data, ['perihalSurat', 'perihal_surat', 'perihal', 'subject']);
+                        const jenjangDitemukan = getFlexibleValue(data, ['jenjangSurat', 'jenjang_surat', 'jenjang', 'level']);
 
+                        // 1. Set pilihan jenjang di dropdown & isi kolom dengan database lama terlebih dahulu (BARU)
+                        if (jenjangDitemukan) {
+                            const cleanJenjang = jenjangDitemukan.trim();
+                            const validOptions = ['Kasubdit', 'Direktur', 'Dirjen', 'Menteri'];
+                            if (validOptions.includes(cleanJenjang)) {
+                                document.getElementById('modalJenjangSurat').value = cleanJenjang;
+                                // Tarik data database lama ke input
+                                window.updateModalFields(cleanJenjang);
+                            }
+                        }
+
+                        // 2. TIMPA kolom input kosong di atas dengan data baru hasil pindaian AI (BARU)
                         if (nomorDitemukan) {
                             document.getElementById('modalNomorSurat').value = nomorDitemukan;
                         }
@@ -1481,19 +1774,23 @@
                                 document.getElementById('modalTanggalSurat').value = formattedDate;
                             }
                         }
+                        if (perihalDitemukan) {
+                            document.getElementById('modalPerihalSurat').value = perihalDitemukan;
+                        }
 
-                        setOCRStatus('success', '✅ Data surat berhasil dibaca otomatis.');
+                        // 3. Cetak kotak status sukses dengan parameter yang benar (BARU)
+                        setOcrStatus('✅ Data surat berhasil dibaca otomatis.', 'success');
 
                     } catch (err) {
                         console.error("OCR Error:", err);
-                        setOCRStatus('error', '❌ Gagal menganalisis dokumen: ' + err.message);
+                        setOcrStatus('error', '❌ Gagal menganalisis dokumen: ' + err.message);
                     } finally {
                         btn.disabled = false;
                         btn.innerHTML = originalHTML;
                     }
                 };
 
-                // ========== EXECUTE UPDATE DATA ==========
+                // ========== EXECUTE UPDATE DATA (DIPERBARUI LENGKAP) ==========
                 function showCustomUpdateConfirm(title, messageHtml) {
                     return new Promise((resolve) => {
                         const modal = document.getElementById('confirmUpdateModal');
@@ -1529,17 +1826,24 @@
                 window.executeMetaUpdate = async function (event) {
                     event.preventDefault();
 
-                    const nomorSuratBaru = document.getElementById('modalNomorSurat').value.trim();
-                    const tanggalSuratBaru = document.getElementById('modalTanggalSurat').value; // format YYYY-MM-DD
+                    const jenjangDipilih = document.getElementById('modalJenjangSurat').value;
+                    const nomorBaru = document.getElementById('modalNomorSurat').value.trim();
+                    const tanggalBaru = document.getElementById('modalTanggalSurat').value; // format YYYY-MM-DD
+                    const formattedTanggalExcel = tanggalBaru.replace(/-/g, '.');
+                    const perihalBaru = document.getElementById('modalPerihalSurat').value.trim();
                     const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file baru';
 
-                    // Standardisasi format tanggal dari YYYY-MM-DD menjadi YYYY.MM.DD
-                    const formattedTanggalExcel = tanggalSuratBaru.replace(/-/g, '.');
+                    // Otomatisasi Status: Jika jenjang yang di-update sama dengan target penandatangan akhir (BARU)
+                    const statusFinal = (jenjangDipilih === activeKelolaData.targetJenjang) ? 'Final' : 'Proses';
 
                     const confirmHtml = `
-                        <strong>Perihal:</strong> ${activeKelolaData.perihal}<br>
-                        <strong>Nomor Surat Baru:</strong> ${nomorSuratBaru}<br>
-                        <strong>Tanggal Dokumen Baru:</strong> ${tanggalSuratBaru.split('-').reverse().join('/')}<br>
+                        <strong>Perihal Utama:</strong> ${activeKelolaData.perihal}<br>
+                        <strong>Target Penandatangan Akhir:</strong> ${activeKelolaData.targetJenjang}<br>
+                        <strong>Jenjang Di-update:</strong> ${jenjangDipilih}<br>
+                        <strong>Perihal Khusus Jenjang:</strong> ${perihalBaru}<br>
+                        <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
+                        <strong>Tanggal Dokumen Baru:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
+                        <strong>Status Dokumen:</strong> ${statusFinal}<br>
                         <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
                         <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
                     `;
@@ -1550,17 +1854,40 @@
                     document.getElementById('kelolaMenuState').style.display = 'none';
                     document.getElementById('kelolaLoadingState').style.display = 'block';
 
-                    const payload = {
+                    // 1. Buat Payload data siap pakai dengan menyertakan seluruh 16 kolom lama (BARU)
+                    let payload = {
                         action: 'updateMeta',
-                        nomorSurat: nomorSuratBaru,
-                        tanggalDokumen: formattedTanggalExcel, // Payload Parameter Baru
                         provinsi: activeKelolaData.provinsi,
                         namaKegiatan: activeKelolaData.namaKegiatan,
                         pathND: activeKelolaData.pathND,
+                        jenjangTerakhir: jenjangDipilih,
+                        statusDokumen: statusFinal,
+
+                        // Parameter Utama untuk Update Kolom Ringkasan Awal Excel agar tidak kosong (BARU)
+                        nomorSurat: nomorBaru,
+                        tanggalDokumen: formattedTanggalExcel,
+
+                        // Kirim data lama dari memori untuk mencegah hilangnya data lama (BARU)
+                        no_ksd: activeKelolaData.no_ksd, tgl_ksd: activeKelolaData.tgl_ksd, perihal_ksd: activeKelolaData.perihal_ksd, link_ksd: activeKelolaData.link_ksd,
+                        no_dir: activeKelolaData.no_dir, tgl_dir: activeKelolaData.tgl_dir, perihal_dir: activeKelolaData.perihal_dir, link_dir: activeKelolaData.link_dir,
+                        no_drj: activeKelolaData.no_dj, tgl_drj: activeKelolaData.tgl_dj, perihal_drj: activeKelolaData.perihal_dj, link_drj: activeKelolaData.link_dj,
+                        no_men: activeKelolaData.no_men, tgl_men: activeKelolaData.tgl_men, perihal_men: activeKelolaData.perihal_men, link_men: activeKelolaData.link_men,
+
                         fileFinalBase64: selectedFileFinalData.base64 || '',
                         fileFinalNama: selectedFileFinalData.nama || '',
                         fileFinalTipe: selectedFileFinalData.tipe || ''
                     };
+
+                    // 2. TIMPA HANYA kavling jenjang yang saat ini dipilih oleh user (BARU)
+                    if (jenjangDipilih === 'Kasubdit') {
+                        payload.no_ksd = nomorBaru; payload.tgl_ksd = formattedTanggalExcel; payload.perihal_ksd = perihalBaru;
+                    } else if (jenjangDipilih === 'Direktur') {
+                        payload.no_dir = nomorBaru; payload.tgl_dir = formattedTanggalExcel; payload.perihal_dir = perihalBaru;
+                    } else if (jenjangDipilih === 'Dirjen') {
+                        payload.no_drj = nomorBaru; payload.tgl_drj = formattedTanggalExcel; payload.perihal_drj = perihalBaru;
+                    } else if (jenjangDipilih === 'Menteri') {
+                        payload.no_men = nomorBaru; payload.tgl_men = formattedTanggalExcel; payload.perihal_men = perihalBaru;
+                    }
 
                     try {
                         let res = await fetch(CONFIG.updateNDFlowUrl, {
@@ -1659,14 +1986,12 @@
 
                 window.addEventListener('load', loadDashboardData);
 
-                // Menutup modal kelola secara otomatis ketika pengguna mengklik area luar modal (background gelap)
                 document.getElementById('kelolaModal').addEventListener('click', function (e) {
                     if (e.target === this) {
                         window.closeKelolaModal();
                     }
                 });
 
-                // Menutup modal hapus secara otomatis ketika pengguna mengklik area luar modal (background gelap)
                 document.getElementById('deleteModal').addEventListener('click', function (e) {
                     if (e.target === this) {
                         window.closeDeleteModal();

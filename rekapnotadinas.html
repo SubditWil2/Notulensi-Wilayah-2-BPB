@@ -454,44 +454,61 @@
             font-size: 13px !important;
         }
 
-        /* CONTAINER UTAMA MODAL (OVERLAY) */
+        /* CONTAINER UTAMA MODAL (OVERLAY - UNTUK SEMUA MODAL) */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(17, 34, 63, 0.7);
+            background: rgba(17, 34, 63, 0.7); /* Background gelap transparan khas PU */
             backdrop-filter: blur(4px);
             display: none;
-            align-items: flex-start;
-            justify-content: center;
+            
+            /* SENTRALISASI SEMPURNA & AMAN DARI TERPOTONG (BARU) */
             overflow-y: auto;
-            padding: 60px 0;
+            padding: 40px 10px; /* Jarak aman atas bawah di layar pendek */
             box-sizing: border-box;
             z-index: 999999 !important;
         }
 
         .modal-overlay.active {
             display: flex;
+            align-items: center; /* Sumbu Vertikal Tengah */
+            justify-content: center; /* Sumbu Horizontal Tengah */
         }
 
-        /* KOTAK PUTIH MODAL (BOX) DI HP */
+        /* KOTAK PUTIH MODAL (BOX - SERAGAM UNTUK SEMUA MODAL) */
         .modal-box {
-            background: white !important;
-            /* MEMAKSA LATAR BELAKANG PUTIH BERSIH (BARU) */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
-            /* MEMAKSA BAYANGAN KARTU (BARU) */
-            width: 90% !important;
-            max-width: 380px !important;
-            height: auto !important;
-            max-height: 90vh !important;
-            border-radius: 12px !important;
-            padding: 16px 20px !important;
-            display: block !important;
-            overflow-y: auto !important;
-            margin: auto !important;
-            /* Memastikan kotak putih berada tepat di tengah layar */
+            background: white;
+            padding: 24px; /* Padat dan proporsional */
+            border-radius: 12px !important; /* Round edge seragam di semua modal (BARU) */
+            width: 95%;
+            max-width: 400px; /* Lebar maksimal ramping seragam (BARU) */
+            
+            /* Trik Ajaib: Margin auto menjaga centering vertikal yang aman dari terpotong */
+            margin: auto !important; 
+            
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            position: relative;
+            text-align: center; /* Default semua teks modal rata tengah agar simetris */
+        }
+
+        .modal-title {
+            font-size: 16px; /* Ukuran font judul seragam (BARU) */
+            font-weight: 700;
+            color: #1d355e;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .modal-sub {
+            font-size: 12px; /* Ukuran font sub-judul seragam (BARU) */
+            color: #64748b;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            text-align: center;
         }
 
         .modal-spinner {
@@ -510,21 +527,21 @@
             }
         }
 
+        /* TOMBOL AKSI DI DALAM MODAL (SERAGAM UNTUK SEMUA MODAL) */
         .btn-modal-action {
             display: block;
             width: 100%;
-            padding: 10px;
-            /* Dikurangi dari 12px agar lebih ramping */
-            border-radius: 8px;
+            padding: 10px 16px !important; /* Ramping dan seragam */
+            border-radius: 8px !important; /* Round edge tombol seragam (BARU) */
             font-weight: 700;
-            font-size: 13px;
-            /* Diturunkan sedikit agar seimbang */
+            font-size: 13px !important;
             text-align: center;
             border: none;
             cursor: pointer;
-            margin-bottom: 8px;
-            /* Lebih rapat jarak antar tombol dari 10px */
+            margin-bottom: 8px !important; /* Jarak vertikal rapat */
             text-decoration: none;
+            box-sizing: border-box;
+            transition: background 0.2s ease;
         }
 
         .btn-save-meta {
@@ -679,16 +696,21 @@
                 /* Menghilangkan label kosong di HP */
             }
 
-            /* MODAL RESPONSIVE */
+            /* KOTAK PUTIH MODAL (BOX) DI HP */
             .modal-box {
-                width: 100%;
-                height: 100%;
-                max-height: 100vh;
+                background: white !important;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+                width: 100% !important;
+                max-width: 390px !important;
+                height: auto !important;
                 border-radius: 0;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
-                overflow-y: auto;
+                
+                /* BEBASKAN DARI DOUBLE SCROLLBAR DI HP (BARU) */
+                max-height: none !important;
+                overflow-y: visible !important;
             }
 
             .btn-modal-action {
@@ -775,6 +797,48 @@
 
         .btn-final:hover {
             background-color: #219653 !important;
+        }
+        /* BEBASKAN TABLE & DROPDOWN DARI "SANGKAR" (OVERFLOW VISIBLE) */
+        .container {
+            overflow: visible !important; /* Mencegah tepi kartu putih memotong menu dropdown paling bawah */
+        }
+
+        .table-container {
+            overflow: visible !important; /* Menghilangkan double-scrollbar vertikal dan membebaskan menu melayang */
+        }
+
+        #confirmUpdateBody {
+            text-align: left !important; /* Rincian perubahan tetap rata kiri agar mudah dibaca */
+            font-size: 12px !important;
+            background: #f8fafc;
+            padding: 12px !important;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px !important;
+            line-height: 1.5;
+        }
+
+        /* STYLE LINK NOMOR SURAT DENGAN HOVER HIGHLIGHT YANG AKTIF (BARU) */
+        .final-link {
+            color: #27ae60 !important;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .final-link:hover {
+            color: #f5b016 !important; /* Berubah menjadi sorot kuning saat didekati */
+            text-decoration: underline !important;
+        }
+        /* KEMBALIKAN SUDUT MELENGKUNG (ROUND EDGES) TANPA MERUSAK OVERFLOW VISIBLE */
+        .header {
+            border-radius: 12px 12px 0 0; /* Mengembalikan kelengkungan sudut atas kepala halaman */
+        }
+
+        /* Melengkungkan sudut atas baris hitam kepala tabel secara manual (BARU) */
+        table th:first-child {
+            border-top-left-radius: 8px !important;
+        }
+        table th:last-child {
+            border-top-right-radius: 8px !important;
         }
     </style>
 </head>
@@ -1020,7 +1084,7 @@
 
         <!-- MODAL KONFIRMASI UPDATE METADATA (CUSTOM) -->
         <div id="confirmUpdateModal" class="modal-overlay">
-            <div class="modal-box" style="text-align: left; max-width: 450px;">
+            <div class="modal-box">
                 <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
                 <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmUpdateTitle">
                     Konfirmasi Perubahan</div>
@@ -1291,13 +1355,35 @@
                     renderTable(filtered);
                 }
 
-                // TOGGLE DROPDOWN ⁝ (BARU)
+                // TOGGLE DROPDOWN ⁝ DENGAN DETEKSI RUANG VERTIKAL OTOMATIS (BARU)
                 window.toggleActionDropdown = function (idx, event) {
                     event.stopPropagation();
+                    
+                    // 1. Tutup semua dropdown lain yang sedang terbuka
                     document.querySelectorAll('.dropdown-menu-content').forEach(el => {
                         if (el.id !== `dropdownMenu-${idx}`) el.classList.remove('show');
                     });
-                    document.getElementById(`dropdownMenu-${idx}`).classList.toggle('show');
+                    
+                    const menu = document.getElementById(`dropdownMenu-${idx}`);
+                    const btn = event.currentTarget;
+                    
+                    // 2. Hitung sisa ruang vertikal di bawah tombol secara real-time (BARU)
+                    const rect = btn.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - rect.bottom;
+                    const menuHeight = 175; // Estimasi tinggi menu dropdown kita (sekitar 175px)
+                    
+                    if (spaceBelow < menuHeight) {
+                        // Jika sisa ruang di bawah sempit, buka ke ATAS (Dropup)
+                        menu.style.top = 'auto';
+                        menu.style.bottom = '36px';
+                    } else {
+                        // Jika sisa ruang cukup, buka ke BAWAH (Dropdown)
+                        menu.style.top = '36px';
+                        menu.style.bottom = 'auto';
+                    }
+                    
+                    // 3. Tampilkan/Sembunyikan menu
+                    menu.classList.toggle('show');
                 };
 
                 // Tutup dropdown jika mengklik area luar
@@ -1350,10 +1436,19 @@
                         let displayNomor = '';
                         if (nomor) {
                             displayNomor = linkFinal
-                                ? `<a href="${linkFinal}" target="_blank" class="document-title-link" style="color: #27ae60; font-weight: 700;">🔗 ${nomor}</a> <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`
-                                : `${nomor} <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`;
+                            ? `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                                 <a href="${linkFinal}" target="_blank" class="document-title-link final-link">${nomor}</a>
+                                 <span class="badge ${statusBadgeClass}">${statusLabel}</span>
+                               </div>`
+                                : `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                                     <span style="font-weight: 700; color: #334155;">${nomor}</span>
+                                     <span class="badge ${statusBadgeClass}">${statusLabel}</span>
+                                   </div>`;
                         } else {
-                            displayNomor = `<span style="color:#94a3b8; font-style:italic;">Belum Diisi</span> <span class="badge ${statusBadgeClass}" style="margin-left:5px;">${statusLabel}</span>`;
+                            displayNomor = `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                                 <span style="color:#94a3b8; font-style:italic;">Belum Diisi</span>
+                                 <span class="badge ${statusBadgeClass}">${statusLabel}</span>
+                               </div>`;
                         }
 
                         let safePerihal = perihal.replace(/'/g, "\\'");
@@ -1367,7 +1462,7 @@
                             <td data-label="Nomor Surat">${displayNomor}</td>
                             <td data-label="Provinsi">${prov}</td>
                             <td data-label="Nama Kegiatan">${keg}</td>
-                            <td data-label="Perihal / Judul">${linkFinal ? `<a href="${linkFinal}" target="_blank" class="document-title-link">🔗 ${perihal}</a>` : perihal}</td>
+                            <td data-label="Perihal / Judul" style="font-weight: 600; color: #1d355e;">${perihal}</td>
                             <td data-label="PIC">${pic}</td>
                             <td class="action-column">
                                 <div class="dropdown-actions">

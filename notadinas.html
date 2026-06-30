@@ -504,7 +504,7 @@
                     <img src="logo-pu.png" alt="Logo PU">
                 </div>
                 <div class="header-content">
-                    <h1>Form Nota Dinas / Surat Undangan</h1>
+                    <h1>Form Nota Dinas / Surat</h1>
                     <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan
                         Umum</p>
                 </div>
@@ -530,8 +530,8 @@
                         <label for="notaDinas">📑 Nota Dinas</label>
                     </div>
                     <div class="toggle-option">
-                        <input type="radio" name="jenisDokumen" id="suratUndangan" value="Surat Undangan">
-                        <label for="suratUndangan">✉️ Surat Undangan</label>
+                        <input type="radio" name="jenisDokumen" id="surat" value="Surat">
+                        <label for="surat">✉️ Surat</label>
                     </div>
                 </div>
 
@@ -1270,7 +1270,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const docType = urlParams.get('type');
             if (docType === 'surat') {
-                document.getElementById('suratUndangan').checked = true;
+                document.getElementById('surat').checked = true;
             } else {
                 document.getElementById('notaDinas').checked = true;
             }

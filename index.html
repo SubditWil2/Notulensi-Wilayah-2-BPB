@@ -300,7 +300,7 @@
             </div>
             <div class="stat-card green">
                 <div class="stat-number loading" id="statSurat">...</div>
-                <div class="stat-label">Surat Undangan</div>
+                <div class="stat-label">Surat</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number loading" id="statTotal">...</div>
@@ -330,8 +330,8 @@
             <a href="notadinas.html?type=surat" class="card green">
                 <div class="card-icon">✉️</div>
                 <div class="card-body">
-                    <h3>Surat Undangan</h3>
-                    <p>Buat dan arsipkan surat undangan sesuai folder kegiatan</p>
+                    <h3>Surat</h3>
+                    <p>Buat dan arsipkan surat sesuai folder kegiatan</p>
                 </div>
                 <div class="card-arrow">›</div>
             </a>
@@ -445,7 +445,7 @@
                 const countSurat = rekapDataNDSurat.filter(r => {
                     const jenis = r['Jenis Dokumen'] || r.jenisDokumen || '';
                     const tgl = r['Tanggal'] || r.tanggal || '';
-                    return jenis === 'Surat Undangan' && isCurrentMonth(tgl);
+                    return jenis === 'Surat' && isCurrentMonth(tgl);
                 }).length;
 
                 const countTotal = countNotulensi + countNotaDinas + countSurat;

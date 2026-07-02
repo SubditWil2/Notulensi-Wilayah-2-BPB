@@ -2426,7 +2426,35 @@
                             return;
                         }
 
-                        const statusFinal = (jenjangDipilih === activeKelolaData.targetJenjang) ? 'Final' : 'Proses';
+                        // Penentuan ranking jenjang untuk mencegah downgrade status dan jenjang akhir
+                        const LEVEL_RANK = {
+                            'Kasubdit': 1,
+                            'Direktur': 2,
+                            'Dirjen': 3,
+                            'Menteri': 4
+                        };
+
+                        const existingJenjang = activeKelolaData.jenjang || 'Kasubdit';
+                        const rawStatus = activeKelolaData.statusDokumen || 'Proses';
+                        const existingStatus = rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1).toLowerCase();
+
+                        const rankDipilih = LEVEL_RANK[jenjangDipilih] || 1;
+                        const rankExisting = LEVEL_RANK[existingJenjang] || 1;
+
+                        let jenjangTerakhirFinal = jenjangDipilih;
+                        let statusFinal = 'Final';
+
+                        if (rankDipilih < rankExisting) {
+                            // Skenario 2: Update jenjang di bawah file eksisting tertinggi
+                            jenjangTerakhirFinal = existingJenjang;
+                            statusFinal = existingStatus;
+                        } else {
+                            // Skenario 1: Update jenjang di atas atau setara dengan file eksisting tertinggi
+                            jenjangTerakhirFinal = jenjangDipilih;
+                            statusFinal = 'Final';
+                        }
+
+                        const statusFinalCap = statusFinal.charAt(0).toUpperCase() + statusFinal.slice(1).toLowerCase();
 
                         const confirmHtml = `
                             <strong>Perihal Utama:</strong> ${activeKelolaData.perihal}<br>
@@ -2435,7 +2463,8 @@
                             <strong>Perihal Khusus Jenjang:</strong> ${perihalBaru}<br>
                             <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
                             <strong>Tanggal Dokumen Baru:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
-                            <strong>Status Dokumen:</strong> ${statusFinal}<br>
+                            <strong>Status Dokumen Akhir:</strong> ${statusFinalCap}<br>
+                            <strong>Jenjang Akhir Terpilih:</strong> ${jenjangTerakhirFinal}<br>
                             <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
                             <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
                         `;
@@ -2452,8 +2481,9 @@
                             provinsi: activeKelolaData.provinsi,
                             namaKegiatan: activeKelolaData.namaKegiatan,
                             pathND: activeKelolaData.pathND,
-                            jenjangTerakhir: jenjangDipilih,
-                            statusDokumen: statusFinal,
+                            jenjangTerakhir: jenjangTerakhirFinal, // Menggunakan jenjangTerakhirFinal agar tidak ter-downgrade
+                            jenjangDiubah: jenjangDipilih,         // Untuk routing file/logika upload di PA
+                            statusDokumen: statusFinalCap,        // Menggunakan statusFinalCap agar konsisten
 
                             nomorSurat: nomorBaru,
                             tanggalDokumen: formattedTanggalExcel,

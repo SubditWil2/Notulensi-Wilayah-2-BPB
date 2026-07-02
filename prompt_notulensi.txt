@@ -223,27 +223,27 @@ SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
   "tujuanRapat": "[Tujuan spesifik rapat dalam 1–2 kalimat formal menggunakan kalimat nominal/infinitif]",
   "grupPembukaan": [
     {
-      "namaPembicara": "[Nama Lengkap Resmi Pemimpin Rapat] – [Jabatan Resmi]",
+      "namaPembicara": "A. [Nama Lengkap Resmi Pemimpin Rapat] – [Jabatan Resmi]",
       "teksPembukaan": "1. [Poin pembukaan substantif pertama]\\n2. [Poin pembukaan substantif kedua]\\n3. [dst.]"
     },
     {
-      "namaPembicara": "[Nama Lengkap Pembicara Pembuka Kedua] – [Jabatan Resmi]",
+      "namaPembicara": "B. [Nama Lengkap Pembicara Pembuka Kedua] – [Jabatan Resmi]",
       "teksPembukaan": "1. [Poin pembukaan substantif pertama]\\n2. [dst.]"
     }
   ],
   "grupPembahasan": [
     {
-      "namaPembicara": "[Nama Lengkap Peserta 1] – [Jabatan/Instansi Resmi]",
+      "namaPembicara": "A. [Nama Lengkap Peserta 1] – [Jabatan/Instansi Resmi]",
       "teksPembahasan": "a. [Pernyataan teknis/substantif detail]\\nb. [Pernyataan teknis/substantif detail]\\nc. [dst.]"
     },
     {
-      "namaPembicara": "[Nama Lengkap Peserta 2] – [Jabatan/Instansi Resmi]",
+      "namaPembicara": "B. [Nama Lengkap Peserta 2] – [Jabatan/Instansi Resmi]",
       "teksPembahasan": "a. [Pernyataan teknis/substantif detail]\\nb. [dst.]"
     }
   ],
   "grupKesimpulan": [
-    { "teksKesimpulan": "[Topik Tindak Lanjut 1]: [Penjelasan tindak lanjut — sertakan penanggungjawab dan tenggat waktu jika disebutkan]" },
-    { "teksKesimpulan": "[Topik Tindak Lanjut 2]: [Penjelasan tindak lanjut]" }
+    { "teksKesimpulan": "1. [Topik Tindak Lanjut 1]: [Penjelasan tindak lanjut — sertakan penanggungjawab dan tenggat waktu jika disebutkan]" },
+    { "teksKesimpulan": "2. [Topik Tindak Lanjut 2]: [Penjelasan tindak lanjut]" }
   ]
 }
 

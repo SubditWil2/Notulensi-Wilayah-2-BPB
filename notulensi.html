@@ -850,9 +850,10 @@
                         <label for="judulRapat">
                             Judul Rapat <span class="required">*</span>
                         </label>
-                        <input type="text" id="judulRapat" name="judulRapat"
-                            placeholder="Masukkan judul rapat" maxlength="500" required>
-                        <div class="help-text">Judul rapat akan muncul lengkap di dokumen, namun nama file akan diringkas otomatis.</div>
+                        <input type="text" id="judulRapat" name="judulRapat" placeholder="Masukkan judul rapat"
+                            maxlength="500" required>
+                        <div class="help-text">Judul rapat akan muncul lengkap di dokumen, namun nama file akan
+                            diringkas otomatis.</div>
                     </div>
 
                     <div id="meetingWarningText"
@@ -1168,11 +1169,17 @@
 
             try {
                 const payload = {
+                    systemInstruction: {
+                        parts: [{ text: state.systemPrompt }]
+                    },
                     contents: [{
-                        parts: [{ text: state.systemPrompt + "\n" + transkrip }]
+                        parts: [{ text: transkrip }]
+                    }],
+                    tools: [{
+                        google_search: {} // Mengaktifkan pencarian Google secara real-time
                     }],
                     generationConfig: {
-                        temperature: 0.1
+                        temperature: 0.2 // Sedikit dinaikkan untuk hasil yang lebih luwes
                     }
                 };
                 const resData = await geminiRequest(payload);
@@ -1391,23 +1398,41 @@
 
         const MODELS_FALLBACK = [
             'gemini-3.5-flash',
-            'gemini-2.5-flash',
-            'gemini-3.1-flash-lite'
         ];
 
         async function geminiRequest(payload, models = MODELS_FALLBACK) {
             for (const model of models) {
                 for (const apiKey of GEMINI_API_KEYS) {
                     let response;
+                    // Lakukan deep clone pada payload agar payload asli tidak rusak saat dimutasi
+                    let currentPayload = JSON.parse(JSON.stringify(payload)); 
+                    
                     try {
                         response = await fetch(
                             `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(payload),
+                                body: JSON.stringify(currentPayload),
                             }
                         );
+
+                        // ANTISIPASI LIMIT GOOGLE SEARCH GROUNDING:
+                        // Jika model mengembalikan error 429/400 dan request menggunakan "tools" (Google Search),
+                        // kita coba panggil kembali model yang sama secara instan TANPA fitur Google Search.
+                        if ((response.status === 429 || response.status === 400) && currentPayload.tools) {
+                            console.warn(`⚠️ Model ${model} membatasi akses dengan Google Search (Status ${response.status}). Mencoba kembali tanpa Search Grounding...`);
+                            delete currentPayload.tools; // Hapus fitur Google Search dari payload
+                            
+                            response = await fetch(
+                                `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                                {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(currentPayload),
+                                }
+                            );
+                        }
                     } catch (networkErr) {
                         console.warn(`⚠️ Network error: ${networkErr.message}, skip...`);
                         continue;

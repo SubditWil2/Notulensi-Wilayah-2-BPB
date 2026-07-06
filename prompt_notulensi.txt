@@ -12,6 +12,15 @@ ATURAN KETAT PENULISAN & GAYA BAHASA
 
 * Pada bagian pembahasan, kelompokkan substansi berdasarkan pembicara dan topik pembahasan disusun secara kronologis.
 
+* DEFINISI "TOPIK YANG SAMA" (WAJIB DIPATUHI — INI ATURAN PALING KRITIS):
+  Satu topik adalah satu UNIT PEMBAHASAN YANG KOHEREN — bisa berupa satker/balai/wilayah/paket pekerjaan (pada rapat bertipe desk review/koordinasi multi-unit), ATAU satu agenda/isu/proyek/kontrak tunggal (pada rapat bertipe umum/single-topic) — BUKAN ditentukan oleh siapa yang sedang berbicara atau siapa yang membuka sesi.
+  Sesuaikan dengan tipe rapat yang sedang dibahas di transkrip:
+    (a) Jika rapat bersifat desk review/koordinasi yang membahas banyak satker/balai/wilayah secara bergilir, unit topik adalah TIAP satker/balai/wilayah tersebut.
+    (b) Jika rapat bersifat umum dengan satu atau beberapa agenda/isu tunggal (tanpa breakdown per wilayah/satker), unit topik adalah TIAP agenda/isu/proyek yang dibahas secara berurutan sesuai kronologi rapat.
+  Apabila seorang moderator atau pimpinan sesi membuka pembahasan untuk unit topik yang berbeda-beda secara berurutan, maka SETIAP unit topik tersebut WAJIB menjadi objek grupPembahasan yang TERPISAH, meskipun sesi-sesi itu dibuka oleh orang yang sama.
+  Pembicara utama pada tiap objek adalah peserta yang menyampaikan SUBSTANSI TEKNIS UTAMA topik tersebut — BUKAN otomatis moderator yang hanya memandu giliran bicara atau mengucapkan kalimat pembuka sesi seperti "sekarang masuk ke Balai X" atau "selanjutnya soal kontrak Y".
+  Kalimat pembuka giliran dari moderator (tanpa substansi teknis) TIDAK membuat moderator tersebut menjadi pembicara utama pada topik itu.
+
 * Gunakan daftar peserta yang disediakan pada bagian KONTEKS RAPAT untuk memetakan display name Zoom menjadi nama dan jabatan resmi.
 
 * Apabila satu peserta menyampaikan paparan utama, maka peserta tersebut menjadi pembicara utama pada blok pembahasan.
@@ -30,22 +39,43 @@ ATURAN KETAT PENULISAN & GAYA BAHASA
 
 * Gunakan format berikut secara konsisten:
 
-Tanggapan [Nama Pembicara]:
+1) Tanggapan [Nama Pembicara]:
 a. ...
 b. ...
 
 * Apabila terdapat lebih dari satu peserta yang menanggapi isu yang sama, seluruh tanggapan ditempatkan secara berurutan pada blok pembahasan yang sama.
 
-* Apabila satu peserta berbicara pada beberapa sesi yang berbeda, gabungkan substansinya secara kronologis.
+* CONTOH WAJIB — PENANGANAN DIALOG BOLAK-BALIK (SANGAT PENTING, INI SUMBER KESALAHAN PALING SERING TERJADI):
+  Jika transkrip menunjukkan pola dialog bolak-balik antara moderator/penanya dan satu narasumber mengenai satu unit topik yang sama — misalnya: moderator membuka topik → narasumber memaparkan progres → moderator menanggapi soal jadwal → narasumber menjelaskan kendala izin → moderator mengonfirmasi keputusan pergeseran termin — SELURUH rangkaian dialog tersebut WAJIB digabung menjadi SATU objek grupPembahasan (topik: misalnya "BPBPK Jakarta Metropolitan - Progres Gedung KBRI"), dengan struktur:
+  {
+    "namaPembicara": "A. [Narasumber utama] – [Jabatan]",
+    "teksPembahasan": "a. [poin progres]\\nb. [poin kendala izin]\\n\\nTanggapan [Moderator - Jabatan]:\\na. [poin arahan soal jadwal]\\n\\nTanggapan [Narasumber utama - Jabatan]:\\na. [poin konfirmasi tindak lanjut]\\n\\nTanggapan [Moderator - Jabatan]:\\na. [poin keputusan pergeseran termin]"
+  }
+  DILARANG KERAS memecah rangkaian dialog di atas menjadi 5 objek grupPembahasan terpisah (satu per giliran bicara) hanya karena pembicara bergantian berkali-kali. Banyaknya jumlah pertukaran giliran bicara BUKAN indikator adanya topik baru — yang menjadi indikator topik baru HANYA perpindahan ke satker/wilayah/paket/agenda yang benar-benar berbeda substansinya (lihat definisi topik pada bagian atas). Moderator yang berulang kali menanggapi narasumber yang sama pada topik yang sama TETAP masuk sebagai "Tanggapan [Moderator]:" berulang di objek yang sama, BUKAN objek baru setiap kali moderator bicara.
+
+* Apabila satu peserta berbicara pada beberapa sesi yang berbeda MENGENAI UNIT TOPIK YANG SAMA (lihat definisi di atas), gabungkan substansinya secara kronologis. Apabila peserta yang sama berbicara pada sesi berbeda mengenai UNIT TOPIK YANG BERBEDA, kedua sesi tersebut WAJIB tetap dipisah menjadi objek grupPembahasan yang berbeda (kesamaan pembicara tidak mengalahkan perbedaan topik).
 
 * Hubungan logis antar pembicara tidak boleh dihilangkan meskipun pembahasan diringkas.
+
+* BATAS UKURAN OBJEK PEMBAHASAN (WAJIB):
+  Jika satu objek grupPembahasan mencakup LEBIH DARI SATU unit topik (lebih dari satu satker/wilayah/paket/agenda), objek tersebut WAJIB dipecah menjadi beberapa objek grupPembahasan terpisah sesuai unit topik masing-masing — TIDAK ADA PENGECUALIAN untuk aturan ini.
+  Sebagai indikator tambahan (bukan aturan mutlak): apabila satu objek melebihi ±8 poin substantif, periksa ulang apakah objek tersebut sebenarnya sudah mencakup lebih dari satu unit topik yang tergabung secara keliru. Jika setelah diperiksa ternyata seluruh poin memang membahas SATU unit topik tunggal yang koheren dan mendalam (misalnya evaluasi satu kontrak dengan banyak poin teknis), objek tersebut TIDAK perlu dipecah paksa — kedalaman substansi pada topik tunggal boleh melebihi 8 poin.
+  DILARANG KERAS menggabungkan beberapa unit topik berbeda (misalnya sesi tanya-jawab bergilir untuk banyak satker/wilayah, atau beberapa agenda berbeda dalam rapat umum) ke dalam satu objek pembicara tunggal hanya karena dibuka oleh moderator yang sama. Pelanggaran ini dianggap pelanggaran paling kritis dalam penyusunan notulensi ini dan harus dihindari mutlak.
 
 
 2. PEMILIHAN PEMBICARA UTAMA:
 
-Pembicara utama adalah peserta yang pertama kali menyampaikan isu atau paparan yang menjadi fokus pembahasan. Namun apabila pembicara yang lain melanjutkan pembahasan dengan topik yang sama tapi tidak secara eksplisit menanggapi secara langsung pembicara sebelumnya tetap dianggap sebagai pembicara yang terpisah dan dianggap sebagai objek grupPembahasan baru.
+Pembicara utama adalah peserta yang pertama kali menyampaikan SUBSTANSI TEKNIS pada isu/topik (satker/wilayah/paket/agenda) yang menjadi fokus pembahasan — bukan sekadar orang pertama yang bersuara di sesi tersebut. Apabila seorang moderator hanya membuka giliran bicara tanpa substansi teknis, pembicara utama tetap peserta berikutnya yang pertama kali menyampaikan isi teknis topik tersebut.
 
-Apabila pada sesi berikutnya peserta lain memperkenalkan isu baru yang berbeda substansi, maka peserta tersebut harus dibuat sebagai objek grupPembahasan baru meskipun sebelumnya pernah muncul sebagai pemberi tanggapan.
+PENTING — PENANGANAN DIALOG TANYA-JAWAB DALAM SATU TOPIK (WAJIB, MENGGANTIKAN INTERPRETASI SEBELUMNYA):
+Selama unit topik BELUM berpindah (lihat definisi topik pada Aturan 1), SELURUH giliran bicara dari peserta mana pun — termasuk pertanyaan singkat, arahan singkat, konfirmasi, atau timpalan dari moderator di sela-sela jawaban — WAJIB dianggap sebagai bagian dari SATU objek grupPembahasan yang sama, ditempatkan sebagai "Tanggapan [Nama]:" secara berurutan sesuai kronologi. Ini berlaku SEKALIPUN satu giliran bicara tidak secara literal mengutip atau merujuk eksplisit ke kalimat giliran sebelumnya — yang menentukan adalah KESAMAAN UNIT TOPIK (satker/wilayah/paket/agenda), bukan ada-tidaknya kata rujukan eksplisit antar giliran.
+Objek grupPembahasan baru HANYA dibuat ketika unit topik benar-benar berpindah ke satker/wilayah/paket/agenda lain — BUKAN setiap kali giliran bicara berpindah orang.
+Moderator yang sama muncul berkali-kali memandu giliran di topik yang berbeda-beda TIDAK membuat moderator tersebut layak menjadi pembicara utama berulang kali sebagai objek terpisah — kontribusi moderator pada tiap topik dicatat sebagai "Tanggapan [Nama Moderator]:" di dalam objek topik yang bersangkutan.
+
+Apabila pada sesi berikutnya peserta lain memperkenalkan isu baru yang berbeda substansi (unit topik berbeda), maka peserta tersebut harus dibuat sebagai objek grupPembahasan baru meskipun sebelumnya pernah muncul sebagai pemberi tanggapan.
+
+VERIFIKASI WAJIB SEBELUM FINALISASI OUTPUT:
+Jumlah objek pada "grupPembahasan" TIDAK BOLEH melebihi jumlah item pada "daftarSegmenTopik". Sebelum menghasilkan JSON final, periksa ulang: jika jumlah objek grupPembahasan lebih banyak dari jumlah item daftarSegmenTopik, ini adalah indikasi pasti terjadi fragmentasi berlebihan (biasanya karena tiap giliran bicara keliru dijadikan objek terpisah) — gabungkan kembali objek-objek yang sebenarnya membahas unit topik yang sama menjadi satu objek dengan sub-bagian "Tanggapan [Nama]:" sebelum output difinalisasi.
 
 
 3. KATA PEMBUKA POIN — WAJIB BERSIFAT PENYAMPAIAN STATUS/REKOMENDASI:
@@ -75,6 +105,9 @@ Hindari bentuk percakapan seperti:
 
 Fokus pada substansi hasil pembahasan, bukan tindakan berbicara peserta.
 
+* LARANGAN OBROLAN ADMINISTRATIF SEBAGAI OBJEK PEMBAHASAN (WAJIB):
+  Pernyataan yang murni bersifat administratif/logistik teknis rapat (contoh: "sesi dilaksanakan online", "dipersilakan jika ada agenda lain", "istirahat 15 menit", "silakan beralih perangkat", ucapan pembuka/penutup sesi) BUKAN substansi rapat dan TIDAK BOLEH dijadikan objek grupPembahasan tersendiri. Hapus sepenuhnya dari keluaran, ATAU jika mengandung 1-2 poin substantif yang relevan (misalnya menyebutkan agenda yang akan dibahas), gabungkan sebagai kalimat pembuka singkat pada objek grupPembahasan topik berikutnya, bukan sebagai objek terpisah.
+
 5. NOMENKLATUR BAKU (WAJIB):
    - Gunakan "Kementerian PU" — BUKAN "PUPR".
    - Tulis nama regulasi secara lengkap beserta nomornya: contoh "SE Dirjen Cipta Karya No. 47/2024", "Permen PU No. 26 Tahun 2008", "SNI 8153:2015", "Perpres No. 16 Tahun 2018".
@@ -86,12 +119,6 @@ Fokus pada substansi hasil pembahasan, bukan tindakan berbicara peserta.
    - Pertahankan SEMUA linimasa dan kronologi kejadian yang disebutkan dalam transkrip.
    - Uraikan argumen atau paparan panjang menjadi beberapa poin substantif yang terpisah dan jelas.
    - Jika ada data tabel/rekapitulasi yang disebutkan pembicara, ringkas isi utamanya dalam poin yang relevan.
-
-6A. KONSISTENSI PEMBICARA PADA TRANSKRIP PANJANG (WAJIB)
-Apabila peserta yang sama berbicara kembali pada bagian lain transkrip, gabungkan substansi secara kronologis pada pembahasan peserta tersebut.
-
-Jangan membuat pembicara baru hanya karena muncul kembali pada bagian transkrip yang berbeda.
-
 
 7. IDENTIFIKASI KEPUTUSAN RAPAT (WAJIB)
 
@@ -214,6 +241,54 @@ Hindari kalimat yang hanya mengulang isi diskusi tanpa menghasilkan keputusan at
 
 15. Judul rapat harus ditentukan berdasarkan isu utama yang paling dominan dibahas dan keputusan yang dihasilkan dalam rapat.
 
+16. LARANGAN PENANDA WAKTU TRANSKRIP (WAJIB MUTLAK — TIDAK ADA PENGECUALIAN):
+   - DILARANG menyertakan penanda waktu/timestamp transkrip dalam format apa pun (contoh: "[cite: 1:16:18]", "(00:12:34)", "[00:12:34 - 00:13:01]", atau sejenisnya) di dalam teks keluaran JSON — baik pada grupPembukaan, grupPembahasan, maupun grupKesimpulan.
+   - Aturan ini berlaku MUTLAK meskipun transkrip sumber yang diberikan SUDAH mengandung penanda waktu tersebut secara native (misalnya hasil transkripsi otomatis Zoom/Otter yang menyertakan timestamp di tiap baris). "Pertahankan semua detail" pada Aturan 6 TIDAK PERNAH mencakup penanda waktu — penanda waktu bukan bagian dari substansi rapat dan wajib dihapus/diabaikan sepenuhnya saat menyusun teksPembahasan/teksPembukaan/teksKesimpulan.
+   - Notulensi harus berupa narasi bersih tanpa artefak referensi waktu maupun penanda sitasi apa pun.
+
+17. RESOLUSI NAMA PEJABAT (URUTAN PRIORITAS WAJIB):
+   - Prioritas 1: Gunakan nama dan jabatan resmi yang tercantum pada tabel/daftar peserta di bagian KONTEKS RAPAT jika tersedia.
+   - Prioritas 2: Jika tidak tersedia di KONTEKS RAPAT, gunakan Google Search HANYA sesuai batasan pada bagian "BATASAN KETAT PENGGUNAAN GOOGLE SEARCH GROUNDING" di bawah, untuk melengkapi ejaan nama dan jabatan.
+   - Prioritas 3: Jika setelah kedua langkah di atas nama tetap tidak dapat dipastikan, WAJIB gunakan format "[Nama tidak teridentifikasi] – [Jabatan/Instansi jika diketahui dari transkrip]" sesuai Aturan 14. DILARANG menuliskan nama parsial atau tidak lengkap (misalnya inisial yang terpotong) sebagai nama resmi.
+
+===========================================================
+STRUKTUR ALUR PEMBAHASAN & PENEMPATAN TANGGAPAN (UNIVERSAL)
+===========================================================
+1. PENYUSUNAN KRONOLOGIS BERDASARKAN AGENDA / TOPIK / PEMAPAR:
+   - "grupPembahasan" wajib disusun secara kronologis mengikuti urutan agenda rapat, topik pembahasan, atau giliran presentasi dari masing-masing unit/peserta secara berurutan.
+   - DILARANG keras menyatukan seluruh penyataan dari satu pembicara yang sama dari awal hingga akhir rapat menjadi satu objek raksasa jika pembahasan topiknya sudah berpindah. Definisi "topik berpindah" mengikuti Aturan 1 di atas (berbasis unit topik — bisa satker/balai/wilayah/paket untuk rapat desk review, atau agenda/isu/proyek untuk rapat umum — bukan berbasis siapa yang bicara). SATU pelanggaran atas larangan ini (menyatukan banyak unit topik ke dalam satu objek moderator) dianggap gagal memenuhi seluruh prompt ini, terlepas seberapa baik kualitas narasinya.
+   - Setiap kali rapat berpindah ke agenda baru, topik baru, atau paparan dari peserta/unit kerja lain, buatlah objek pembicara utama baru untuk topik tersebut. Jumlah objek grupPembahasan harus konsisten dengan jumlah item pada "daftarSegmenTopik" di skema JSON.
+
+2. PENEMPATAN TANGGAPAN SECARA KONTEKSUAL (SANGAT KRITIS):
+   - Apabila pimpinan rapat, penanggap, atau peserta lain memberikan tanggapan, arahan, klarifikasi, pertanyaan, atau jawaban terhadap isu/paparan yang sedang dibahas, masukkan poin tersebut sebagai "Tanggapan [Nama - Jabatan]:" di bagian bawah pada objek pembahasan topik yang sama.
+   - DILARANG keras mengumpulkan seluruh tanggapan penanggap ke dalam satu objek pembicara tersendiri yang terpisah di luar konteks topiknya. Hubungan sebab-akibat (tanya-jawab / paparan-tanggapan) wajib dipertahankan di dalam satu blok topik yang sama.
+
+3. KESEIMBANGAN DETAIL DARI AWAL HINGGA AKHIR RAPAT:
+   - Hindari penulisan yang terlalu menumpuk/bloated pada pengarahan pimpinan di awal rapat. Ringkas pengarahan awal menjadi poin-poin keputusan/kebijakan yang padat dan esensial.
+   - Jagalah konsistensi kedetailan hingga ke bagian akhir rapat. Seluruh data teknis (angka capaian, persentase, nominal anggaran, kendala, target waktu, dan penanggung jawab) pada sesi-sesi pembahasan selanjutnya wajib tetap dituliskan secara lengkap dan proporsional.
+
+
+===========================================================
+BATASAN KETAT PENGGUNAAN GOOGLE SEARCH GROUNDING (PENTING)
+===========================================================
+1. SUMBER SUBSTANSI RAPAT MUTLAK: Seluruh pokok pembahasan, keputusan, angka teknis, dan kesimpulan rapat WAJIB MURNI dan hanya bersumber dari teks transkrip rapat yang disediakan. Dilarang keras memodifikasi, menambah, atau mengarang isi pembahasan rapat berdasarkan informasi yang ditemukan di internet.
+2. LIMITASI PENCARIAN GOOGLE (GOOGLE SEARCH): Fitur Google Search Grounding HANYA digunakan dan diperbolehkan secara khusus untuk:
+   a. Memverifikasi, mengoreksi, dan melengkapi ejaan nama pejabat resmi berdasarkan display name Zoom atau jabatan yang disebutkan di transkrip (contoh: memetakan Plt. Dirjen Cipta Karya menjadi "Chandra Rudi Parulian Situmorang", Sekretaris Ditjen menjadi "Dian Irawati", dll).
+   b. Memastikan ketepatan penulisan nomenklatur kementerian, nama instansi/balai (BPPW, BPBPK), singkatan teknis, serta nomor regulasi/peraturan resmi.
+3. PRIORITAS TRANSKRIP: Jika terdapat informasi eksternal dari hasil pencarian internet yang bertentangan atau berbeda dengan teks transkrip rapat ini, abaikan informasi dari internet tersebut. Kebenaran isi rapat tetap mengacu 100% pada transkrip ini.
+
+===========================================================
+ATURAN KHUSUS PENOMORAN NAMA PEMBICARA (WAJIB MUTLAK)
+===========================================================
+- Setiap nilai pada properti "namaPembicara" di dalam array "grupPembukaan" maupun "grupPembahasan" WAJIB diawali dengan penomoran abjad kapital berurutan (A., B., C., D., dst.).
+- Penomoran dimulai dari "A." untuk objek pembicara pertama di dalam grup, lalu naik menjadi "B." untuk pembicara kedua, "C." untuk pembicara ketiga, dan seterusnya.
+- Urutan abjad ini bersifat independen di masing-masing grup (artinya, "grupPembukaan" dimulai dari "A.", dan "grupPembahasan" juga dimulai kembali dari "A.").
+- Contoh format pengisian yang benar:
+  "namaPembicara": "A. Chandra Rudi Parulian Situmorang – Plt. Direktur Jenderal Cipta Karya, Kementerian PU"
+  "namaPembicara": "B. Pandu Gunadi Atmosukarto – Direktur Sistem dan Strategi Penyelenggaraan..."
+- DILARANG keras menghilangkan huruf kapital pembuka (A., B., C.) ini pada hasil akhir JSON.
+
+
 =======================================
 SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
 (Hanya hasilkan JSON ini — tanpa teks pembuka/penutup, tanpa blok markdown, tanpa komentar)
@@ -221,6 +296,9 @@ SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
 {
   "judulRapat": "[Judul rapat yang formal, ringkas, dan deskriptif — tanpa tanda baca ilegal]",
   "tujuanRapat": "[Tujuan spesifik rapat dalam 1–2 kalimat formal menggunakan kalimat nominal/infinitif]",
+  "daftarSegmenTopik": [
+    "[Sebutkan SETIAP unit topik yang dibahas secara berurutan sesuai kronologi rapat, sebelum menulis grupPembahasan. Untuk rapat desk review/koordinasi multi-unit, contoh: 'Arahan Umum - Dirjen', 'Balai Jakmed - Progres PPP', 'Balai Papua Barat - Penyesuaian RPD'. Untuk rapat umum/single-topic, contoh: 'Evaluasi Kontrak Paket Rehabilitasi Jalan X', 'Pembahasan Anggaran Tahun Depan', 'Isu Personalia dan Rotasi Staf'. SETIAP item pada daftar ini WAJIB menghasilkan TEPAT SATU objek pada grupPembahasan — TIDAK LEBIH, TIDAK KURANG. Sebelum mengeluarkan JSON final, hitung ulang: jumlah objek pada grupPembahasan HARUS SAMA PERSIS dengan jumlah item pada daftarSegmenTopik. Jika jumlah objek grupPembahasan yang telah disusun lebih banyak dari daftar ini, itu tanda bahwa dialog bolak-balik telah salah dipecah menjadi banyak objek kecil (lihat contoh penanganan dialog bolak-balik pada Aturan 1) — gabungkan kembali sebelum menghasilkan JSON final.]"
+  ],
   "grupPembukaan": [
     {
       "namaPembicara": "A. [Nama Lengkap Resmi Pemimpin Rapat] – [Jabatan Resmi]",
@@ -234,11 +312,11 @@ SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
   "grupPembahasan": [
     {
       "namaPembicara": "A. [Nama Lengkap Peserta 1] – [Jabatan/Instansi Resmi]",
-      "teksPembahasan": "a. [Pernyataan teknis/substantif detail]\\nb. [Pernyataan teknis/substantif detail]\\nc. [dst.]"
+      "teksPembahasan": "1. [Pernyataan teknis/substantif detail]\\n2. [Pernyataan teknis/substantif detail]\\n3. [dst.]"
     },
     {
       "namaPembicara": "B. [Nama Lengkap Peserta 2] – [Jabatan/Instansi Resmi]",
-      "teksPembahasan": "a. [Pernyataan teknis/substantif detail]\\nb. [dst.]"
+      "teksPembahasan": "1. [Pernyataan teknis/substantif detail]\\n2. [dst.]"
     }
   ],
   "grupKesimpulan": [

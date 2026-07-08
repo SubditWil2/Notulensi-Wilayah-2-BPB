@@ -446,7 +446,8 @@
 
         .modal-box .filter-group input,
         .modal-box .filter-group select {
-            width: 100% !important; /* Memastikan semua isian memenuhi lebar kolom */
+            width: 100% !important;
+            /* Memastikan semua isian memenuhi lebar kolom */
             padding: 8px 10px !important;
             font-size: 13px !important;
             border: 1px solid #cbd5e1 !important;
@@ -484,8 +485,8 @@
             padding: 24px;
             border-radius: 12px !important;
             width: 95%;
-            max-width: 440px; 
-            margin: auto !important; 
+            max-width: 440px;
+            margin: auto !important;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
             position: relative;
@@ -810,10 +811,12 @@
             font-weight: 700;
             text-decoration: none;
         }
+
         .final-link:hover {
             color: #f5b016 !important;
             text-decoration: underline !important;
         }
+
         .header {
             border-radius: 12px 12px 0 0;
         }
@@ -821,6 +824,7 @@
         table th:first-child {
             border-top-left-radius: 8px !important;
         }
+
         table th:last-child {
             border-top-right-radius: 8px !important;
         }
@@ -837,12 +841,15 @@
                     <div class="logo-container"><img src="logo-pu.png" alt="Logo PU"></div>
                     <div class="header-content">
                         <h1>Rekap Nota Dinas & Surat</h1>
-                        <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan Umum</p>
+                        <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan
+                            Umum</p>
                     </div>
                 </div>
                 <!-- JALUR GLOBAL: Tombol "Arsipkan Berkas" berdampingan dengan tombol "Buat Baru" -->
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button id="btnArsipGlobal" onclick="window.openGlobalModal()" class="btn-back" style="background: #27ae60; color: white; border: none; cursor: pointer; font-family: inherit;">📂 Arsipkan Berkas</button>
+                    <button id="btnArsipGlobal" onclick="window.openGlobalModal()" class="btn-back"
+                        style="background: #27ae60; color: white; border: none; cursor: pointer; font-family: inherit;">📂
+                        Arsipkan Berkas</button>
                     <a href="notadinas.html" class="btn-back">📑 Buat Baru</a>
                 </div>
             </div>
@@ -941,12 +948,17 @@
                     <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 16px;">
 
                     <!-- UNIFIED SELECTOR: Pilihan Tindakan Radio Button -->
-                    <div id="unifiedSelector" style="display: none; justify-content: space-around; background: #f1f5f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #cbd5e1;">
-                        <label style="font-size: 12px; font-weight: 700; color: #1d355e; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                            <input type="radio" name="actionType" value="update" id="radioUpdate" checked onchange="window.toggleActionType(this.value)"> Perbarui Eksisting
+                    <div id="unifiedSelector"
+                        style="display: none; justify-content: space-around; background: #f1f5f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #cbd5e1;">
+                        <label
+                            style="font-size: 12px; font-weight: 700; color: #1d355e; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                            <input type="radio" name="actionType" value="update" id="radioUpdate" checked
+                                onchange="window.toggleActionType(this.value)"> Perbarui Eksisting
                         </label>
-                        <label style="font-size: 12px; font-weight: 700; color: #1d355e; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                            <input type="radio" name="actionType" value="new" id="radioNew" onchange="window.toggleActionType(this.value)"> Arsipkan Baru
+                        <label
+                            style="font-size: 12px; font-weight: 700; color: #1d355e; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                            <input type="radio" name="actionType" value="new" id="radioNew"
+                                onchange="window.toggleActionType(this.value)"> Arsipkan Baru
                         </label>
                     </div>
 
@@ -955,35 +967,48 @@
                         <!-- Dropdown 1: Provinsi -->
                         <div class="filter-group" style="margin-bottom: 10px;">
                             <label style="font-size: 12px; font-weight: 700; color: #1d355e;">Pilih Provinsi</label>
-                            <select id="modalSelectProvinsi" onchange="window.onModalProvinsiChange(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                            <select id="modalSelectProvinsi" onchange="window.onModalProvinsiChange(this.value)"
+                                style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                 <option value="">-- Pilih Provinsi --</option>
                             </select>
                         </div>
                         <!-- Dropdown 2: Kegiatan (Hanya muncul jika Provinsi sudah dipilih) -->
-                        <div class="filter-group" id="groupModalSelectKegiatan" style="margin-bottom: 10px; display: none;">
+                        <div class="filter-group" id="groupModalSelectKegiatan"
+                            style="margin-bottom: 10px; display: none;">
                             <label style="font-size: 12px; font-weight: 700; color: #1d355e;">Pilih Kegiatan</label>
-                            <select id="modalSelectKegiatan" onchange="window.onModalKegiatanChange(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                            <select id="modalSelectKegiatan" onchange="window.onModalKegiatanChange(this.value)"
+                                style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                 <option value="">-- Pilih Kegiatan --</option>
                             </select>
                         </div>
                         <!-- Dropdown 3: Perihal (Hanya muncul jika Kegiatan sudah dipilih) -->
-                        <div class="filter-group" id="groupModalSelectPerihal" style="margin-bottom: 10px; display: none;">
-                            <label style="font-size: 12px; font-weight: 700; color: #1d355e;">Pilih Surat / Perihal Dokumen</label>
-                            <select id="modalSelectPerihal" onchange="window.selectExistingActivity(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                        <div class="filter-group" id="groupModalSelectPerihal"
+                            style="margin-bottom: 10px; display: none;">
+                            <label style="font-size: 12px; font-weight: 700; color: #1d355e;">Pilih Surat / Perihal
+                                Dokumen</label>
+                            <select id="modalSelectPerihal" onchange="window.selectExistingActivity(this.value)"
+                                style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                 <option value="">-- Pilih Surat / Perihal --</option>
                             </select>
                         </div>
                     </div>
 
                     <!-- TALI PENGAMAN DUPLIKASI (WARNING BANNER) -->
-                    <div id="duplicateWarningBanner" class="message error" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; display: none; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-size: 11px; text-align: left; line-height: 1.4;">
-                        ⚠️ <strong>Peringatan Duplikasi:</strong> Nama kegiatan ini sudah terdaftar di dalam rekap data Excel. Silakan pilih opsi "Perbarui Eksisting" di atas jika ingin meng-update jenjang baru untuk kegiatan tersebut.
+                    <div id="duplicateWarningBanner" class="message error"
+                        style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; display: none; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-size: 11px; text-align: left; line-height: 1.4;">
+                        ⚠️ <strong>Peringatan Duplikasi:</strong> Nama kegiatan ini sudah terdaftar di dalam rekap data
+                        Excel. Silakan pilih opsi "Perbarui Eksisting" di atas jika ingin meng-update jenjang baru untuk
+                        kegiatan tersebut.
                     </div>
 
                     <!-- KONTANER RIWAYAT SEJARAH DOKUMEN BERJENJANG -->
-                    <div id="modalHistoryContainer" style="display: none; margin-bottom: 15px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
-                        <div style="font-size: 12px; font-weight: 700; color: #1d355e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">📂 Riwayat Dokumen Berjenjang:</div>
-                        <div id="modalHistoryList" style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;"></div>
+                    <div id="modalHistoryContainer"
+                        style="display: none; margin-bottom: 15px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: left;">
+                        <div
+                            style="font-size: 12px; font-weight: 700; color: #1d355e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                            📂 Riwayat Dokumen Berjenjang:</div>
+                        <div id="modalHistoryList"
+                            style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;"></div>
                     </div>
 
                     <form id="metaForm" onsubmit="window.executeMetaUpdate(event)"
@@ -993,33 +1018,48 @@
                         <div id="newArchiveFields" style="display: none; margin-bottom: 15px;">
                             <div class="filter-group" style="margin-bottom: 12px;">
                                 <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Jenis Dokumen</label>
-                                <select id="modalJenisDokumen" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                                <select id="modalJenisDokumen"
+                                    style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                     <option value="Nota Dinas">Nota Dinas</option>
                                     <option value="Surat">Surat</option>
                                 </select>
                             </div>
                             <!-- Provinsi Baru (Dropdown Penuh berisi seluruh Provinsi Master) -->
                             <div class="filter-group" style="margin-bottom: 12px;">
-                                <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Provinsi <span style="color:#e74c3c;">*</span></label>
-                                <select id="modalNewProvinsiSelect" onchange="window.onModalNewProvinsiChange(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                                <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Provinsi <span
+                                        style="color:#e74c3c;">*</span></label>
+                                <select id="modalNewProvinsiSelect"
+                                    onchange="window.onModalNewProvinsiChange(this.value)"
+                                    style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                     <option value="">-- Pilih Provinsi --</option>
                                 </select>
                             </div>
                             <!-- Nama Kegiatan Baru (Dropdown berisi kegiatan Provinsi terpilih + tombol tambah) -->
                             <div class="filter-group" style="margin-bottom: 12px;">
-                                <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nama Kegiatan <span style="color:#e74c3c;">*</span></label>
-                                <div style="display: flex; gap: 8px; align-items: center;" id="modalNewKegiatanDropdownRow">
-                                    <select id="modalNewKegiatanSelect" onchange="window.onModalNewKegiatanSelectChange(this.value)" style="flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
+                                <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Nama Kegiatan <span
+                                        style="color:#e74c3c;">*</span></label>
+                                <div style="display: flex; gap: 8px; align-items: center;"
+                                    id="modalNewKegiatanDropdownRow">
+                                    <select id="modalNewKegiatanSelect"
+                                        onchange="window.onModalNewKegiatanSelectChange(this.value)"
+                                        style="flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: white;">
                                         <option value="">-- Pilih Nama Kegiatan --</option>
                                     </select>
-                                    <button type="button" onclick="window.showModalNewKegiatanInput(true)" style="padding: 8px 12px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; height: 35px; white-space: nowrap;">+ Tambah</button>
+                                    <button type="button" onclick="window.showModalNewKegiatanInput(true)"
+                                        style="padding: 8px 12px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; height: 35px; white-space: nowrap;">+
+                                        Tambah</button>
                                 </div>
-                                
+
                                 <!-- Input Text manual jika klik "+ Tambah" -->
                                 <div id="modalNewKegiatanManualRow" style="display: none; margin-top: 8px;">
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="text" id="modalNewKegiatanManualInput" placeholder="Ketik nama kegiatan baru..." oninput="window.checkDuplicateActivity(this.value)" style="flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
-                                        <button type="button" onclick="window.showModalNewKegiatanInput(false)" style="padding: 8px 12px; background: #94a3b8; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; height: 35px;">✕ Batal</button>
+                                        <input type="text" id="modalNewKegiatanManualInput"
+                                            placeholder="Ketik nama kegiatan baru..."
+                                            oninput="window.checkDuplicateActivity(this.value)"
+                                            style="flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                                        <button type="button" onclick="window.showModalNewKegiatanInput(false)"
+                                            style="padding: 8px 12px; background: #94a3b8; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; height: 35px;">✕
+                                            Batal</button>
                                     </div>
                                 </div>
                             </div>
@@ -1027,7 +1067,8 @@
 
                         <!-- 1. AREA UPLOAD FILE -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final (PDF/Word bertanda tangan)</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
+                                (PDF/Word bertanda tangan)</label>
                             <div class="modal-upload-area" id="modalUploadArea"
                                 onclick="document.getElementById('modalFileFinal').click()">
                                 <span style="font-size: 24px; display:block; margin-bottom: 4px;">📂</span>
@@ -1047,20 +1088,59 @@
                         </div>
                         <div id="ocrStatusBox" class="ocr-status" style="margin-bottom: 15px;"></div>
 
-                        <!-- 2.5. DROPDOWN JENJANG PENANDATANGAN -->
-                        <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Jenjang Penandatangan Saat Ini</label>
-                            <select id="modalJenjangSurat" required onchange="window.updateModalFields(this.value)">
-                                <option value="Kasubdit">Kasubdit</option>
-                                <option value="Direktur">Direktur</option>
-                                <option value="Dirjen">Dirjen</option>
-                                <option value="Menteri">Menteri</option>
-                            </select>
+                        <!-- PENGATURAN JENJANG CERDAS -->
+                        <div
+                            style="background: #ffffff; padding: 15px; border: 1.5px solid #1d355e; border-radius: 12px; margin-bottom: 15px; text-align: left;">
+                            <label
+                                style="font-size: 11px; font-weight: 800; color: #1d355e; display: block; margin-bottom: 10px; letter-spacing: 0.5px;">PENANDATANGAN
+                                (JENJANG)</label>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                                <button type="button" id="btnJnjInternal" onclick="setKategoriJenjang('Internal')"
+                                    style="padding: 8px; border-radius: 8px; border: 2px solid #1d355e; background: #1d355e; color: white; font-weight: 700; font-size: 12px; cursor: pointer;">🏢
+                                    Internal</button>
+                                <button type="button" id="btnJnjEksternal" onclick="setKategoriJenjang('Eksternal')"
+                                    style="padding: 8px; border-radius: 8px; border: 2px solid #cbd5e1; background: white; color: #64748b; font-weight: 700; font-size: 12px; cursor: pointer;">🌍
+                                    Eksternal</button>
+                            </div>
+
+                            <!-- Input Internal (Dropdown) -->
+                            <div id="wrapperInternal">
+                                <select id="modalJenjangSurat"
+                                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; background: #f8fafc;">
+                                    <option value="Kasubdit">Kasubdit</option>
+                                    <option value="Direktur">Direktur</option>
+                                    <option value="Dirjen">Dirjen</option>
+                                    <option value="Menteri">Menteri</option>
+                                </select>
+                            </div>
+
+                            <!-- Input Eksternal (Text Box) -->
+                            <div id="wrapperEksternal" style="display: none;">
+                                <input type="text" id="modalJenjangKustom"
+                                    placeholder="Contoh: Gubernur NTB / Direktur PT..."
+                                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                            </div>
+                        </div>
+
+                        <!-- LOKASI INPUT ALUR DARI-KE (SUDAH DIPERBAIKI) -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                            <div class="filter-group" style="margin-bottom: 0 !important;">
+                                <label style="font-size: 11px; font-weight: 800;">ALUR: DARI</label>
+                                <input type="text" id="modalDari" placeholder="Pengirim..."
+                                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                            </div>
+                            <div class="filter-group" style="margin-bottom: 0 !important;">
+                                <label style="font-size: 11px; font-weight: 800;">ALUR: KE</label>
+                                <input type="text" id="modalKe" placeholder="Penerima..."
+                                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+                            </div>
                         </div>
 
                         <!-- NEW INPUT: PERIHAL SURAT BERJENJANG -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Perihal / Judul Surat Khusus Jenjang Ini</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Perihal / Judul Surat
+                                Khusus Jenjang Ini</label>
                             <input type="text" id="modalPerihalSurat" placeholder="Ketik perihal khusus tingkat ini..."
                                 required>
                         </div>
@@ -1073,8 +1153,20 @@
 
                         <!-- 4. INPUT TANGGAL SURAT -->
                         <div class="filter-group" style="margin-bottom: 15px;">
-                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen Final</label>
+                            <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Tanggal Dokumen
+                                Final</label>
                             <input type="date" id="modalTanggalSurat" required>
+                        </div>
+
+                        <!-- CHECKBOX KRONOLOGIS (Tepat di bawah Tanggal) -->
+                        <div
+                            style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; padding: 5px 2px;">
+                            <input type="checkbox" id="modalIsKronologis"
+                                style="width: 18px; height: 18px; cursor: pointer; accent-color: #1d355e;">
+                            <label for="modalIsKronologis"
+                                style="font-size: 13px; font-weight: 700; color: #1d355e; cursor: pointer; margin: 0;">
+                                Tampilkan di Timeline Kronologis Kegiatan
+                            </label>
                         </div>
 
                         <!-- 5. TOMBOL SIMPAN -->
@@ -1088,7 +1180,8 @@
                             style="color:white; display:none;">✅ Buka File Final</a>
                         <!-- TOMBOL BUKA FOLDER BARU -->
                         <a href="#" target="_blank" id="btnBukaFolder" class="btn-modal-action"
-                            style="color:white; display:none; background-color: #2980b9 !important;">📂 Buka Folder Berkas (OneDrive)</a>
+                            style="color:white; display:none; background-color: #2980b9 !important;">📂 Buka Folder
+                            Berkas (OneDrive)</a>
                     </div>
 
                     <button type="button" class="btn-close-modal btn-modal-action"
@@ -1111,8 +1204,10 @@
                     <div class="modal-title">Konfirmasi Hapus</div>
                     <div class="modal-sub">Hapus data dokumen berikut?<br><strong id="deleteTargetText"
                             style="color:#1d355e; display:block; margin-top:8px;"></strong></div>
-                    <button class="btn-delete-excel btn-modal-action" onclick="executeDelete('excel')">🗂️ Hapus Riwayat Excel Saja</button>
-                    <button class="btn-delete-all btn-modal-action" onclick="executeDelete('all')">🔥 Hapus Riwayat & Berkas Server</button>
+                    <button class="btn-delete-excel btn-modal-action" onclick="executeDelete('excel')">🗂️ Hapus Riwayat
+                        Excel Saja</button>
+                    <button class="btn-delete-all btn-modal-action" onclick="executeDelete('all')">🔥 Hapus Riwayat &
+                        Berkas Server</button>
                     <button class="btn-close-modal btn-modal-action" onclick="closeDeleteModal()">Batal</button>
                 </div>
                 <div id="modalLoadingState" style="display: none;">
@@ -1130,7 +1225,8 @@
                 <div id="modalErrorState" style="display: none;">
                     <div style="font-size:40px; margin-bottom: 8px;">❌</div>
                     <div class="modal-title" style="color:#e74c3c;">Gagal</div>
-                    <div class="modal-sub" id="deleteErrorText" style="color:#c0392b;">Gagal memproses penghapusan data.</div>
+                    <div class="modal-sub" id="deleteErrorText" style="color:#c0392b;">Gagal memproses penghapusan data.
+                    </div>
                     <button class="btn-close-modal btn-modal-action" onclick="resetDeleteModal()">Kembali</button>
                 </div>
             </div>
@@ -1140,7 +1236,8 @@
         <div id="confirmUpdateModal" class="modal-overlay">
             <div class="modal-box">
                 <div style="font-size: 40px; text-align: center; margin-bottom: 8px;">📋</div>
-                <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmUpdateTitle">Konfirmasi Perubahan</div>
+                <div class="modal-title" style="text-align: center; margin-bottom: 15px;" id="confirmUpdateTitle">
+                    Konfirmasi Perubahan</div>
                 <div class="modal-sub" id="confirmUpdateBody"
                     style="font-size: 13px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
                 </div>
@@ -1454,18 +1551,18 @@
                 // TOGGLE DROPDOWN ⁝ DENGAN DETEKSI RUANG VERTIKAL OTOMATIS
                 window.toggleActionDropdown = function (idx, event) {
                     event.stopPropagation();
-                    
+
                     document.querySelectorAll('.dropdown-menu-content').forEach(el => {
                         if (el.id !== `dropdownMenu-${idx}`) el.classList.remove('show');
                     });
-                    
+
                     const menu = document.getElementById(`dropdownMenu-${idx}`);
                     const btn = event.currentTarget;
-                    
+
                     const rect = btn.getBoundingClientRect();
                     const spaceBelow = window.innerHeight - rect.bottom;
                     const menuHeight = 175;
-                    
+
                     if (spaceBelow < menuHeight) {
                         menu.style.top = 'auto';
                         menu.style.bottom = '36px';
@@ -1473,7 +1570,7 @@
                         menu.style.top = '36px';
                         menu.style.bottom = 'auto';
                     }
-                    
+
                     menu.classList.toggle('show');
                 };
 
@@ -1525,7 +1622,7 @@
                         let displayNomor = '';
                         if (nomor) {
                             displayNomor = linkFinal
-                            ? `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                                ? `<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
                                  <a href="${linkFinal}" target="_blank" class="document-title-link final-link">${nomor}</a>
                                  <span class="badge ${statusBadgeClass}">${statusLabel}</span>
                                </div>`
@@ -1660,7 +1757,7 @@
                         if (lvl.no) {
                             hasHistory = true;
                             const tglFormatted = lvl.tgl ? lvl.tgl.split('.').reverse().join('/') : '-';
-                            
+
                             const itemHtml = `
                                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px; margin-bottom: 4px;">
                                     <div style="max-width: 80%; line-height: 1.3;">
@@ -1687,7 +1784,7 @@
                     document.getElementById('modalTanggalSurat').value = '';
                     document.getElementById('modalPerihalSurat').value = '';
                     document.getElementById('modalJenjangSurat').value = 'Kasubdit';
-                    
+
                     document.getElementById('modalJenisDokumen').value = 'Nota Dinas';
                     document.getElementById('modalNewProvinsiSelect').value = '';
                     document.getElementById('modalNewKegiatanSelect').innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
@@ -1697,7 +1794,7 @@
                 // ==================== INTEGRASI FASE 2 BARU (OPTIMALISASI BERTINGKAT & PROPORSI ELEMEN) ====================
 
                 // JALUR GLOBAL: Membuka modal dari Tombol Header "Arsipkan Berkas"
-                window.openGlobalModal = function() {
+                window.openGlobalModal = function () {
                     isGlobalMode = true;
                     activeKelolaData = {};
                     selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
@@ -1729,7 +1826,7 @@
                     document.getElementById('modalUploadFeedback').style.display = 'none';
                     document.getElementById('modalUploadLabel').textContent = 'Pilih file final...';
                     document.getElementById('ocrActionArea').style.display = 'none';
-                    
+
                     const ocrStatusBox = document.getElementById('ocrStatusBox');
                     if (ocrStatusBox) ocrStatusBox.style.display = 'none';
 
@@ -1739,7 +1836,7 @@
                 };
 
                 // Toggle logic antara mode "Perbarui Eksisting" dan "Arsipkan Baru"
-                window.toggleActionType = function(value) {
+                window.toggleActionType = function (value) {
                     const warningBanner = document.getElementById('duplicateWarningBanner');
                     const submitBtn = document.querySelector('#metaForm button[type="submit"]');
 
@@ -1752,25 +1849,25 @@
                         submitBtn.style.cursor = 'pointer';
 
                         resetModalFormFields();
-                        
+
                         // Reset struktur dropdown bertingkat Eksisting
                         document.getElementById('modalSelectProvinsi').value = '';
                         document.getElementById('groupModalSelectKegiatan').style.display = 'none';
                         document.getElementById('groupModalSelectPerihal').style.display = 'none';
                         document.getElementById('modalHistoryContainer').style.display = 'none';
-                        
+
                         window.populateActivityDropdown();
                     } else {
                         document.getElementById('groupSelectKegiatan').style.display = 'none';
                         document.getElementById('newArchiveFields').style.display = 'block';
                         document.getElementById('modalHistoryContainer').style.display = 'none';
-                        
+
                         document.getElementById('btnBukaDraft').style.display = 'none';
                         document.getElementById('btnBukaFinal').style.display = 'none';
                         document.getElementById('btnBukaFolder').style.display = 'none';
 
                         resetModalFormFields();
-                        
+
                         // Populasikan daftar seluruh provinsi master untuk dropdown arsip baru
                         window.populateNewArchiveProvinces();
                         window.showModalNewKegiatanInput(false); // Sembunyikan pengetikan manual di awal
@@ -1778,7 +1875,7 @@
                 };
 
                 // EKSISTING - POPULASI DROPDOWN PERTAMA: Memuat daftar Provinsi unik yang ada di rekap database
-                window.populateActivityDropdown = function() {
+                window.populateActivityDropdown = function () {
                     const provSelect = document.getElementById('modalSelectProvinsi');
                     provSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
 
@@ -1800,7 +1897,7 @@
                 };
 
                 // EKSISTING - KETIKA PROVINSI DIPILIH: Mengisi dropdown kedua (Kegiatan)
-                window.onModalProvinsiChange = function(provValue) {
+                window.onModalProvinsiChange = function (provValue) {
                     const kegSelect = document.getElementById('modalSelectKegiatan');
                     kegSelect.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
 
@@ -1833,7 +1930,7 @@
                 };
 
                 // EKSISTING - KETIKA KEGIATAN DIPILIH: Mengisi dropdown ketiga (Perihal)
-                window.onModalKegiatanChange = function(kegValue) {
+                window.onModalKegiatanChange = function (kegValue) {
                     const perihalSelect = document.getElementById('modalSelectPerihal');
                     perihalSelect.innerHTML = '<option value="">-- Pilih Surat / Perihal --</option>';
 
@@ -1874,7 +1971,7 @@
                 };
 
                 // EKSISTING - KETIKA PERIHAL DIPILIH: Memulihkan isian database ke form kelola utama
-                window.selectExistingActivity = function(pathKey) {
+                window.selectExistingActivity = function (pathKey) {
                     if (!pathKey) {
                         resetModalFormFields();
                         document.getElementById('modalHistoryContainer').style.display = 'none';
@@ -1892,7 +1989,7 @@
                 // ==================== LOGIKA ARSIP BARU SINKRON (SINKRONISASI NOTADINAS.HTML) ====================
 
                 // ARSIP BARU: Mengisi Dropdown Provinsi dengan seluruh master Provinsi dari server
-                window.populateNewArchiveProvinces = function() {
+                window.populateNewArchiveProvinces = function () {
                     const sel = document.getElementById('modalNewProvinsiSelect');
                     sel.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
 
@@ -1914,10 +2011,10 @@
                 };
 
                 // ARSIP BARU: Mengubah dropdown kegiatan sesuai provinsi master terpilih
-                window.onModalNewProvinsiChange = function(provValue) {
+                window.onModalNewProvinsiChange = function (provValue) {
                     const kegSelect = document.getElementById('modalNewKegiatanSelect');
                     kegSelect.innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
-                    
+
                     // Reset input manual
                     document.getElementById('modalNewKegiatanManualInput').value = '';
                     window.showModalNewKegiatanInput(false);
@@ -1942,7 +2039,7 @@
                 };
 
                 // ARSIP BARU: Kontrol pengetikan nama kegiatan baru (Manual vs Dropdown)
-                window.showModalNewKegiatanInput = function(showManual) {
+                window.showModalNewKegiatanInput = function (showManual) {
                     const dropdownRow = document.getElementById('modalNewKegiatanDropdownRow');
                     const manualRow = document.getElementById('modalNewKegiatanManualRow');
                     const manualInput = document.getElementById('modalNewKegiatanManualInput');
@@ -1961,13 +2058,13 @@
                     }
                 };
 
-                window.onModalNewKegiatanSelectChange = function(val) {
+                window.onModalNewKegiatanSelectChange = function (val) {
                     // Update key check if user selects from dropdown
                     window.checkDuplicateActivity(val);
                 };
 
                 // TALI PENGAMAN DUPLIKASI: Memeriksa kesamaan nama kegiatan dari ketikan user
-                window.checkDuplicateActivity = function(kegiatanName) {
+                window.checkDuplicateActivity = function (kegiatanName) {
                     const warningBanner = document.getElementById('duplicateWarningBanner');
                     const submitBtn = document.querySelector('#metaForm button[type="submit"]');
 
@@ -2189,18 +2286,16 @@
                             extractedText = result.value;
                         }
 
-                        let promptText = "Analisis dokumen ini dengan saksama. Temukan:\n" +
-                            "1. Nomor surat resmi (biasanya memiliki pola kode klasifikasi seperti HM, UM, KP, PL, PR, atau sejenisnya, contoh: UM.0102-W2/...).\n" +
-                            "2. Tanggal dokumen/surat resmi ini ditandatangani atau dikeluarkan.\n" +
-                            "3. Perihal atau judul surat secara utuh dan tepat.\n" +
-                            "4. Jenjang penandatangan (Wajib salah satu dari: 'Kasubdit', 'Direktur', 'Dirjen', atau 'Menteri') berdasarkan nama jabatan penandatangan di bagian tanda tangan (misal jika ditandatangani 'Direktur Jenderal', kembalikan 'Dirjen'. Jika oleh 'Direktur Bina Penataan...', kembalikan 'Direktur'. Jika oleh 'Kasubdit', kembalikan 'Kasubdit').\n\n" +
-                            "Kembalikan jawaban Anda HANYA dalam format JSON bersih berikut:\n" +
-                            "{\n" +
-                            "  \"nomorSurat\": \"NOMOR_SURAT_YANG_DITEMUKAN\",\n" +
-                            "  \"tanggalSurat\": \"YYYY.MM.DD\",\n" +
-                            "  \"perihalSurat\": \"PERIHAL_YANG_DITEMUKAN\",\n" +
-                            "  \"jenjangSurat\": \"Kasubdit/Direktur/Dirjen/Menteri\"\n" +
-                            "}\n" +
+                        // Update prompt di dalam fungsi runOCR
+                        let promptText = "Analisis dokumen ini. Temukan:\n" +
+                            "1. Nomor surat.\n" +
+                            "2. Tanggal (YYYY.MM.DD).\n" +
+                            "3. Perihal.\n" +
+                            "4. JABATAN PENANDATANGAN. Jika itu Menteri/Dirjen/Direktur/Kasubdit PUPR, tulis salah satu. Jika penandatangan adalah pihak LUAR (misal: Gubernur, Bupati, Direktur Utama PT), tulis nama jabatannya secara lengkap.\n" +
+                            "5. PENGIRIM (Contoh: Gubernur NTB).\n" +
+                            "6. PENERIMA (Contoh: Menteri PU).\n\n" +
+                            "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}";
+                        "}; \n" +
                             "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
 
                         let payloadContents = [];
@@ -2269,6 +2364,24 @@
                             document.getElementById('modalPerihalSurat').value = perihalDitemukan;
                         }
 
+                        // Di dalam success block runOCR:
+                        if (data.alurDari) document.getElementById('modalDari').value = data.alurDari;
+                        if (data.alurKe) document.getElementById('modalKe').value = data.alurKe;
+
+                        // Di dalam success block runOCR:
+                        const jabatanHasilAI = data.jabatan || "";
+                        const listInternal = ['Menteri', 'Dirjen', 'Direktur', 'Kasubdit'];
+
+                        if (listInternal.includes(jabatanHasilAI)) {
+                            setKategoriJenjang('Internal');
+                            document.getElementById('modalJenjangSurat').value = jabatanHasilAI;
+                        } else {
+                            setKategoriJenjang('Eksternal');
+                            document.getElementById('modalJenjangKustom').value = jabatanHasilAI;
+                        }
+                        document.getElementById('modalDari').value = data.alurDari || "";
+                        document.getElementById('modalKe').value = data.alurKe || "";
+
                         setOcrStatus('✅ Data surat berhasil dibaca otomatis.', 'success');
 
                     } catch (err) {
@@ -2316,14 +2429,23 @@
                 window.executeMetaUpdate = async function (event) {
                     event.preventDefault();
 
+                    // 1. TENTUKAN JENJANG FINAL (Internal vs Eksternal)
+                    const jenjangFinal = (kategoriJenjangAktif === 'Internal')
+                        ? document.getElementById('modalJenjangSurat').value
+                        : document.getElementById('modalJenjangKustom').value.trim();
+
+                    if (!jenjangFinal) {
+                        alert('Mohon isi Jenjang/Jabatan penandatangan!');
+                        return;
+                    }
+
                     const isNewArchive = isGlobalMode && document.getElementById('radioNew').checked;
 
                     // CABANG 1: ARSIPKAN BERKAS BARU MURNI (Flow 2)
                     if (isNewArchive) {
                         const jenisDokumen = document.getElementById('modalJenisDokumen').value;
                         const provinsi = document.getElementById('modalNewProvinsiSelect').value;
-                        
-                        // Deteksi isian manual vs isian dropdown untuk kegiatan
+
                         let namaKegiatan = '';
                         const isManualKegiatan = document.getElementById('modalNewKegiatanManualRow').style.display === 'flex';
                         if (isManualKegiatan) {
@@ -2336,42 +2458,29 @@
                         const nomorBaru = document.getElementById('modalNomorSurat').value.trim();
                         const tanggalBaru = document.getElementById('modalTanggalSurat').value;
                         const formattedTanggalExcel = tanggalBaru.replace(/-/g, '.');
-                        const jenjangDipilih = document.getElementById('modalJenjangSurat').value;
                         const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file';
 
-                        if (!provinsi) {
-                            alert('Mohon pilih Provinsi terlebih dahulu!');
-                            return;
-                        }
-
-                        if (!namaKegiatan) {
-                            alert('Mohon pilih atau masukkan Nama Kegiatan baru!');
-                            return;
-                        }
-
-                        if (!selectedFileFinalData.base64) {
-                            alert('Mohon unggah berkas final untuk melakukan pengarsipan baru!');
-                            return;
-                        }
+                        if (!provinsi) { alert('Mohon pilih Provinsi!'); return; }
+                        if (!namaKegiatan) { alert('Mohon pilih/isi Nama Kegiatan!'); return; }
+                        if (!selectedFileFinalData.base64) { alert('Mohon unggah berkas final!'); return; }
 
                         const confirmHtml = `
-                            <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
-                            <strong>Provinsi:</strong> ${provinsi}<br>
-                            <strong>Nama Kegiatan:</strong> ${namaKegiatan}<br>
-                            <strong>Perihal Utama:</strong> ${perihalBaru}<br>
-                            <strong>Jenjang Pertama:</strong> ${jenjangDipilih}<br>
-                            <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
-                            <strong>Tanggal Dokumen Baru:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
-                            <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
-                            <span style="color:#27ae60; font-weight:bold;">Apakah Anda yakin ingin mengarsipkan berkas baru ini ke server?</span>
-                        `;
+            <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
+            <strong>Provinsi:</strong> ${provinsi}<br>
+            <strong>Nama Kegiatan:</strong> ${namaKegiatan}<br>
+            <strong>Perihal Utama:</strong> ${perihalBaru}<br>
+            <strong>Jenjang:</strong> ${jenjangFinal}<br>
+            <strong>Nomor Surat:</strong> ${nomorBaru}<br>
+            <strong>Tanggal:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
+            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+        `;
 
                         const yakin = await showCustomUpdateConfirm('Arsipkan Berkas Baru?', confirmHtml);
                         if (!yakin) return;
 
                         document.getElementById('kelolaMenuState').style.display = 'none';
                         document.getElementById('kelolaLoadingState').style.display = 'block';
-                        document.getElementById('kelolaLoadingText').textContent = "Mengarsipkan berkas baru dan memperbarui database Excel...";
+                        document.getElementById('kelolaLoadingText').textContent = "Mengarsipkan berkas baru...";
 
                         let payload = {
                             action: 'archiveNew',
@@ -2379,114 +2488,91 @@
                             provinsi: provinsi,
                             namaKegiatan: namaKegiatan,
                             perihal: perihalBaru,
-                            jenjangTerakhir: jenjangDipilih,
+                            jenjangTerakhir: jenjangFinal,
                             statusDokumen: 'Final',
                             nomorSurat: nomorBaru,
                             tanggalDokumen: formattedTanggalExcel,
-                            
+                            alurDari: document.getElementById('modalDari').value,
+                            alurKe: document.getElementById('modalKe').value,
+                            isKronologis: document.getElementById('modalIsKronologis').checked ? 'Ya' : 'Tidak', 
                             fileFinalBase64: selectedFileFinalData.base64 || '',
                             fileFinalNama: selectedFileFinalData.nama || '',
                             fileFinalTipe: selectedFileFinalData.tipe || ''
                         };
 
                         try {
-                            if (CONFIG.archiveNDFlowUrl === 'MASUKKAN_URL_FLOW_BARU_DI_SINI' || !CONFIG.archiveNDFlowUrl) {
-                                throw new Error('Alamat URL Power Automate untuk Arsip Baru (archiveNDFlowUrl) belum dikonfigurasi di rekapnotadinas.html.');
-                            }
-
                             let res = await fetch(CONFIG.archiveNDFlowUrl, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
                             });
-
-                            if (!res.ok) throw new Error('Gagal menyimpan berkas baru di server.');
+                            if (!res.ok) throw new Error('Gagal menyimpan berkas di server.');
                             clearCachedData();
                             await loadDashboardData();
                             closeKelolaModal();
                             showMessage('Berkas baru berhasil diarsipkan.', 'info');
                         } catch (err) {
                             console.error(err);
-                            alert('Gagal mengarsipkan: ' + err.message);
+                            alert('Gagal: ' + err.message);
                             document.getElementById('kelolaLoadingState').style.display = 'none';
                             document.getElementById('kelolaMenuState').style.display = 'block';
                         }
 
-                    // CABANG 2: UPDATE METADATA BERJENJANG (Flow 1)
+                        // CABANG 2: UPDATE METADATA BERJENJANG (Flow 1)
                     } else {
-                        const jenjangDipilih = document.getElementById('modalJenjangSurat').value;
                         const nomorBaru = document.getElementById('modalNomorSurat').value.trim();
                         const tanggalBaru = document.getElementById('modalTanggalSurat').value;
                         const formattedTanggalExcel = tanggalBaru.replace(/-/g, '.');
                         const perihalBaru = document.getElementById('modalPerihalSurat').value.trim();
                         const namaFileUploaded = selectedFileFinalData.nama || 'Tidak ada file baru';
 
-                        if (!activeKelolaData.pathND) {
-                            alert('Silakan pilih kegiatan eksisting terlebih dahulu!');
-                            return;
-                        }
+                        if (!activeKelolaData.pathND) { alert('Silakan pilih kegiatan!'); return; }
 
-                        // Penentuan ranking jenjang untuk mencegah downgrade status dan jenjang akhir
-                        const LEVEL_RANK = {
-                            'Kasubdit': 1,
-                            'Direktur': 2,
-                            'Dirjen': 3,
-                            'Menteri': 4
-                        };
-
+                        const LEVEL_RANK = { 'Kasubdit': 1, 'Direktur': 2, 'Dirjen': 3, 'Menteri': 4 };
                         const existingJenjang = activeKelolaData.jenjang || 'Kasubdit';
-                        const rawStatus = activeKelolaData.statusDokumen || 'Proses';
-                        const existingStatus = rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1).toLowerCase();
+                        const existingStatus = (activeKelolaData.statusDokumen || 'Proses').charAt(0).toUpperCase() + (activeKelolaData.statusDokumen || 'Proses').slice(1).toLowerCase();
 
-                        const rankDipilih = LEVEL_RANK[jenjangDipilih] || 1;
-                        const rankExisting = LEVEL_RANK[existingJenjang] || 1;
-
-                        let jenjangTerakhirFinal = jenjangDipilih;
+                        let jenjangTerakhirFinal = jenjangFinal;
                         let statusFinal = 'Final';
 
-                        if (rankDipilih < rankExisting) {
-                            // Skenario 2: Update jenjang di bawah file eksisting tertinggi
-                            jenjangTerakhirFinal = existingJenjang;
-                            statusFinal = existingStatus;
-                        } else {
-                            // Skenario 1: Update jenjang di atas atau setara dengan file eksisting tertinggi
-                            jenjangTerakhirFinal = jenjangDipilih;
-                            statusFinal = 'Final';
+                        // Logika Ranking (Hanya jika Internal)
+                        if (kategoriJenjangAktif === 'Internal') {
+                            const rankDipilih = LEVEL_RANK[jenjangFinal] || 0;
+                            const rankExisting = LEVEL_RANK[existingJenjang] || 0;
+
+                            if (rankDipilih < rankExisting) {
+                                jenjangTerakhirFinal = existingJenjang;
+                                statusFinal = existingStatus;
+                            }
                         }
 
-                        const statusFinalCap = statusFinal.charAt(0).toUpperCase() + statusFinal.slice(1).toLowerCase();
-
                         const confirmHtml = `
-                            <strong>Perihal Utama:</strong> ${activeKelolaData.perihal}<br>
-                            <strong>Target Penandatangan Akhir:</strong> ${activeKelolaData.targetJenjang}<br>
-                            <strong>Jenjang Di-update:</strong> ${jenjangDipilih}<br>
-                            <strong>Perihal Khusus Jenjang:</strong> ${perihalBaru}<br>
-                            <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
-                            <strong>Tanggal Dokumen Baru:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
-                            <strong>Status Dokumen Akhir:</strong> ${statusFinalCap}<br>
-                            <strong>Jenjang Akhir Terpilih:</strong> ${jenjangTerakhirFinal}<br>
-                            <strong>File Berkas Final:</strong> ${namaFileUploaded}<br><br>
-                            <span style="color:#e74c3c; font-weight:bold;">Apakah Anda yakin ingin menyimpan perubahan data ini ke server?</span>
-                        `;
+            <strong>Perihal Utama:</strong> ${activeKelolaData.perihal}<br>
+            <strong>Jenjang Di-update:</strong> ${jenjangFinal}<br>
+            <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
+            <strong>Status Akhir:</strong> ${statusFinal}<br>
+            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+        `;
 
                         const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
                         if (!yakin) return;
 
                         document.getElementById('kelolaMenuState').style.display = 'none';
                         document.getElementById('kelolaLoadingState').style.display = 'block';
-                        document.getElementById('kelolaLoadingText').textContent = "Menghubungi server dan memperbarui dokumen.";
 
                         let payload = {
                             action: 'updateMeta',
                             provinsi: activeKelolaData.provinsi,
                             namaKegiatan: activeKelolaData.namaKegiatan,
                             pathND: activeKelolaData.pathND,
-                            jenjangTerakhir: jenjangTerakhirFinal, // Menggunakan jenjangTerakhirFinal agar tidak ter-downgrade
-                            jenjangDiubah: jenjangDipilih,         // Untuk routing file/logika upload di PA
-                            statusDokumen: statusFinalCap,        // Menggunakan statusFinalCap agar konsisten
-
+                            jenjangTerakhir: jenjangTerakhirFinal,
+                            jenjangDiubah: jenjangFinal,
+                            statusDokumen: statusFinal,
                             nomorSurat: nomorBaru,
                             tanggalDokumen: formattedTanggalExcel,
+                            alurDari: document.getElementById('modalDari').value,
+                            alurKe: document.getElementById('modalKe').value,
+                            isKronologis: document.getElementById('modalIsKronologis').checked ? 'Ya' : 'Tidak', 
 
                             no_ksd: activeKelolaData.no_ksd, tgl_ksd: activeKelolaData.tgl_ksd, perihal_ksd: activeKelolaData.perihal_ksd, link_ksd: activeKelolaData.link_ksd,
                             no_dir: activeKelolaData.no_dir, tgl_dir: activeKelolaData.tgl_dir, perihal_dir: activeKelolaData.perihal_dir, link_dir: activeKelolaData.link_dir,
@@ -2498,14 +2584,12 @@
                             fileFinalTipe: selectedFileFinalData.tipe || ''
                         };
 
-                        if (jenjangDipilih === 'Kasubdit') {
-                            payload.no_ksd = nomorBaru; payload.tgl_ksd = formattedTanggalExcel; payload.perihal_ksd = perihalBaru;
-                        } else if (jenjangDipilih === 'Direktur') {
-                            payload.no_dir = nomorBaru; payload.tgl_dir = formattedTanggalExcel; payload.perihal_dir = perihalBaru;
-                        } else if (jenjangDipilih === 'Dirjen') {
-                            payload.no_drj = nomorBaru; payload.tgl_drj = formattedTanggalExcel; payload.perihal_drj = perihalBaru;
-                        } else if (jenjangDipilih === 'Menteri') {
-                            payload.no_men = nomorBaru; payload.tgl_men = formattedTanggalExcel; payload.perihal_men = perihalBaru;
+                        // Mapping History (Hanya jika Internal)
+                        if (kategoriJenjangAktif === 'Internal') {
+                            if (jenjangFinal === 'Kasubdit') { payload.no_ksd = nomorBaru; payload.tgl_ksd = formattedTanggalExcel; payload.perihal_ksd = perihalBaru; }
+                            else if (jenjangFinal === 'Direktur') { payload.no_dir = nomorBaru; payload.tgl_dir = formattedTanggalExcel; payload.perihal_dir = perihalBaru; }
+                            else if (jenjangFinal === 'Dirjen') { payload.no_drj = nomorBaru; payload.tgl_drj = formattedTanggalExcel; payload.perihal_drj = perihalBaru; }
+                            else if (jenjangFinal === 'Menteri') { payload.no_men = nomorBaru; payload.tgl_men = formattedTanggalExcel; payload.perihal_men = perihalBaru; }
                         }
 
                         try {
@@ -2514,15 +2598,14 @@
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
                             });
-
-                            if (!res.ok) throw new Error('Gagal memperbarui data di server.');
+                            if (!res.ok) throw new Error('Gagal memperbarui data.');
                             clearCachedData();
                             await loadDashboardData();
                             closeKelolaModal();
-                            showMessage('Data dokumen berhasil diperbarui.', 'info');
+                            showMessage('Data berhasil diperbarui.', 'info');
                         } catch (err) {
                             console.error(err);
-                            alert('Gagal memperbarui: ' + err.message);
+                            alert('Gagal: ' + err.message);
                             document.getElementById('kelolaLoadingState').style.display = 'none';
                             document.getElementById('kelolaMenuState').style.display = 'block';
                         }
@@ -2619,6 +2702,26 @@
                 });
 
             })();
+
+            let kategoriJenjangAktif = 'Internal';
+
+            window.setKategoriJenjang = function (kat) {
+                kategoriJenjangAktif = kat;
+                const btnInt = document.getElementById('btnJnjInternal');
+                const btnEks = document.getElementById('btnJnjEksternal');
+                const wrapInt = document.getElementById('wrapperInternal');
+                const wrapEks = document.getElementById('wrapperEksternal');
+
+                if (kat === 'Internal') {
+                    btnInt.style.background = '#1d355e'; btnInt.style.color = 'white'; btnInt.style.borderColor = '#1d355e';
+                    btnEks.style.background = 'white'; btnEks.style.color = '#64748b'; btnEks.style.borderColor = '#cbd5e1';
+                    wrapInt.style.display = 'block'; wrapEks.style.display = 'none';
+                } else {
+                    btnEks.style.background = '#1d355e'; btnEks.style.color = 'white'; btnEks.style.borderColor = '#1d355e';
+                    btnInt.style.background = 'white'; btnInt.style.color = '#64748b'; btnInt.style.borderColor = '#cbd5e1';
+                    wrapInt.style.display = 'none'; wrapEks.style.display = 'block';
+                }
+            };
         </script>
     </div>
     <script src="navbar.js"></script>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kronologis Kegiatan — Subdit Wil 2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            min-height: 100vh;
+            color: #334155;
+            position: relative;
+        }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('logo-pu.png'); background-repeat: no-repeat;
+            background-position: center; background-size: 60vh auto;
+            opacity: 0.04; z-index: -1; pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px; margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(29, 53, 94, 0.08);
+            border: 1px solid #e2e8f0; overflow: visible;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
+            color: white; padding: 16px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 4px solid #f5b016; border-radius: 12px 12px 0 0;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo-container {
+            width: 52px; height: 52px; background: white; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; padding: 5px;
+        }
+        .logo-container img { width: 100%; height: auto; object-fit: contain; }
+        .header-content h1 { font-size: 18px; font-weight: 700; margin: 0; }
+        .header-content p { font-size: 12px; color: #f5b016; font-weight: 600; margin: 0; }
+
+        .btn-print {
+            padding: 8px 16px; background: #f5b016; color: #11223f;
+            border-radius: 6px; font-weight: 700; font-size: 12px; border: none; cursor: pointer;
+        }
+
+        .dashboard-content { padding: 20px 24px; }
+
+        /* FILTER SECTION */
+        .filter-section {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+            margin-bottom: 20px; background: #f8fafc; padding: 16px;
+            border-radius: 10px; border: 1px solid #e2e8f0;
+        }
+        .filter-group label { display: block; font-size: 11px; font-weight: 800; color: #1d355e; margin-bottom: 6px; text-transform: uppercase; }
+        .filter-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; background: white; }
+
+        /* HEADER LAPORAN DINAMIS (DIPAKSA MUNCUL SAAT PRINT) */
+        #infoLaporan {
+            display: none; margin-bottom: 20px; padding: 15px;
+            background: white; border: 2.5px solid #1d355e; border-radius: 10px;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+        #infoLaporan h2 { font-size: 16px; color: #1d355e; text-transform: uppercase; margin: 0; }
+        #infoLaporan p { font-size: 12px; color: #64748b; font-weight: bold; margin-bottom: 5px; }
+
+        /* TABLE STYLE */
+        .table-container { width: 100%; overflow-x: auto; border-radius: 10px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
+        
+        th { 
+            background-color: #1d355e !important; color: white !important; 
+            padding: 14px 12px; font-size: 12px; text-align: left;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+
+        .col-no { width: 45px; text-align: center; }
+        .col-tgl { width: 100px; }
+        .col-uraian { width: auto; }
+        .col-nomor { width: 180px; }
+        .col-alur { width: 150px; }
+        .col-aksi { width: 85px; text-align: center; }
+
+        td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; line-height: 1.4; font-size: 13px; word-wrap: break-word; }
+
+        /* TOMBOL BUKA */
+        .btn-view {
+            display: inline-block; padding: 6px 12px; background: #1d355e !important;
+            color: white !important; text-decoration: none; border-radius: 6px; 
+            font-weight: 700; font-size: 11px;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+
+        .empty-state { text-align: center; padding: 60px; color: #94a3b8; font-style: italic; }
+
+        /* PENGATURAN CETAK (PRINT) */
+        @media print {
+            @page { size: landscape; margin: 1cm; }
+            #navbar, .filter-section, .btn-print { display: none !important; }
+            body { background: white !important; padding: 0 !important; }
+            body::before { display: none !important; }
+            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: none !important; }
+            
+            /* Tampilkan Identitas Proyek */
+            #infoLaporan { display: block !important; border: 2px solid #1d355e !important; }
+            th { background-color: #1d355e !important; color: white !important; border: 1px solid #1d355e !important; }
+            
+            /* Memastikan Link "BUKA" Tetap Ada & Berwarna Navy di PDF agar kontras */
+            .btn-view { 
+                background: #11223f !important; 
+                color: white !important; 
+                display: inline-block !important; 
+                border-radius: 4px !important;
+                padding: 4px 8px !important;
+                text-decoration: none !important;
+            }
+            
+            td { border: 1px solid #eee !important; color: black !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div class="logo-container"><img src="logo-pu.png" alt="Logo PU"></div>
+                <div class="header-content">
+                    <h1>Kronologis Administrasi Kegiatan</h1>
+                    <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan</p>
+                </div>
+            </div>
+            <button onclick="window.print()" class="btn-print">🖨️ Cetak Kronologis</button>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Filter -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label>📍 Provinsi</label>
+                    <select id="filterProvinsi">
+                        <option value="">-- Pilih Provinsi --</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>🏗️ Nama Kegiatan</label>
+                    <select id="filterKegiatan" disabled>
+                        <option value="">-- Pilih Kegiatan --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Header Laporan (Identitas untuk PDF) -->
+            <div id="infoLaporan">
+                <p id="infoProvinsi"></p>
+                <h2 id="infoKegiatan"></h2>
+            </div>
+
+            <div id="loadingStatus" style="display:none; text-align:center; padding:10px; color:#1d355e; font-weight:bold;">
+                Memuat data...
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-no">NO</th>
+                            <th class="col-tgl">TANGGAL</th>
+                            <th class="col-uraian">URAIAN / PERIHAL DOKUMEN</th>
+                            <th class="col-nomor">NOMOR SURAT</th>
+                            <th class="col-alur">DARI</th>
+                            <th class="col-alur">KE</th>
+                            <th class="col-aksi">BERKAS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timelineBody">
+                        <tr><td colspan="7" class="empty-state">Silakan pilih Provinsi dan Nama Kegiatan.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script>
+        const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
+        const CACHE_KEY = 'subdit_wil2_master_cache';
+        
+        let masterData = [], kegiatanByProvinsi = {};
+
+        // Fungsi Cerdas Pencarian Link
+        function cariLink(item) {
+            if (!item) return null;
+            const keys = ['Link Final', 'linkFinal', 'Link_x0020_Final', 'Link File', 'linkFile', 'Link_x0020_File', 'Link_Folder', 'linkFolder', 'Link Undangan', 'linkUndangan', 'fileLink', 'link', 'Link'];
+            for (let key of keys) {
+                if (item[key] && item[key] !== "null" && item[key] !== "") return item[key];
+            }
+            return null;
+        }
+
+        async function initPage() {
+            const status = document.getElementById('loadingStatus'), provSelect = document.getElementById('filterProvinsi');
+            status.style.display = 'block';
+            let rawData = JSON.parse(sessionStorage.getItem(CACHE_KEY));
+            
+            if (!rawData) {
+                try {
+                    const res = await fetch(GET_DATA_FLOW_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'getData'}) });
+                    rawData = await res.json();
+                    if (typeof rawData === 'string') rawData = JSON.parse(rawData);
+                    sessionStorage.setItem(CACHE_KEY, JSON.stringify(rawData));
+                } catch (e) { status.innerHTML = "Gagal memuat data."; return; }
+            }
+
+            masterData = [...(rawData.kegiatan || []), ...(rawData.notadinas || rawData['ND-Surat'] || rawData.rekapND || [])];
+            masterData.forEach(item => {
+                const p = item.Provinsi || item.provinsi, k = item['Nama Kegiatan'] || item.namaKegiatan || item.NamaKegiatan;
+                if (p && k) { if (!kegiatanByProvinsi[p]) kegiatanByProvinsi[p] = new Set(); kegiatanByProvinsi[p].add(k); }
+            });
+
+            provSelect.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+            Object.keys(kegiatanByProvinsi).sort().forEach(p => provSelect.innerHTML += `<option value="${p}">${p}</option>`);
+            status.style.display = 'none';
+        }
+
+        document.getElementById('filterProvinsi').addEventListener('change', function() {
+            const kegSelect = document.getElementById('filterKegiatan');
+            kegSelect.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
+            document.getElementById('infoLaporan').style.display = 'none';
+            document.getElementById('timelineBody').innerHTML = '<tr><td colspan="7" class="empty-state">Silakan pilih Nama Kegiatan.</td></tr>';
+            
+            if (this.value) {
+                kegSelect.disabled = false;
+                Array.from(kegiatanByProvinsi[this.value]).sort().forEach(k => kegSelect.innerHTML += `<option value="${k}">${k}</option>`);
+            } else { kegSelect.disabled = true; }
+        });
+
+        document.getElementById('filterKegiatan').addEventListener('change', function() {
+            const kegVal = this.value, provVal = document.getElementById('filterProvinsi').value, tbody = document.getElementById('timelineBody'), infoBox = document.getElementById('infoLaporan');
+            if (!kegVal) { infoBox.style.display = 'none'; return; }
+
+            infoBox.style.display = 'block';
+            document.getElementById('infoProvinsi').innerText = "PROVINSI: " + provVal;
+            document.getElementById('infoKegiatan').innerText = kegVal;
+
+            const filtered = masterData.filter(item => {
+                const itemKeg = item['Nama Kegiatan'] || item.namaKegiatan || item.NamaKegiatan;
+                const isKron = item.isKronologis || item.IsKronologis || item.Is_Kronologis;
+                return itemKeg === kegVal && (isKron === 'Ya' || isKron === true);
+            });
+
+            filtered.sort((a, b) => new Date((a.Tanggal || a.tanggal || '').replace(/\./g, '-')) - new Date((b.Tanggal || b.tanggal || '').replace(/\./g, '-')));
+
+            tbody.innerHTML = filtered.length ? '' : '<tr><td colspan="7" class="empty-state">Data kronologis belum ditemukan.</td></tr>';
+            filtered.forEach((item, i) => {
+                const linkObj = cariLink(item);
+                const tgl = (item.Tanggal || item.tanggal || '').replace(/\./g, '-').split('-').reverse().join('/');
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">${i + 1}</td>
+                        <td style="color:#1d355e; font-weight:600;">${tgl}</td>
+                        <td style="font-weight:500;">${item.Perihal || item.perihal || item['Judul Rapat'] || '-'}</td>
+                        <td style="font-family:monospace; font-size:11px;">${item['Nomor Surat'] || item.nomorSurat || '-'}</td>
+                        <td>${item.alurDari || item.AlurDari || '-'}</td>
+                        <td>${item.alurKe || item.AlurKe || '-'}</td>
+                        <td style="text-align:center;">
+                            ${linkObj ? `<a href="${linkObj}" target="_blank" class="btn-view">BUKA</a>` : '-'}
+                        </td>
+                    </tr>`;
+            });
+        });
+
+        window.addEventListener('load', initPage);
+    </script>
+</body>
+
+</html>

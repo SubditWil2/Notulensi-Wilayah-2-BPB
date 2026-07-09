@@ -1287,7 +1287,7 @@
                     getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
                     deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
                     updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ffd07244a37a4f2bb999472b2e5f61c1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GE4Av5hFskT3u42oH8PpFzkjYhTRGJFBNe8uuOCxDVA',
-                    archiveNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1b0fc73a4f38432c8f481d6a922f4f93/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PoSnJc1Ydcsc740fUzfbHlOn88sD7NNJjBUlG_W_LCU' // Hubungkan URL flow Power Automate ke-2 di sini
+                    archiveNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1b0fc73a4f38432c8f481d6a922f4f93/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PoSnJc1Ydcsc740fUzfbHlOn88sD7NNJjBUlG_W_LCU' 
                 };
 
                 let databaseND = [];
@@ -1297,10 +1297,7 @@
                 let masterProvinces = [];
                 let masterKegiatanByProvinsi = {};
 
-                // Ditambahkan field tanggalDokumen untuk penyesuaian metadata
                 let activeKelolaData = {};
-
-                // Ditambahkan key rawFile untuk mempermudah pemindaian OCR lokal
                 let selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
 
                 // API Key Gemini diinisialisasi dari database flow
@@ -1667,26 +1664,30 @@
                     });
                 }
 
-                // Fungsi Pembantu: Mengisi otomatis kolom Nomor, Tanggal, dan Perihal di modal berdasarkan jenjang
+                // Fungsi Pembantu: Mengisi otomatis kolom Nomor, Tanggal, dan Perihal di modal berdasarkan jenjang (DIPERBAIKI UNTUK AUTOPREDICATE TANGGAL CERDAS) [1]
                 window.updateModalFields = function (jenjang) {
                     if (!activeKelolaData) return;
 
                     if (jenjang === 'Kasubdit') {
                         document.getElementById('modalNomorSurat').value = activeKelolaData.no_ksd || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_ksd ? activeKelolaData.tgl_ksd.replace(/\./g, '-') : '';
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_ksd ? normalizeToYYYYMMDD(activeKelolaData.tgl_ksd) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_ksd || activeKelolaData.perihal || '';
                     } else if (jenjang === 'Direktur') {
                         document.getElementById('modalNomorSurat').value = activeKelolaData.no_dir || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dir ? activeKelolaData.tgl_dir.replace(/\./g, '-') : '';
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dir ? normalizeToYYYYMMDD(activeKelolaData.tgl_dir) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dir || activeKelolaData.perihal || '';
                     } else if (jenjang === 'Dirjen') {
                         document.getElementById('modalNomorSurat').value = activeKelolaData.no_dj || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dj ? activeKelolaData.tgl_dj.replace(/\./g, '-') : '';
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dj ? normalizeToYYYYMMDD(activeKelolaData.tgl_dj) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dj || activeKelolaData.perihal || '';
                     } else if (jenjang === 'Menteri') {
                         document.getElementById('modalNomorSurat').value = activeKelolaData.no_men || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_men ? activeKelolaData.tgl_men.replace(/\./g, '-') : '';
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_men ? normalizeToYYYYMMDD(activeKelolaData.tgl_men) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_men || activeKelolaData.perihal || '';
+                    } else if (jenjang === 'Eksternal') {
+                        document.getElementById('modalNomorSurat').value = activeKelolaData.nomorSurat || '';
+                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tanggal ? normalizeToYYYYMMDD(activeKelolaData.tanggal) : '';
+                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal || '';
                     }
                 };
 
@@ -1700,6 +1701,13 @@
                         linkFile: getValue(row, ['Link File', 'linkFile']) || '',
                         linkFinal: getValue(row, ['Link Final', 'linkFinal']) || '',
                         rowElement: rowElement || null,
+
+                        // Field Umum Baris Dokumen
+                        nomorSurat: getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '',
+                        tanggal: getValue(row, ['Tanggal', 'tanggal']) || '',
+                        alurDari: getValue(row, ['AlurDari', 'alurDari', 'Alur Dari']) || '',
+                        alurKe: getValue(row, ['AlurKe', 'alurKe', 'Alur Ke']) || '',
+                        isKronologis: getValue(row, ['IsKronologis', 'isKronologis', 'Is Kronologis', 'Is_Kronologis']) || 'Tidak',
 
                         no_ksd: getValue(row, ['No_Kasubdit']) || '',
                         tgl_ksd: getValue(row, ['Tgl_Kasubdit']) || '',
@@ -1730,13 +1738,28 @@
                     document.getElementById('kelolaTitle').innerHTML = activeKelolaData.perihal;
                     document.getElementById('kelolaSub').innerHTML = `${activeKelolaData.provinsi} — ${activeKelolaData.namaKegiatan}`;
 
-                    let jenjangFormatAman = activeKelolaData.jenjang;
-                    if (jenjangFormatAman) {
-                        jenjangFormatAman = jenjangFormatAman.charAt(0).toUpperCase() + jenjangFormatAman.slice(1).toLowerCase();
-                    }
+                    // Masukkan data Alur Dari, Ke, dan IsKronologis secara akurat ke form input UI modal
+                    document.getElementById('modalDari').value = activeKelolaData.alurDari;
+                    document.getElementById('modalKe').value = activeKelolaData.alurKe;
+                    document.getElementById('modalIsKronologis').checked = (activeKelolaData.isKronologis === 'Ya');
+
+                    // Deteksi Pintar Jenjang Internal atau Eksternal
                     const validOptions = ['Kasubdit', 'Direktur', 'Dirjen', 'Menteri'];
-                    document.getElementById('modalJenjangSurat').value = validOptions.includes(jenjangFormatAman) ? jenjangFormatAman : 'Kasubdit';
-                    activeKelolaData.jenjang = document.getElementById('modalJenjangSurat').value;
+                    let rawJenjang = activeKelolaData.jenjang;
+                    let jenjangFormatAman = 'Kasubdit';
+                    if (rawJenjang) {
+                        jenjangFormatAman = rawJenjang.trim().charAt(0).toUpperCase() + rawJenjang.trim().slice(1).toLowerCase();
+                    }
+
+                    if (validOptions.includes(jenjangFormatAman)) {
+                        setKategoriJenjang('Internal');
+                        document.getElementById('modalJenjangSurat').value = jenjangFormatAman;
+                        activeKelolaData.jenjang = jenjangFormatAman;
+                    } else {
+                        setKategoriJenjang('Eksternal');
+                        document.getElementById('modalJenjangKustom').value = rawJenjang;
+                        activeKelolaData.jenjang = 'Eksternal';
+                    }
                 }
 
                 // Helper: Menampilkan visual riwayat dokumen berjenjang di dalam modal
@@ -1789,6 +1812,10 @@
                     document.getElementById('modalNewProvinsiSelect').value = '';
                     document.getElementById('modalNewKegiatanSelect').innerHTML = '<option value="">-- Pilih Nama Kegiatan --</option>';
                     document.getElementById('modalNewKegiatanManualInput').value = '';
+                    
+                    document.getElementById('modalDari').value = '';
+                    document.getElementById('modalKe').value = '';
+                    document.getElementById('modalIsKronologis').checked = false;
                 }
 
                 // ==================== INTEGRASI FASE 2 BARU (OPTIMALISASI BERTINGKAT & PROPORSI ELEMEN) ====================
@@ -1870,7 +1897,7 @@
 
                         // Populasikan daftar seluruh provinsi master untuk dropdown arsip baru
                         window.populateNewArchiveProvinces();
-                        window.showModalNewKegiatanInput(false); // Sembunyikan pengetikan manual di awal
+                        window.showModalNewKegiatanInput(false); 
                     }
                 };
 
@@ -1970,7 +1997,7 @@
                     document.getElementById('groupModalSelectPerihal').style.display = 'block';
                 };
 
-                // EKSISTING - KETIKA PERIHAL DIPILIH: Memulihkan isian database ke form kelola utama
+                // EKSISTING - KETIKA PERIHAL DIPILIH: Memulihkan isian database ke form kelola utama (DIPERBAIKI DARI BUG COLLISION) [1]
                 window.selectExistingActivity = function (pathKey) {
                     if (!pathKey) {
                         resetModalFormFields();
@@ -1982,7 +2009,12 @@
                     if (row) {
                         loadRowToModalData(row, null);
                         displayModalHistory();
-                        window.updateModalFields(document.getElementById('modalJenjangSurat').value);
+                        
+                        // Perbaikan total bug tabrakan level eksternal & internal (BARU) [1]
+                        const currentActiveLevel = (kategoriJenjangAktif === 'Internal') 
+                            ? document.getElementById('modalJenjangSurat').value 
+                            : 'Eksternal';
+                        window.updateModalFields(currentActiveLevel);
                     }
                 };
 
@@ -2048,18 +2080,17 @@
                     if (showManual) {
                         dropdownRow.style.display = 'none';
                         manualRow.style.display = 'flex';
-                        dropdownSelect.value = ''; // Reset pilihan dropdown
+                        dropdownSelect.value = ''; 
                         manualInput.focus();
                     } else {
                         dropdownRow.style.display = 'flex';
                         manualRow.style.display = 'none';
-                        manualInput.value = ''; // Reset input manual
-                        window.checkDuplicateActivity(''); // Reset warning banner
+                        manualInput.value = ''; 
+                        window.checkDuplicateActivity(''); 
                     }
                 };
 
                 window.onModalNewKegiatanSelectChange = function (val) {
-                    // Update key check if user selects from dropdown
                     window.checkDuplicateActivity(val);
                 };
 
@@ -2082,7 +2113,6 @@
                         return existingKeg === cleanInput;
                     });
 
-                    // Banner menyala jika kegiatan terdeteksi duplikat saat mode pengetikan manual aktif
                     if (exists && document.getElementById('radioNew').checked && document.getElementById('modalNewKegiatanManualRow').style.display === 'flex') {
                         warningBanner.style.display = 'block';
                         submitBtn.disabled = true;
@@ -2098,7 +2128,7 @@
 
                 // =========================================================================================
 
-                // JALUR ROW: Membuka modal kelola berkas berjenjang langsung dari baris tabel (⁝)
+                // JALUR ROW: Membuka modal kelola berkas berjenjang langsung dari baris tabel (⁝) (DIPERBAIKI SINKRONISASI AKTIF) [1]
                 window.openKelolaModal = function (pathKey, btn) {
                     isGlobalMode = false;
 
@@ -2117,7 +2147,11 @@
                     loadRowToModalData(row, btn ? btn.closest('tr') : null);
                     displayModalHistory();
 
-                    window.updateModalFields(activeKelolaData.jenjang);
+                    // Perbaikan pemanggilan layout input konstan (BARU) [1]
+                    const currentActiveLevel = (kategoriJenjangAktif === 'Internal') 
+                        ? document.getElementById('modalJenjangSurat').value 
+                        : 'Eksternal';
+                    window.updateModalFields(currentActiveLevel);
 
                     document.getElementById('modalFileFinal').value = '';
                     document.getElementById('modalUploadFeedback').style.display = 'none';
@@ -2262,7 +2296,7 @@
                     return '';
                 }
 
-                // OCR PROSESING via GEMINI
+                // OCR PROCESSING via GEMINI (BERSIH DARI DUPLIKASI DAN KONFLIK REVERT)
                 window.runOCR = async function () {
                     const file = selectedFileFinalData.rawFile;
                     const btn = document.getElementById('btnOCR');
@@ -2286,7 +2320,7 @@
                             extractedText = result.value;
                         }
 
-                        // Update prompt di dalam fungsi runOCR
+                        // Perbaikan total syntax error string assignment
                         let promptText = "Analisis dokumen ini. Temukan:\n" +
                             "1. Nomor surat.\n" +
                             "2. Tanggal (YYYY.MM.DD).\n" +
@@ -2294,8 +2328,7 @@
                             "4. JABATAN PENANDATANGAN. Jika itu Menteri/Dirjen/Direktur/Kasubdit PUPR, tulis salah satu. Jika penandatangan adalah pihak LUAR (misal: Gubernur, Bupati, Direktur Utama PT), tulis nama jabatannya secara lengkap.\n" +
                             "5. PENGIRIM (Contoh: Gubernur NTB).\n" +
                             "6. PENERIMA (Contoh: Menteri PU).\n\n" +
-                            "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}";
-                        "}; \n" +
+                            "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}\n" +
                             "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
 
                         let payloadContents = [];
@@ -2340,17 +2373,25 @@
                         const nomorDitemukan = getFlexibleValue(data, ['nomorSurat', 'nomor_surat', 'nomor', 'noSurat', 'no_surat']);
                         const tanggalDitemukan = getFlexibleValue(data, ['tanggalSurat', 'tanggal_surat', 'tanggal', 'date']);
                         const perihalDitemukan = getFlexibleValue(data, ['perihalSurat', 'perihal_surat', 'perihal', 'subject']);
-                        const jenjangDitemukan = getFlexibleValue(data, ['jenjangSurat', 'jenjang_surat', 'jenjang', 'level']);
+                        const jenjangDitemukan = getFlexibleValue(data, ['jenjangSurat', 'jenjang_surat', 'jenjang', 'level', 'jabatan']);
 
-                        if (jenjangDitemukan) {
-                            const cleanJenjang = jenjangDitemukan.trim();
-                            const validOptions = ['Kasubdit', 'Direktur', 'Dirjen', 'Menteri'];
-                            if (validOptions.includes(cleanJenjang)) {
-                                document.getElementById('modalJenjangSurat').value = cleanJenjang;
-                                window.updateModalFields(cleanJenjang);
-                            }
+                        // LANGKAH 1: Set Kategori & Nilai Jenjang
+                        const validInternal = ['Menteri', 'Dirjen', 'Direktur', 'Kasubdit'];
+                        let finalJenjang = jenjangDitemukan || data.jabatan || "";
+                        let normalizedJenjang = '';
+                        if (finalJenjang) {
+                            normalizedJenjang = finalJenjang.trim().charAt(0).toUpperCase() + finalJenjang.trim().slice(1).toLowerCase();
                         }
 
+                        if (validInternal.includes(normalizedJenjang)) {
+                            setKategoriJenjang('Internal');
+                            document.getElementById('modalJenjangSurat').value = normalizedJenjang;
+                        } else if (finalJenjang.trim() !== "") {
+                            setKategoriJenjang('Eksternal');
+                            document.getElementById('modalJenjangKustom').value = finalJenjang;
+                        }
+
+                        // LANGKAH 2: TULIS NILAI OCR BARU
                         if (nomorDitemukan) {
                             document.getElementById('modalNomorSurat').value = nomorDitemukan;
                         }
@@ -2363,22 +2404,7 @@
                         if (perihalDitemukan) {
                             document.getElementById('modalPerihalSurat').value = perihalDitemukan;
                         }
-
-                        // Di dalam success block runOCR:
-                        if (data.alurDari) document.getElementById('modalDari').value = data.alurDari;
-                        if (data.alurKe) document.getElementById('modalKe').value = data.alurKe;
-
-                        // Di dalam success block runOCR:
-                        const jabatanHasilAI = data.jabatan || "";
-                        const listInternal = ['Menteri', 'Dirjen', 'Direktur', 'Kasubdit'];
-
-                        if (listInternal.includes(jabatanHasilAI)) {
-                            setKategoriJenjang('Internal');
-                            document.getElementById('modalJenjangSurat').value = jabatanHasilAI;
-                        } else {
-                            setKategoriJenjang('Eksternal');
-                            document.getElementById('modalJenjangKustom').value = jabatanHasilAI;
-                        }
+                        
                         document.getElementById('modalDari').value = data.alurDari || "";
                         document.getElementById('modalKe').value = data.alurKe || "";
 
@@ -2429,7 +2455,7 @@
                 window.executeMetaUpdate = async function (event) {
                     event.preventDefault();
 
-                    // 1. TENTUKAN JENJANG FINAL (Internal vs Eksternal)
+                    // TENTUKAN JENJANG FINAL (Internal vs Eksternal)
                     const jenjangFinal = (kategoriJenjangAktif === 'Internal')
                         ? document.getElementById('modalJenjangSurat').value
                         : document.getElementById('modalJenjangKustom').value.trim();
@@ -2441,7 +2467,7 @@
 
                     const isNewArchive = isGlobalMode && document.getElementById('radioNew').checked;
 
-                    // CABANG 1: ARSIPKAN BERKAS BARU MURNI (Flow 2)
+                    // CABANG 1: ARSIPKAN BERKAS BARU MURNI
                     if (isNewArchive) {
                         const jenisDokumen = document.getElementById('modalJenisDokumen').value;
                         const provinsi = document.getElementById('modalNewProvinsiSelect').value;
@@ -2465,15 +2491,15 @@
                         if (!selectedFileFinalData.base64) { alert('Mohon unggah berkas final!'); return; }
 
                         const confirmHtml = `
-            <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
-            <strong>Provinsi:</strong> ${provinsi}<br>
-            <strong>Nama Kegiatan:</strong> ${namaKegiatan}<br>
-            <strong>Perihal Utama:</strong> ${perihalBaru}<br>
-            <strong>Jenjang:</strong> ${jenjangFinal}<br>
-            <strong>Nomor Surat:</strong> ${nomorBaru}<br>
-            <strong>Tanggal:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
-            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
-        `;
+                            <strong>Jenis Dokumen:</strong> ${jenisDokumen}<br>
+                            <strong>Provinsi:</strong> ${provinsi}<br>
+                            <strong>Nama Kegiatan:</strong> ${namaKegiatan}<br>
+                            <strong>Perihal Utama:</strong> ${perihalBaru}<br>
+                            <strong>Jenjang:</strong> ${jenjangFinal}<br>
+                            <strong>Nomor Surat:</strong> ${nomorBaru}<br>
+                            <strong>Tanggal:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
+                            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+                        `;
 
                         const yakin = await showCustomUpdateConfirm('Arsipkan Berkas Baru?', confirmHtml);
                         if (!yakin) return;
@@ -2518,8 +2544,9 @@
                             document.getElementById('kelolaMenuState').style.display = 'block';
                         }
 
-                        // CABANG 2: UPDATE METADATA BERJENJANG (Flow 1)
+                        // CABANG 2: UPDATE METADATA BERJENJANG (PERBAIKAN TOTAL MEMBACA DAN MENGIRIM VARIABEL MANUAL)
                     } else {
+                        // Membaca input elemen DOM secara langsung untuk menangkap hasil ketikan manual pengguna
                         const nomorBaru = document.getElementById('modalNomorSurat').value.trim();
                         const tanggalBaru = document.getElementById('modalTanggalSurat').value;
                         const formattedTanggalExcel = tanggalBaru.replace(/-/g, '.');
@@ -2546,13 +2573,16 @@
                             }
                         }
 
+                        // Menampilkan data input baru (perihalBaru & tanggalBaru) ke dalam modal dialog konfirmasi
+                        const formattedTanggalIndo = tanggalBaru ? tanggalBaru.split('-').reverse().join('/') : '-';
                         const confirmHtml = `
-            <strong>Perihal Utama:</strong> ${activeKelolaData.perihal}<br>
-            <strong>Jenjang Di-update:</strong> ${jenjangFinal}<br>
-            <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
-            <strong>Status Akhir:</strong> ${statusFinal}<br>
-            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
-        `;
+                            <strong>Perihal Baru:</strong> ${perihalBaru}<br>
+                            <strong>Jenjang Di-update:</strong> ${jenjangFinal}<br>
+                            <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
+                            <strong>Tanggal Baru:</strong> ${formattedTanggalIndo}<br>
+                            <strong>Status Akhir:</strong> ${statusFinal}<br>
+                            <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+                        `;
 
                         const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
                         if (!yakin) return;
@@ -2570,6 +2600,7 @@
                             statusDokumen: statusFinal,
                             nomorSurat: nomorBaru,
                             tanggalDokumen: formattedTanggalExcel,
+                            perihal: perihalBaru, // Menambahkan kunci perihal baru agar tersinkronisasi ke Power Automate
                             alurDari: document.getElementById('modalDari').value,
                             alurKe: document.getElementById('modalKe').value,
                             isKronologis: document.getElementById('modalIsKronologis').checked ? 'Ya' : 'Tidak', 
@@ -2687,6 +2718,11 @@
                 }
                 function hideMessage() { document.getElementById('message').style.display = 'none'; }
 
+                // BIND EVENT LISTENER KE SELECT JENJANG
+                document.getElementById('modalJenjangSurat').addEventListener('change', function () {
+                    window.updateModalFields(this.value);
+                });
+
                 window.addEventListener('load', loadDashboardData);
 
                 document.getElementById('kelolaModal').addEventListener('click', function (e) {
@@ -2705,6 +2741,7 @@
 
             let kategoriJenjangAktif = 'Internal';
 
+            // Pembaharuan Fungsi Toggle Kategori Jenjang untuk sinkronisasi form otomatis
             window.setKategoriJenjang = function (kat) {
                 kategoriJenjangAktif = kat;
                 const btnInt = document.getElementById('btnJnjInternal');
@@ -2716,10 +2753,17 @@
                     btnInt.style.background = '#1d355e'; btnInt.style.color = 'white'; btnInt.style.borderColor = '#1d355e';
                     btnEks.style.background = 'white'; btnEks.style.color = '#64748b'; btnEks.style.borderColor = '#cbd5e1';
                     wrapInt.style.display = 'block'; wrapEks.style.display = 'none';
+                    
+                    // Auto-sync field dengan level internal terpilih
+                    const selectedInternal = document.getElementById('modalJenjangSurat').value;
+                    window.updateModalFields(selectedInternal);
                 } else {
                     btnEks.style.background = '#1d355e'; btnEks.style.color = 'white'; btnEks.style.borderColor = '#1d355e';
                     btnInt.style.background = 'white'; btnInt.style.color = '#64748b'; btnInt.style.borderColor = '#cbd5e1';
                     wrapInt.style.display = 'none'; wrapEks.style.display = 'block';
+                    
+                    // Auto-sync field dengan data umum baris excel
+                    window.updateModalFields('Eksternal');
                 }
             };
         </script>

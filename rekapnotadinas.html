@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 
+<!-- <script>
+    if (sessionStorage.getItem('dms_access_token') !== 'authorized') {
+        window.location.href = 'login.html';
+    }
+</script>
+ -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -1269,6 +1276,7 @@
                 return null;
             }
 
+            // Simpan hasil fetch ke cache browser
             function setCachedData(data) {
                 sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
@@ -1664,7 +1672,7 @@
                     });
                 }
 
-                // Fungsi Pembantu: Mengisi otomatis kolom Nomor, Tanggal, dan Perihal di modal berdasarkan jenjang (DIPERBAIKI UNTUK AUTOPREDICATE TANGGAL CERDAS) [1]
+                // Fungsi Pembantu: Mengisi otomatis kolom Nomor, Tanggal, dan Perihal di modal berdasarkan jenjang
                 window.updateModalFields = function (jenjang) {
                     if (!activeKelolaData) return;
 
@@ -1685,6 +1693,7 @@
                         document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_men ? normalizeToYYYYMMDD(activeKelolaData.tgl_men) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_men || activeKelolaData.perihal || '';
                     } else if (jenjang === 'Eksternal') {
+                        // Jika Eksternal, isi form dengan data nomor & tanggal umum di baris excel
                         document.getElementById('modalNomorSurat').value = activeKelolaData.nomorSurat || '';
                         document.getElementById('modalTanggalSurat').value = activeKelolaData.tanggal ? normalizeToYYYYMMDD(activeKelolaData.tanggal) : '';
                         document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal || '';
@@ -1997,7 +2006,7 @@
                     document.getElementById('groupModalSelectPerihal').style.display = 'block';
                 };
 
-                // EKSISTING - KETIKA PERIHAL DIPILIH: Memulihkan isian database ke form kelola utama (DIPERBAIKI DARI BUG COLLISION) [1]
+                // EKSISTING - KETIKA PERIHAL DIPILIH: Memulihkan isian database ke form kelola utama (DIPERBAIKI DARI BUG COLLISION)
                 window.selectExistingActivity = function (pathKey) {
                     if (!pathKey) {
                         resetModalFormFields();
@@ -2010,7 +2019,7 @@
                         loadRowToModalData(row, null);
                         displayModalHistory();
                         
-                        // Perbaikan total bug tabrakan level eksternal & internal (BARU) [1]
+                        // Perbaikan total bug tabrakan level eksternal & internal
                         const currentActiveLevel = (kategoriJenjangAktif === 'Internal') 
                             ? document.getElementById('modalJenjangSurat').value 
                             : 'Eksternal';
@@ -2128,7 +2137,7 @@
 
                 // =========================================================================================
 
-                // JALUR ROW: Membuka modal kelola berkas berjenjang langsung dari baris tabel (⁝) (DIPERBAIKI SINKRONISASI AKTIF) [1]
+                // JALUR ROW: Membuka modal kelola berkas berjenjang langsung dari baris tabel (⁝) (DIPERBAIKI SINKRONISASI AKTIF)
                 window.openKelolaModal = function (pathKey, btn) {
                     isGlobalMode = false;
 
@@ -2147,7 +2156,7 @@
                     loadRowToModalData(row, btn ? btn.closest('tr') : null);
                     displayModalHistory();
 
-                    // Perbaikan pemanggilan layout input konstan (BARU) [1]
+                    // Perbaikan pemanggilan layout input konstan
                     const currentActiveLevel = (kategoriJenjangAktif === 'Internal') 
                         ? document.getElementById('modalJenjangSurat').value 
                         : 'Eksternal';
@@ -2296,7 +2305,7 @@
                     return '';
                 }
 
-                // OCR PROCESSING via GEMINI (BERSIH DARI DUPLIKASI DAN KONFLIK REVERT)
+                // OCR PROCESSING via GEMINI (DIPERBAIKI TOTAL UNTUK PENGENALAN JENJANG INTERNAL PINTAR & PARSIAL SUBDIT II) [1]
                 window.runOCR = async function () {
                     const file = selectedFileFinalData.rawFile;
                     const btn = document.getElementById('btnOCR');
@@ -2320,12 +2329,18 @@
                             extractedText = result.value;
                         }
 
-                        // Perbaikan total syntax error string assignment
+                        // Perbaikan total syntax error string assignment & Penguatan Aturan Substansi Subdit II (BARU) [1]
                         let promptText = "Analisis dokumen ini. Temukan:\n" +
                             "1. Nomor surat.\n" +
                             "2. Tanggal (YYYY.MM.DD).\n" +
                             "3. Perihal.\n" +
-                            "4. JABATAN PENANDATANGAN. Jika itu Menteri/Dirjen/Direktur/Kasubdit PUPR, tulis salah satu. Jika penandatangan adalah pihak LUAR (misal: Gubernur, Bupati, Direktur Utama PT), tulis nama jabatannya secara lengkap.\n" +
+                            "4. JABATAN PENANDATANGAN. Ketentuan wajib:\n" +
+                            "   - Jika penandatangan adalah salah satu dari 4 jabatan internal PUPR berikut, tulis TEPAT seperti ini:\n" +
+                            "     * \"Menteri Pekerjaan Umum\"\n" +
+                            "     * \"Direktur Jenderal Cipta Karya\"\n" +
+                            "     * \"Direktur Bina Penataan Bangunan\"\n" +
+                            "     * \"Kasubdit Wilayah II\"\n" +
+                            "   - Jika di luar 4 jabatan internal tersebut, anggap sebagai EXTERNAL dan tuliskan nama jabatannya secara lengkap (misal: \"Gubernur Nusa Tenggara Barat\", \"Bupati Lombok Barat\", \"Direktur Utama PT. ABC\").\n" +
                             "5. PENGIRIM (Contoh: Gubernur NTB).\n" +
                             "6. PENERIMA (Contoh: Menteri PU).\n\n" +
                             "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}\n" +
@@ -2375,23 +2390,38 @@
                         const perihalDitemukan = getFlexibleValue(data, ['perihalSurat', 'perihal_surat', 'perihal', 'subject']);
                         const jenjangDitemukan = getFlexibleValue(data, ['jenjangSurat', 'jenjang_surat', 'jenjang', 'level', 'jabatan']);
 
-                        // LANGKAH 1: Set Kategori & Nilai Jenjang
-                        const validInternal = ['Menteri', 'Dirjen', 'Direktur', 'Kasubdit'];
-                        let finalJenjang = jenjangDitemukan || data.jabatan || "";
-                        let normalizedJenjang = '';
-                        if (finalJenjang) {
-                            normalizedJenjang = finalJenjang.trim().charAt(0).toUpperCase() + finalJenjang.trim().slice(1).toLowerCase();
+                        // LANGKAH 1: Klasifikasi Ketat Khusus Internal Subdit II vs Eksternal (BARU) [1]
+                        let rawJabatanAI = jenjangDitemukan || data.jabatan || "";
+                        let lowerJabatan = rawJabatanAI.toString().toLowerCase().trim();
+                        let kategoriBerdasarkanAI = 'Eksternal';
+                        let matchedInternalLevel = '';
+
+                        // Verifikasi ketat 4 nama jabatan internal Kementerian PU yang diperbolehkan
+                        if (lowerJabatan.includes('kasubdit') && 
+                            (lowerJabatan.includes('wilayah ii') || lowerJabatan.includes('wilayah 2') || lowerJabatan.includes('wil. ii') || lowerJabatan.includes('wil. 2') || lowerJabatan.includes('wilayah 2 bpb') || lowerJabatan.includes('wilayah ii bpb'))) {
+                            kategoriBerdasarkanAI = 'Internal';
+                            matchedInternalLevel = 'Kasubdit';
+                        } else if (lowerJabatan.includes('direktur jenderal cipta karya') || lowerJabatan.includes('dirjen cipta karya') || lowerJabatan.includes('dirjen ck') || (lowerJabatan.includes('direktur jenderal') && lowerJabatan.includes('cipta karya'))) {
+                            kategoriBerdasarkanAI = 'Internal';
+                            matchedInternalLevel = 'Dirjen';
+                        } else if (lowerJabatan.includes('direktur bina penataan bangunan') || lowerJabatan.includes('direktur bpb') || (lowerJabatan.includes('direktur') && lowerJabatan.includes('penataan bangunan'))) {
+                            kategoriBerdasarkanAI = 'Internal';
+                            matchedInternalLevel = 'Direktur';
+                        } else if (lowerJabatan.includes('menteri pekerjaan umum') || lowerJabatan.includes('menteri pu') || lowerJabatan === 'menteri') {
+                            kategoriBerdasarkanAI = 'Internal';
+                            matchedInternalLevel = 'Menteri';
                         }
 
-                        if (validInternal.includes(normalizedJenjang)) {
+                        // Mengaktifkan form UI kategori yang sesuai
+                        if (kategoriBerdasarkanAI === 'Internal') {
                             setKategoriJenjang('Internal');
-                            document.getElementById('modalJenjangSurat').value = normalizedJenjang;
-                        } else if (finalJenjang.trim() !== "") {
+                            document.getElementById('modalJenjangSurat').value = matchedInternalLevel;
+                        } else {
                             setKategoriJenjang('Eksternal');
-                            document.getElementById('modalJenjangKustom').value = finalJenjang;
+                            document.getElementById('modalJenjangKustom').value = rawJabatanAI;
                         }
 
-                        // LANGKAH 2: TULIS NILAI OCR BARU
+                        // LANGKAH 2: TULIS NILAI OCR BARU KE FORM
                         if (nomorDitemukan) {
                             document.getElementById('modalNomorSurat').value = nomorDitemukan;
                         }
@@ -2724,18 +2754,6 @@
                 });
 
                 window.addEventListener('load', loadDashboardData);
-
-                document.getElementById('kelolaModal').addEventListener('click', function (e) {
-                    if (e.target === this) {
-                        window.closeKelolaModal();
-                    }
-                });
-
-                document.getElementById('deleteModal').addEventListener('click', function (e) {
-                    if (e.target === this) {
-                        window.closeDeleteModal();
-                    }
-                });
 
             })();
 

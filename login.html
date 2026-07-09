@@ -1,0 +1,20 @@
+<!-- login.html sederhana -->
+<div id="login-box" style="max-width: 400px; margin: 100px auto; padding: 40px; background: white; border-radius: 12px; border-bottom: 5px solid #f5b016; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+    <img src="logo-pu.png" width="80">
+    <h2 style="color:#11223f;">DMS Subdit Wilayah 2</h2>
+    <p style="font-size: 13px; color:#64748b;">Silakan masukkan Kredensial Staf</p>
+    <input type="password" id="passInput" placeholder="Password Akses" style="width:100%; padding: 12px; margin: 20px 0; border:1px solid #cbd5e1; border-radius:8px;">
+    <button onclick="checkAuth()" style="width:100%; padding: 12px; background:#11223f; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">MASUK SISTEM</button>
+</div>
+
+<script>
+function checkAuth() {
+    const pass = document.getElementById('passInput').value;
+    if (pass === 'Subdit2Juara') { // Ganti dengan password pilihan Anda
+        sessionStorage.setItem('dms_access_token', 'authorized');
+        window.location.href = 'index.html';
+    } else {
+        alert('Password Salah!');
+    }
+}
+</script>

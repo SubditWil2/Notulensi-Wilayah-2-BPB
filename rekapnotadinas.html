@@ -1210,6 +1210,30 @@
                             </label>
                         </div>
 
+                        <!-- DOKUMEN PENDUKUNG (MULTIPLE FILES) -->
+                        <div class="filter-group"
+                            style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                            <label
+                                style="font-size: 11px; font-weight: 800; color: #1d355e; display: block; margin-bottom: 8px;">DOKUMEN
+                                PENDUKUNG (OPSIONAL)</label>
+
+                            <input type="file" id="modalLampiran" multiple style="display: none;"
+                                onchange="window.handleSupportingFiles(event)">
+
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button type="button" class="btn-ocr" style="margin-top:0; width: auto;"
+                                    onclick="document.getElementById('modalLampiran').click()">
+                                    📂 Tambah Berkas
+                                </button>
+                                <span id="modalFileCountText"
+                                    style="font-size: 11px; color: #64748b; font-style: italic;">Belum ada berkas</span>
+                            </div>
+
+                            <!-- Container Daftar Berkas -->
+                            <div id="modalFileListContainer"
+                                style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px;"></div>
+                        </div>
+
                         <!-- 5. TOMBOL SIMPAN -->
                         <button type="submit" class="btn-modal-action btn-save-meta">✓ Simpan Perubahan</button>
                     </form>
@@ -1584,6 +1608,16 @@
                     }
                     if (pic) filtered = filtered.filter(row => (getValue(row, ['PIC', 'pic', 'namaPembuat', 'Dibuat Oleh']) || '') === pic);
 
+                    // Di dalam function applyFilters()
+                    let jenisFilter = document.getElementById('filterJenis').value;
+
+                    if (jenisFilter) {
+                        filtered = filtered.filter(row => {
+                            let valJenis = (getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || '');
+                            // Cocokkan pilihan dropdown filter dengan label di Excel
+                            return valJenis === jenisFilter;
+                        });
+                    }
                     renderTable(filtered);
                 }
 
@@ -1859,6 +1893,12 @@
                     document.getElementById('modalDari').value = '';
                     document.getElementById('modalKe').value = '';
                     document.getElementById('modalIsKronologis').checked = false;
+                    selectedSupportingFiles = [];
+                    renderSupportingFileList();
+
+                    if (document.getElementById('modalLampiran')) {
+                        document.getElementById('modalLampiran').value = '';
+                    }
                 }
 
                 // ==================== INTEGRASI FASE 2 BARU (OPTIMALISASI BERTINGKAT & PROPORSI ELEMEN) ====================
@@ -2251,8 +2291,9 @@
                     const label = document.getElementById('modalUploadLabel');
                     const ocrActionArea = document.getElementById('ocrActionArea');
                     const ocrStatusBox = document.getElementById('ocrStatusBox');
+
                     feedback.style.display = 'none';
-                    ocrActionArea.style.display = 'none';
+                    ocrActionArea.style.display = 'none'; // Sembunyikan dulu secara default
                     if (ocrStatusBox) ocrStatusBox.style.display = 'none';
 
                     if (!file) return;
@@ -2265,7 +2306,19 @@
                         feedback.style.color = '#27ae60';
                         feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
 
-                        ocrActionArea.style.display = 'block';
+                        // --- LOGIKA PENGUNCI OCR (BARU) ---
+                        const kategoriSelect = document.getElementById('modalJenisDokumen');
+                        const selectedOption = kategoriSelect.selectedOptions[0];
+                        const type = selectedOption.getAttribute('data-type');
+
+                        // Tombol OCR HANYA muncul jika kategori adalah 'Rutin'
+                        if (type === 'Rutin') {
+                            ocrActionArea.style.display = 'block';
+                        } else {
+                            ocrActionArea.style.display = 'none';
+                        }
+                        // ----------------------------------
+
                     } catch (e) {
                         console.error(e);
                     }
@@ -2543,6 +2596,20 @@
                         return;
                     }
 
+                    // Di dalam executeMetaUpdate, sebelum menyusun payload:
+                    let lampiranArray = [];
+                    if (selectedSupportingFiles.length > 0) {
+                        // Fungsi pembantu toBase64 sudah Anda miliki di bawah
+                        const conversionPromises = selectedSupportingFiles.map(async (file) => {
+                            const base64Data = await toBase64(file);
+                            return {
+                                namaFile: file.name,
+                                kontenFile: base64Data
+                            };
+                        });
+                        lampiranArray = await Promise.all(conversionPromises);
+                    }
+
                     const selectedOption = kategoriSelect.selectedOptions[0];
                     // Ambil label dari attribute 'data-label', jika tidak ada pakai text biasa
                     const kategoriLabel = selectedOption.getAttribute('data-label') || selectedOption.text;
@@ -2596,6 +2663,7 @@
                             jenjangTerakhir: jenjangFinal,
                             statusDokumen: 'Final',
                             nomorSurat: nomorBaru,
+                            lampiran: lampiranArray,
                             tanggalDokumen: formattedTanggalExcel,
                             alurDari: document.getElementById('modalDari').value,
                             alurKe: document.getElementById('modalKe').value,
@@ -2614,6 +2682,8 @@
                             if (!res.ok) throw new Error('Gagal menyimpan berkas di server.');
                             clearCachedData();
                             await loadDashboardData();
+                            selectedSupportingFiles = [];
+                            renderSupportingFileList();
                             closeKelolaModal();
                             showMessage('Berkas baru berhasil diarsipkan.', 'info');
                         } catch (err) {
@@ -2673,6 +2743,7 @@
                             jenjangDiubah: jenjangFinal,
                             statusDokumen: statusFinal,
                             nomorSurat: nomorBaru,
+                            lampiran: lampiranArray,
                             tanggalDokumen: formattedTanggalExcel,
                             perihal: perihalBaru,
                             alurDari: document.getElementById('modalDari').value,
@@ -2705,6 +2776,8 @@
                             if (!res.ok) throw new Error('Gagal memperbarui data.');
                             clearCachedData();
                             await loadDashboardData();
+                            selectedSupportingFiles = [];
+                            renderSupportingFileList();
                             closeKelolaModal();
                             showMessage('Data berhasil diperbarui.', 'info');
                         } catch (err) {
@@ -2829,35 +2902,80 @@
             };
 
             window.handleKategoriChange = function (pathValue) {
-                // 1. Update teks petunjuk folder di bawah dropdown
+                // 1. Update visual path hint
                 const pathHint = document.getElementById('displayPath');
                 if (pathHint) pathHint.innerText = pathValue;
 
-                // 2. Ambil metadata dari option terpilih
+                // 2. Ambil metadata
                 const kategoriSelect = document.getElementById('modalJenisDokumen');
                 const selectedOption = kategoriSelect.selectedOptions[0];
                 const type = selectedOption.getAttribute('data-type');
 
                 const btnOCRArea = document.getElementById('ocrActionArea');
-                const boxOCRStatus = document.getElementById('ocrStatusBox');
                 const checkKronologis = document.getElementById('modalIsKronologis');
+                const filePresent = !!selectedFileFinalData.rawFile; // Cek apakah sudah ada file
 
-                // 3. Logika Spoon-Feeding
+                // 3. Logika Spoon-Feeding & Pengunci
                 if (type === 'Teknis') {
-                    // SEMBUNYIKAN OCR untuk Kontrak/Laporan
+                    // Jika Teknis, kunci mati OCR meskipun ada file
                     if (btnOCRArea) btnOCRArea.style.display = 'none';
-                    if (boxOCRStatus) boxOCRStatus.style.display = 'none';
-
-                    // AUTO-CENTANG KRONOLOGIS (Karena dokumen teknis biasanya milestone)
+                    // Biasanya dokumen kontrak/teknis adalah Milestone
                     if (checkKronologis) checkKronologis.checked = true;
                 } else {
-                    // TAMPILKAN KEMBALI OCR jika dokumen bersifat persuratan DAN file sudah diupload
-                    if (selectedFileFinalData.rawFile && btnOCRArea) {
+                    // Jika Rutin (Persuratan), cek apakah file sudah diunggah
+                    if (filePresent && btnOCRArea) {
                         btnOCRArea.style.display = 'block';
+                    } else if (btnOCRArea) {
+                        btnOCRArea.style.display = 'none';
                     }
-                    // Matikan centang otomatis untuk surat biasa
+                    // Reset kronologis untuk surat rutin (opsional)
                     if (checkKronologis) checkKronologis.checked = false;
                 }
+            };
+
+            let selectedSupportingFiles = []; // Menampung array berkas pendukung
+
+            window.handleSupportingFiles = function (event) {
+                const files = Array.from(event.target.files);
+                const MAX_SIZE_MB = 100;
+
+                const oversizedFiles = files.filter(f => f.size > MAX_SIZE_MB * 1024 * 1024);
+                if (oversizedFiles.length > 0) {
+                    alert(`Gagal memilih berkas: "${oversizedFiles[0].name}" melebihi batas 100MB`);
+                    return;
+                }
+
+                selectedSupportingFiles = [...selectedSupportingFiles, ...files];
+                renderSupportingFileList();
+                event.target.value = ''; // Reset input
+            };
+
+            function renderSupportingFileList() {
+                const container = document.getElementById('modalFileListContainer');
+                const textCount = document.getElementById('modalFileCountText');
+                container.innerHTML = '';
+
+                if (selectedSupportingFiles.length === 0) {
+                    textCount.textContent = 'Belum ada berkas dipilih';
+                    return;
+                }
+
+                textCount.textContent = `${selectedSupportingFiles.length} berkas siap diunggah`;
+
+                selectedSupportingFiles.forEach((file, index) => {
+                    const item = document.createElement('div');
+                    item.style = "display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 12px;";
+                    item.innerHTML = `
+            <span style="color: #1d355e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%;">📄 ${file.name}</span>
+            <button type="button" onclick="removeSupportingFile(${index})" style="background:none; border:none; color:#e74c3c; cursor:pointer; font-weight:bold;">✕</button>
+        `;
+                    container.appendChild(item);
+                });
+            }
+
+            window.removeSupportingFile = function (index) {
+                selectedSupportingFiles.splice(index, 1);
+                renderSupportingFileList();
             };
         </script>
     </div>

@@ -1026,45 +1026,47 @@
                     <form id="metaForm" onsubmit="window.executeMetaUpdate(event)"
                         style="text-align: left; margin-bottom: 15px;">
 
+                        <!-- DROPDOWN JENIS & FOLDERISASI TERPADU -->
+                        <div class="filter-group" style="margin-bottom: 15px;">
+                            <label style="font-size: 11px; font-weight: 800; color: #1d355e;">JENIS DOKUMEN &
+                                KATEGORI ARSIP</label>
+                            <select id="modalJenisDokumen" onchange="window.handleKategoriChange(this.value)"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600;">
+                                <optgroup label="PERSURATAN">
+                                    <option value="F. Surat, ND, Notulensi/a. Surat" data-label="Surat"
+                                        data-type="Rutin">Surat Keluar / Undangan</option>
+                                    <option value="F. Surat, ND, Notulensi/b. Nota Dinas" data-label="Nota Dinas"
+                                        data-type="Rutin">Nota Dinas</option>
+                                    <option value="F. Surat, ND, Notulensi/a. Surat" data-label="Surat Masuk"
+                                        data-type="Rutin">Surat Masuk Eksternal</option>
+                                </optgroup>
+                                <optgroup label="DOKUMEN KONTRAK & TEKNIS">
+                                    <option value="B. Dokumen Perencanaan/01. Kontrak" data-label="Kontrak"
+                                        data-type="Teknis">Kontrak Perencanaan</option>
+                                    <option value="C. Dok. Pelaksanaan/01. Kontrak" data-label="Kontrak"
+                                        data-type="Teknis">Kontrak Fisik</option>
+                                    <option value="D. Dok. Pengawasan/01. Kontrak" data-label="Kontrak"
+                                        data-type="Teknis">Kontrak Pengawasan</option>
+                                    <option value="C. Dok. Pelaksanaan/02. SPMK, SPPBJ, dll" data-label="SPMK"
+                                        data-type="Teknis">SPMK / SPPBJ Fisik</option>
+                                    <option value="C. Dok. Pelaksanaan/03. Addendum dan Justifikasi"
+                                        data-label="Addendum" data-type="Teknis">Addendum / Justek Fisik</option>
+                                </optgroup>
+                                <optgroup label="LAPORAN">
+                                    <option value="E. Laporan Monev dan Progres" data-label="Laporan"
+                                        data-type="Teknis">Laporan Monev & Progres</option>
+                                </optgroup>
+                            </select>
+                            <div id="pathHint"
+                                style="font-size: 10px; color: #64748b; margin-top: 6px; font-style: italic;">
+                                📍 Lokasi: <span id="displayPath" style="font-weight:bold; color:#1d355e;">F. Surat,
+                                    ND, Notulensi/a. Surat</span>
+                            </div>
+                        </div>
+
                         <!-- FORM KELOMPOK INPUT KHUSUS ARSIP BERKAS BARU (SINKRONISASI NOTADINAS.HTML) -->
                         <div id="newArchiveFields" style="display: none; margin-bottom: 15px;">
-                            <!-- DROPDOWN JENIS & FOLDERISASI TERPADU -->
-                            <div class="filter-group" style="margin-bottom: 15px;">
-                                <label style="font-size: 11px; font-weight: 800; color: #1d355e;">JENIS DOKUMEN &
-                                    KATEGORI ARSIP</label>
-                                <select id="modalJenisDokumen" onchange="window.handleKategoriChange(this.value)"
-                                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600;">
-                                    <optgroup label="PERSURATAN">
-                                        <option value="F. Surat, ND, Notulensi/a. Surat" data-label="Surat"
-                                            data-type="Rutin">Surat Keluar / Undangan</option>
-                                        <option value="F. Surat, ND, Notulensi/b. Nota Dinas" data-label="Nota Dinas"
-                                            data-type="Rutin">Nota Dinas</option>
-                                        <option value="F. Surat, ND, Notulensi/a. Surat" data-label="Surat Masuk"
-                                            data-type="Rutin">Surat Masuk Eksternal</option>
-                                    </optgroup>
-                                    <optgroup label="DOKUMEN KONTRAK & TEKNIS">
-                                        <option value="B. Dokumen Perencanaan/01. Kontrak" data-label="Kontrak"
-                                            data-type="Teknis">Kontrak Perencanaan</option>
-                                        <option value="C. Dok. Pelaksanaan/01. Kontrak" data-label="Kontrak"
-                                            data-type="Teknis">Kontrak Fisik</option>
-                                        <option value="D. Dok. Pengawasan/01. Kontrak" data-label="Kontrak"
-                                            data-type="Teknis">Kontrak Pengawasan</option>
-                                        <option value="C. Dok. Pelaksanaan/02. SPMK, SPPBJ, dll" data-label="SPMK"
-                                            data-type="Teknis">SPMK / SPPBJ Fisik</option>
-                                        <option value="C. Dok. Pelaksanaan/03. Addendum dan Justifikasi"
-                                            data-label="Addendum" data-type="Teknis">Addendum / Justek Fisik</option>
-                                    </optgroup>
-                                    <optgroup label="LAPORAN">
-                                        <option value="E. Laporan Monev dan Progres" data-label="Laporan"
-                                            data-type="Teknis">Laporan Monev & Progres</option>
-                                    </optgroup>
-                                </select>
-                                <div id="pathHint"
-                                    style="font-size: 10px; color: #64748b; margin-top: 6px; font-style: italic;">
-                                    📍 Lokasi: <span id="displayPath" style="font-weight:bold; color:#1d355e;">F. Surat,
-                                        ND, Notulensi/a. Surat</span>
-                                </div>
-                            </div>
+
                             <!-- Provinsi Baru (Dropdown Penuh berisi seluruh Provinsi Master) -->
                             <div class="filter-group" style="margin-bottom: 12px;">
                                 <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Provinsi <span
@@ -1320,6 +1322,9 @@
             const CACHE_KEY = 'subdit_wil2_master_cache';
             const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
             const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+
+
+            let selectedFileFinalData = { base64: '', nama: '', tipe: '', rawFile: null };
 
             function getCachedData() {
                 const cached = sessionStorage.getItem(CACHE_KEY);
@@ -1744,28 +1749,47 @@
                 window.updateModalFields = function (jenjang) {
                     if (!activeKelolaData) return;
 
+                    // Ambil nilai yang sedang ada di layar saat ini (agar tidak hilang)
+                    const currentNo = document.getElementById('modalNomorSurat').value;
+                    const currentTgl = document.getElementById('modalTanggalSurat').value;
+                    const currentPerihal = document.getElementById('modalPerihalSurat').value;
+
+                    let targetNo = '';
+                    let targetTgl = '';
+                    let targetPerihal = '';
+
                     if (jenjang === 'Kasubdit') {
-                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_ksd || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_ksd ? normalizeToYYYYMMDD(activeKelolaData.tgl_ksd) : '';
-                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_ksd || activeKelolaData.perihal || '';
+                        targetNo = activeKelolaData.no_ksd;
+                        targetTgl = activeKelolaData.tgl_ksd ? normalizeToYYYYMMDD(activeKelolaData.tgl_ksd) : '';
+                        targetPerihal = activeKelolaData.perihal_ksd;
                     } else if (jenjang === 'Direktur') {
-                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_dir || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dir ? normalizeToYYYYMMDD(activeKelolaData.tgl_dir) : '';
-                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dir || activeKelolaData.perihal || '';
+                        targetNo = activeKelolaData.no_dir;
+                        targetTgl = activeKelolaData.tgl_dir ? normalizeToYYYYMMDD(activeKelolaData.tgl_dir) : '';
+                        targetPerihal = activeKelolaData.perihal_dir;
                     } else if (jenjang === 'Dirjen') {
-                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_dj || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_dj ? normalizeToYYYYMMDD(activeKelolaData.tgl_dj) : '';
-                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_dj || activeKelolaData.perihal || '';
+                        targetNo = activeKelolaData.no_dj;
+                        targetTgl = activeKelolaData.tgl_dj ? normalizeToYYYYMMDD(activeKelolaData.tgl_dj) : '';
+                        targetPerihal = activeKelolaData.perihal_dj;
                     } else if (jenjang === 'Menteri') {
-                        document.getElementById('modalNomorSurat').value = activeKelolaData.no_men || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tgl_men ? normalizeToYYYYMMDD(activeKelolaData.tgl_men) : '';
-                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal_men || activeKelolaData.perihal || '';
+                        targetNo = activeKelolaData.no_men;
+                        targetTgl = activeKelolaData.tgl_men ? normalizeToYYYYMMDD(activeKelolaData.tgl_men) : '';
+                        targetPerihal = activeKelolaData.perihal_men;
                     } else if (jenjang === 'Eksternal') {
-                        // Jika Eksternal, isi form dengan data nomor & tanggal umum di baris excel
-                        document.getElementById('modalNomorSurat').value = activeKelolaData.nomorSurat || '';
-                        document.getElementById('modalTanggalSurat').value = activeKelolaData.tanggal ? normalizeToYYYYMMDD(activeKelolaData.tanggal) : '';
-                        document.getElementById('modalPerihalSurat').value = activeKelolaData.perihal || '';
+                        targetNo = activeKelolaData.nomorSurat;
+                        targetTgl = activeKelolaData.tanggal ? normalizeToYYYYMMDD(activeKelolaData.tanggal) : '';
+                        targetPerihal = activeKelolaData.perihal;
                     }
+
+                    // --- LOGIKA PENGAMAN (ANTI-RESET) ---
+                    // Update kolom hanya jika di database ADA isinya. 
+                    // Jika di database kosong, biarkan user tetap memegang apa yang sudah dia ketik di layar.
+                    if (targetNo) document.getElementById('modalNomorSurat').value = targetNo;
+                    if (targetTgl) document.getElementById('modalTanggalSurat').value = targetTgl;
+                    if (targetPerihal) document.getElementById('modalPerihalSurat').value = targetPerihal;
+
+                    // Jika ini adalah mode update dan baru pertama kali buka, 
+                    // dan database memang kosong untuk jenjang itu, kita pastikan field tidak null
+                    if (!targetNo && !currentNo) document.getElementById('modalNomorSurat').value = '';
                 };
 
                 // Helper: Mengikat data baris ke activeKelolaData
@@ -1779,12 +1803,12 @@
                         linkFinal: getValue(row, ['Link Final', 'linkFinal']) || '',
                         rowElement: rowElement || null,
 
-                        // Field Umum Baris Dokumen
                         nomorSurat: getValue(row, ['Nomor Surat', 'nomorSurat', 'NomorSurat']) || '',
                         tanggal: getValue(row, ['Tanggal', 'tanggal']) || '',
                         alurDari: getValue(row, ['AlurDari', 'alurDari', 'Alur Dari']) || '',
                         alurKe: getValue(row, ['AlurKe', 'alurKe', 'Alur Ke']) || '',
                         isKronologis: getValue(row, ['IsKronologis', 'isKronologis', 'Is Kronologis', 'Is_Kronologis']) || 'Tidak',
+                        jenisDokumen: getValue(row, ['Jenis Dokumen', 'jenisDokumen']) || '', // Diambil untuk pencocokan dropdown
 
                         no_ksd: getValue(row, ['No_Kasubdit']) || '',
                         tgl_ksd: getValue(row, ['Tgl_Kasubdit']) || '',
@@ -1815,15 +1839,46 @@
                     document.getElementById('kelolaTitle').innerHTML = activeKelolaData.perihal;
                     document.getElementById('kelolaSub').innerHTML = `${activeKelolaData.provinsi} — ${activeKelolaData.namaKegiatan}`;
 
-                    // Masukkan data Alur Dari, Ke, dan IsKronologis secara akurat ke form input UI modal
+                    // --- 1. LOGIKA DETEKSI KATEGORI & FOLDER (AKURASI TINGGI) ---
+                    const comboJenis = document.getElementById('modalJenisDokumen');
+                    const labelExcel = (activeKelolaData.jenisDokumen || "").trim();
+                    const pathExcel = (activeKelolaData.pathND || "").trim();
+
+                    if (comboJenis) {
+                        let found = false;
+                        // Prioritas 1: Cocokkan Label (Membedakan Surat Masuk vs Keluar meskipun folder sama)
+                        for (let i = 0; i < comboJenis.options.length; i++) {
+                            const optLabel = comboJenis.options[i].getAttribute('data-label') || "";
+                            if (optLabel.toLowerCase() === labelExcel.toLowerCase()) {
+                                comboJenis.selectedIndex = i;
+                                found = true;
+                                break;
+                            }
+                        }
+                        // Prioritas 2: Jika label tidak ketemu, cocokkan Path
+                        if (!found) {
+                            for (let i = 0; i < comboJenis.options.length; i++) {
+                                if (pathExcel.includes(comboJenis.options[i].value)) {
+                                    comboJenis.selectedIndex = i;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!found) comboJenis.selectedIndex = 0;
+                        window.handleKategoriChange(comboJenis.value);
+                    }
+
+                    // --- 2. LOGIKA ALUR & KRONOLOGIS ---
                     document.getElementById('modalDari').value = activeKelolaData.alurDari;
                     document.getElementById('modalKe').value = activeKelolaData.alurKe;
                     document.getElementById('modalIsKronologis').checked = (activeKelolaData.isKronologis === 'Ya');
 
-                    // Deteksi Pintar Jenjang Internal atau Eksternal
+                    // --- 3. DETEKSI PINTAR JENJANG ---
                     const validOptions = ['Kasubdit', 'Direktur', 'Dirjen', 'Menteri'];
                     let rawJenjang = activeKelolaData.jenjang;
                     let jenjangFormatAman = 'Kasubdit';
+
                     if (rawJenjang) {
                         jenjangFormatAman = rawJenjang.trim().charAt(0).toUpperCase() + rawJenjang.trim().slice(1).toLowerCase();
                     }
@@ -1831,11 +1886,9 @@
                     if (validOptions.includes(jenjangFormatAman)) {
                         setKategoriJenjang('Internal');
                         document.getElementById('modalJenjangSurat').value = jenjangFormatAman;
-                        activeKelolaData.jenjang = jenjangFormatAman;
                     } else {
                         setKategoriJenjang('Eksternal');
                         document.getElementById('modalJenjangKustom').value = rawJenjang;
-                        activeKelolaData.jenjang = 'Eksternal';
                     }
                 }
 
@@ -1947,6 +2000,12 @@
 
                     // Tambahkan baris ini di baris terakhir fungsi window.openGlobalModal
                     window.handleKategoriChange(document.getElementById('modalJenisDokumen').value);
+
+                    const comboJenis = document.getElementById('modalJenisDokumen');
+                    if (comboJenis) {
+                        comboJenis.selectedIndex = 0;
+                        window.handleKategoriChange(comboJenis.value);
+                    }
                 };
 
                 // Toggle logic antara mode "Perbarui Eksisting" dan "Arsipkan Baru"
@@ -2293,34 +2352,41 @@
                     const ocrStatusBox = document.getElementById('ocrStatusBox');
 
                     feedback.style.display = 'none';
-                    ocrActionArea.style.display = 'none'; // Sembunyikan dulu secara default
+                    if (ocrActionArea) ocrActionArea.style.display = 'none';
                     if (ocrStatusBox) ocrStatusBox.style.display = 'none';
 
                     if (!file) return;
 
                     try {
                         const base64 = await toBase64(file);
+                        // Pastikan variabel ini sudah dideklarasikan di scope global (paling atas script)
                         selectedFileFinalData = { base64, nama: file.name, tipe: file.type, rawFile: file };
+
                         label.textContent = file.name;
                         feedback.style.display = 'block';
                         feedback.style.color = '#27ae60';
                         feedback.textContent = `✓ Berkas terpilih (${formatFileSize(file.size)})`;
 
-                        // --- LOGIKA PENGUNCI OCR (BARU) ---
+                        // --- LOGIKA PENGUNCI OCR (SINKRON DENGAN KATEGORI) ---
                         const kategoriSelect = document.getElementById('modalJenisDokumen');
-                        const selectedOption = kategoriSelect.selectedOptions[0];
-                        const type = selectedOption.getAttribute('data-type');
 
-                        // Tombol OCR HANYA muncul jika kategori adalah 'Rutin'
-                        if (type === 'Rutin') {
-                            ocrActionArea.style.display = 'block';
-                        } else {
-                            ocrActionArea.style.display = 'none';
+                        // Safety Check: Pastikan dropdown ada dan ada pilihan yang terpilih
+                        if (kategoriSelect && kategoriSelect.selectedOptions.length > 0) {
+                            const selectedOption = kategoriSelect.selectedOptions[0];
+                            const type = selectedOption.getAttribute('data-type');
+
+                            // Tombol OCR HANYA muncul jika kategori adalah 'Rutin'
+                            if (type === 'Rutin' && ocrActionArea) {
+                                ocrActionArea.style.display = 'block';
+                            } else if (ocrActionArea) {
+                                ocrActionArea.style.display = 'none';
+                            }
                         }
-                        // ----------------------------------
+                        // --------------------------------------------------
 
                     } catch (e) {
-                        console.error(e);
+                        console.error("Error saat memproses file:", e);
+                        alert("Gagal membaca file. Silakan coba lagi.");
                     }
                 };
 
@@ -2425,16 +2491,11 @@
                             "1. Nomor surat.\n" +
                             "2. Tanggal (YYYY.MM.DD).\n" +
                             "3. Perihal.\n" +
-                            "4. JABATAN PENANDATANGAN. Ketentuan wajib:\n" +
-                            "   - Jika penandatangan adalah salah satu dari 4 jabatan internal PUPR berikut, tulis TEPAT seperti ini:\n" +
-                            "     * \"Menteri Pekerjaan Umum\"\n" +
-                            "     * \"Direktur Jenderal Cipta Karya\"\n" +
-                            "     * \"Direktur Bina Penataan Bangunan\"\n" +
-                            "     * \"Kasubdit Wilayah II\"\n" +
-                            "   - Jika di luar 4 jabatan internal tersebut, anggap sebagai EXTERNAL dan tuliskan nama jabatannya secara lengkap (misal: \"Gubernur Nusa Tenggara Barat\", \"Bupati Lombok Barat\", \"Direktur Utama PT. ABC\").\n" +
-                            "5. PENGIRIM (Contoh: Gubernur NTB).\n" +
-                            "6. PENERIMA (Contoh: Menteri PU).\n\n" +
-                            "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}\n" +
+                            "4. KLASIFIKASI JENIS: Jika pengirim (Kop/Tanda tangan) berasal dari LUAR instansi PUPR dan ditujukan KEPADA internal PUPR, sebutkan sebagai 'Surat Masuk'. Jika pengirim adalah internal PUPR, sebutkan sebagai 'Surat'.\n" +
+                            "5. JABATAN PENANDATANGAN (Menteri/Dirjen/Direktur/Kasubdit jika internal, atau Jabatan Lengkap jika eksternal).\n" +
+                            "6. PENGIRIM (Dari).\n" +
+                            "7. PENERIMA (Ke).\n\n" +
+                            "Kembalikan JSON: {\"nomorSurat\":\"...\",\"tanggalSurat\":\"...\",\"perihalSurat\":\"...\",\"jenis\":\"...\",\"jabatan\":\"...\",\"alurDari\":\"...\",\"alurKe\":\"...\"}\n" +
                             "Jika benar-benar tidak ditemukan setelah dianalisis secara mendalam, isi dengan string kosong \"\". Berikan HANYA JSON tanpa tanda markdown block (seperti ```json) atau teks penjelasan lain.";
 
                         let payloadContents = [];
@@ -2528,6 +2589,18 @@
 
                         document.getElementById('modalDari').value = data.alurDari || "";
                         document.getElementById('modalKe').value = data.alurKe || "";
+
+                        // Di dalam success block runOCR
+                        const jenisHasilAI = data.jenis || ""; // "Surat Masuk" atau "Surat"
+                        if (jenisHasilAI === "Surat Masuk") {
+                            // Cari index dropdown yang data-label nya adalah "Surat Masuk"
+                            for (let i = 0; i < comboJenis.options.length; i++) {
+                                if (comboJenis.options[i].getAttribute('data-label') === 'Surat Masuk') {
+                                    comboJenis.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                        }
 
                         setOcrStatus('✅ Data surat berhasil dibaca otomatis.', 'success');
 
@@ -2639,13 +2712,15 @@
                         if (!selectedFileFinalData.base64) { alert('Mohon unggah berkas final!'); return; }
 
                         const confirmHtml = `
-            <strong>Kategori:</strong> ${kategoriLabel}<br>
-            <strong>Provinsi:</strong> ${provinsi}<br>
-            <strong>Kegiatan:</strong> ${namaKegiatan}<br>
-            <strong>Perihal:</strong> ${perihalBaru}<br>
-            <strong>Jenjang:</strong> ${jenjangFinal}<br>
-            <strong>Nomor Surat:</strong> ${nomorBaru}
-        `;
+    <strong>Jenis Dokumen:</strong> ${kategoriLabel}<br>
+    <strong>Provinsi:</strong> ${provinsi}<br>
+    <strong>Nama Kegiatan:</strong> ${namaKegiatan}<br>
+    <strong>Perihal Utama:</strong> ${perihalBaru}<br>
+    <strong>Jenjang:</strong> ${jenjangFinal}<br>
+    <strong>Nomor Surat:</strong> ${nomorBaru}<br>
+    <strong>Tanggal:</strong> ${tanggalBaru.split('-').reverse().join('/')}<br>
+    <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+`;
 
                         const yakin = await showCustomUpdateConfirm('Arsipkan Berkas Baru?', confirmHtml);
                         if (!yakin) return;
@@ -2718,14 +2793,17 @@
                             }
                         }
 
-                        const confirmHtml = `
-            <strong>Perihal:</strong> ${perihalBaru}<br>
-            <strong>Kategori:</strong> ${kategoriLabel}<br>
-            <strong>Jenjang:</strong> ${jenjangFinal}<br>
-            <strong>Nomor Surat:</strong> ${nomorBaru}<br>
-            <strong>Status:</strong> ${statusFinal}
-        `;
+                        const formattedTanggalIndo = tanggalBaru ? tanggalBaru.split('-').reverse().join('/') : '-';
 
+                        const confirmHtml = `
+    <strong>Jenis Dokumen:</strong> ${kategoriLabel}<br>
+    <strong>Perihal Baru:</strong> ${perihalBaru}<br>
+    <strong>Jenjang Di-update:</strong> ${jenjangFinal}<br>
+    <strong>Nomor Surat Baru:</strong> ${nomorBaru}<br>
+    <strong>Tanggal Baru:</strong> ${formattedTanggalIndo}<br>
+    <strong>Status Akhir:</strong> ${statusFinal}<br>
+    <strong>Alur:</strong> ${document.getElementById('modalDari').value} ➔ ${document.getElementById('modalKe').value}
+`;
                         const yakin = await showCustomUpdateConfirm('Simpan Perubahan Dokumen?', confirmHtml);
                         if (!yakin) return;
 
@@ -2902,34 +2980,39 @@
             };
 
             window.handleKategoriChange = function (pathValue) {
-                // 1. Update visual path hint
                 const pathHint = document.getElementById('displayPath');
                 if (pathHint) pathHint.innerText = pathValue;
 
-                // 2. Ambil metadata
                 const kategoriSelect = document.getElementById('modalJenisDokumen');
+                if (!kategoriSelect || !kategoriSelect.selectedOptions[0]) return;
+
                 const selectedOption = kategoriSelect.selectedOptions[0];
                 const type = selectedOption.getAttribute('data-type');
+                const label = selectedOption.getAttribute('data-label');
 
                 const btnOCRArea = document.getElementById('ocrActionArea');
+                const boxOCRStatus = document.getElementById('ocrStatusBox');
                 const checkKronologis = document.getElementById('modalIsKronologis');
-                const filePresent = !!selectedFileFinalData.rawFile; // Cek apakah sudah ada file
+                const filePresent = !!selectedFileFinalData.rawFile;
 
-                // 3. Logika Spoon-Feeding & Pengunci
+                // A. Logika Spoon-Feeding OCR & Milestone
                 if (type === 'Teknis') {
-                    // Jika Teknis, kunci mati OCR meskipun ada file
                     if (btnOCRArea) btnOCRArea.style.display = 'none';
-                    // Biasanya dokumen kontrak/teknis adalah Milestone
+                    if (boxOCRStatus) boxOCRStatus.style.display = 'none';
                     if (checkKronologis) checkKronologis.checked = true;
                 } else {
-                    // Jika Rutin (Persuratan), cek apakah file sudah diunggah
                     if (filePresent && btnOCRArea) {
                         btnOCRArea.style.display = 'block';
                     } else if (btnOCRArea) {
                         btnOCRArea.style.display = 'none';
                     }
-                    // Reset kronologis untuk surat rutin (opsional)
-                    if (checkKronologis) checkKronologis.checked = false;
+                }
+
+                // B. Logika Otomatisasi Jenjang Eksternal
+                if (label === 'Surat Masuk') {
+                    setKategoriJenjang('Eksternal');
+                } else if (type === 'Rutin') {
+                    setKategoriJenjang('Internal');
                 }
             };
 

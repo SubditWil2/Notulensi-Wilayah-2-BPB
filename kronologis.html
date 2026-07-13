@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 
-<!-- <script>
-    if (sessionStorage.getItem('dms_access_token') !== 'authorized') {
-        window.location.href = 'login.html';
-    }
-</script>
- -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -37,7 +30,7 @@
             border: 1px solid #e2e8f0; overflow: visible;
         }
 
-        /* HEADER */
+        /* HEADER UTAMA */
         .header {
             background: linear-gradient(135deg, #1d355e 0%, #11223f 100%);
             color: white; padding: 16px 24px;
@@ -71,7 +64,7 @@
         .filter-group label { display: block; font-size: 11px; font-weight: 800; color: #1d355e; margin-bottom: 6px; text-transform: uppercase; }
         .filter-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; background: white; }
 
-        /* HEADER LAPORAN DINAMIS (DIPAKSA MUNCUL SAAT PRINT) */
+        /* HEADER LAPORAN DINAMIS */
         #infoLaporan {
             display: none; margin-bottom: 20px; padding: 15px;
             background: white; border: 2.5px solid #1d355e; border-radius: 10px;
@@ -99,7 +92,7 @@
 
         td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; line-height: 1.4; font-size: 13px; word-wrap: break-word; }
 
-        /* TOMBOL BUKA */
+        /* TOMBOL BUKA (DISPLAY LAYAR) */
         .btn-view {
             display: inline-block; padding: 6px 12px; background: #1d355e !important;
             color: white !important; text-decoration: none; border-radius: 6px; 
@@ -109,29 +102,70 @@
 
         .empty-state { text-align: center; padding: 60px; color: #94a3b8; font-style: italic; }
 
-        /* PENGATURAN CETAK (PRINT) */
+        /* ============================== 
+           MODE MOBILE (SCREEN ONLY)
+           ============================== */
+        @media screen and (max-width: 768px) {
+            .filter-section { grid-template-columns: 1fr; }
+            .header-content p { display: none; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid #cbd5e1; margin-bottom: 15px; border-radius: 12px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+            td { border: none; border-bottom: 1px dashed #eee; position: relative; padding: 10px 8px 10px 45% !important; text-align: right; display: flex; justify-content: flex-end; align-items: center; min-height: 44px; }
+            td:before { position: absolute; left: 10px; width: 40%; font-weight: 800; color: #64748b; text-align: left; content: attr(data-label); font-size: 11px; }
+            td:last-child { border-bottom: 0; }
+            .btn-view { width: 100%; text-align: center; padding: 10px; }
+        }
+
+        /* ============================== 
+           MODE CETAK (PRINT) - FIXED NAVY & BUTTONS
+           ============================== */
         @media print {
-            @page { size: landscape; margin: 1cm; }
+            @page { size: landscape; margin: 0.5cm; }
+            
             #navbar, .filter-section, .btn-print { display: none !important; }
-            body { background: white !important; padding: 0 !important; }
             body::before { display: none !important; }
             .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: none !important; }
+
+            /* Paksa Layout Tabel Desktop */
+            .table-container { overflow: visible !important; }
+            table { display: table !important; table-layout: auto !important; width: 100% !important; border: 1px solid #ccc !important; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { display: table-row !important; page-break-inside: avoid; }
             
-            /* Tampilkan Identitas Proyek */
-            #infoLaporan { display: block !important; border: 2px solid #1d355e !important; }
-            th { background-color: #1d355e !important; color: white !important; border: 1px solid #1d355e !important; }
-            
-            /* Memastikan Link "BUKA" Tetap Ada & Berwarna Navy di PDF agar kontras */
-            .btn-view { 
-                background: #11223f !important; 
+            /* Warna Navy Header di Cetakan */
+            th { 
+                display: table-cell !important; 
+                background-color: #1d355e !important; 
                 color: white !important; 
-                display: inline-block !important; 
-                border-radius: 4px !important;
-                padding: 4px 8px !important;
-                text-decoration: none !important;
+                border: 1px solid #1d355e !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
             }
             
-            td { border: 1px solid #eee !important; color: black !important; }
+            td { 
+                display: table-cell !important; 
+                border: 1px solid #ccc !important; 
+                padding: 8px !important;
+                color: black !important;
+            }
+
+            /* Tombol BUKA agar tetap Biru di Cetakan */
+            .btn-view { 
+                background-color: #1d355e !important; 
+                color: white !important; 
+                display: inline-block !important;
+                border-radius: 4px !important;
+                padding: 4px 10px !important;
+                text-decoration: none !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+
+            /* Identitas Laporan */
+            #infoLaporan { display: block !important; border: 2px solid #1d355e !important; }
+            td:before { content: none !important; } /* Matikan label mobile */
         }
     </style>
 </head>
@@ -152,7 +186,6 @@
         </div>
 
         <div class="dashboard-content">
-            <!-- Filter -->
             <div class="filter-section">
                 <div class="filter-group">
                     <label>📍 Provinsi</label>
@@ -168,7 +201,6 @@
                 </div>
             </div>
 
-            <!-- Header Laporan (Identitas untuk PDF) -->
             <div id="infoLaporan">
                 <p id="infoProvinsi"></p>
                 <h2 id="infoKegiatan"></h2>
@@ -206,7 +238,6 @@
         
         let masterData = [], kegiatanByProvinsi = {};
 
-        // Fungsi Cerdas Pencarian Link
         function cariLink(item) {
             if (!item) return null;
             const keys = ['Link Final', 'linkFinal', 'Link_x0020_Final', 'Link File', 'linkFile', 'Link_x0020_File', 'Link_Folder', 'linkFolder', 'Link Undangan', 'linkUndangan', 'fileLink', 'link', 'Link'];
@@ -267,7 +298,7 @@
                 return itemKeg === kegVal && (isKron === 'Ya' || isKron === true);
             });
 
-            filtered.sort((a, b) => new Date((a.Tanggal || a.tanggal || '').replace(/\./g, '-')) - new Date((b.Tanggal || b.tanggal || '').replace(/\./g, '-')));
+            filtered.sort((a, b) => new Date((a.Tanggal || a.tanggal || a.tanggalRapat || '').replace(/\./g, '-')) - new Date((b.Tanggal || b.tanggal || b.tanggalRapat || '').replace(/\./g, '-')));
 
             tbody.innerHTML = filtered.length ? '' : '<tr><td colspan="7" class="empty-state">Data kronologis belum ditemukan.</td></tr>';
             filtered.forEach((item, i) => {
@@ -276,13 +307,13 @@
                 
                 tbody.innerHTML += `
                     <tr>
-                        <td style="text-align:center; font-weight:bold;">${i + 1}</td>
-                        <td style="color:#1d355e; font-weight:600;">${tgl}</td>
-                        <td style="font-weight:500;">${item.Perihal || item.perihal || item['Judul Rapat'] || '-'}</td>
-                        <td style="font-family:monospace; font-size:11px;">${item['Nomor Surat'] || item.nomorSurat || '-'}</td>
-                        <td>${item.alurDari || item.AlurDari || '-'}</td>
-                        <td>${item.alurKe || item.AlurKe || '-'}</td>
-                        <td style="text-align:center;">
+                        <td data-label="NO" style="text-align:center; font-weight:bold;">${i + 1}</td>
+                        <td data-label="TANGGAL" style="color:#1d355e; font-weight:600;">${tgl}</td>
+                        <td data-label="URAIAN">${item.Perihal || item.perihal || item['Judul Rapat'] || '-'}</td>
+                        <td data-label="NOMOR SURAT" style="font-family:monospace; font-size:11px;">${item['Nomor Surat'] || item.nomorSurat || '-'}</td>
+                        <td data-label="DARI">${item.alurDari || item.AlurDari || '-'}</td>
+                        <td data-label="KE">${item.alurKe || item.AlurKe || '-'}</td>
+                        <td data-label="BERKAS" style="text-align:center;">
                             ${linkObj ? `<a href="${linkObj}" target="_blank" class="btn-view">BUKA</a>` : '-'}
                         </td>
                     </tr>`;

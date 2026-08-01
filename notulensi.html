@@ -1404,7 +1404,8 @@
         }
 
         const MODELS_FALLBACK = [
-            'gemini-3.5-flash',
+            'gemini-3.6-flash',
+            'gemini-3.5-flash'
         ];
 
         async function geminiRequest(payload, models = MODELS_FALLBACK) {
@@ -1648,8 +1649,8 @@
             try {
                 const base64Data = await toBase64(file);
                 const OCR_MODELS = [
+                    'gemini-3.5-flash-lite',
                     'gemini-3.1-flash-lite',
-                    'gemini-2.5-flash',
                     'gemini-3.5-flash'
                 ];
 

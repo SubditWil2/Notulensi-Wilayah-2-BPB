@@ -422,13 +422,16 @@
             height: 100%;
             background: rgba(17, 34, 63, 0.85);
             backdrop-filter: blur(5px);
-            z-index: 9999;
+            z-index: 99999 !important;
+            /* Ditingkatkan agar di atas navbar */
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            padding: 20px;
+            /* Jarak aman dari tepi layar */
         }
 
         .modal-overlay.active {
@@ -438,14 +441,33 @@
 
         .modal-box {
             background: white;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
-            padding: 40px 30px;
+            max-height: 88vh;
+            /* Batasi tinggi maksimal 88% dari layar */
+            overflow-y: auto;
+            /* Aktifkan scroll internal jika layar pendek */
+            padding: 25px 22px;
+            /* Padding dipersingkat dari 40px ke 25px */
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             transform: translateY(20px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Scrollbar Halus untuk Modal-Box */
+        .modal-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-box::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .modal-box::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
         .modal-overlay.active .modal-box {
@@ -533,6 +555,46 @@
             background: #e2e8f0;
         }
 
+        /* STYLES KHUSUS RADIO PROMPT SELECTOR */
+        .prompt-selector-container {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .prompt-radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .prompt-radio-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1d355e;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            flex: 1;
+            transition: all 0.2s ease;
+        }
+
+        .prompt-radio-label:hover {
+            border-color: #1d355e;
+        }
+
+        .prompt-radio-label input[type="radio"]:checked+span {
+            color: #1d355e;
+            font-weight: 700;
+        }
+
         @media (max-width: 768px) {
 
             /* Menjaga tata letak tetap mendatar (horizontal) dan tidak turun ke bawah */
@@ -603,6 +665,11 @@
             .button-group {
                 flex-direction: column;
             }
+
+            .prompt-radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
 
 
@@ -648,42 +715,54 @@
                 <div class="modal-loading-sub" id="loadingDynamicText">Membuat struktur folder proyek...</div>
             </div>
 
-            <!-- Tampilan POP-UP INPUT/UPLOAD TRANSKRIP AI -->
+            <!-- Tampilan POP-UP INPUT/UPLOAD TRANSKRIP AI (DIPERBAIKI) -->
             <div id="modalAITranscript" style="display: none; text-align: left;">
-                <h3 style="color: #1d355e; margin-bottom: 10px; font-weight: 700; font-size: 16px;">⚡ Kirim Menggunakan
-                    Asisten AI</h3>
-                <p style="font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.5;">
-                    Unggah berkas atau tempelkan teks transkrip rapat (Zoom/Tactiq/Teams) Anda di bawah ini.
+                <h3 style="color: #1d355e; margin-bottom: 6px; font-weight: 700; font-size: 15px;">⚡ Kirim Menggunakan Asisten AI</h3>
+                <p style="font-size: 11.5px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">
+                    Pilih format prompt, lalu unggah berkas atau tempelkan teks transkrip rapat Anda di bawah ini.
                 </p>
 
+                <!-- PILIHAN TIPE RAPAT / PROMPT (RADIO BUTTONS) -->
+                <div class="prompt-selector-container" style="padding: 10px; margin-bottom: 12px;">
+                    <label style="font-size: 11.5px; font-weight: 700; color: #1d355e; margin: 0;">📋 Pilih Format Prompt AI:</label>
+                    <div class="prompt-radio-group" style="margin-top: 6px;">
+                        <label class="prompt-radio-label" style="padding: 6px 10px; font-size: 11.5px;">
+                            <input type="radio" name="promptType" value="reguler" checked>
+                            <span>📌 Rapat Biasa / Koordinasi</span>
+                        </label>
+                        <label class="prompt-radio-label" style="padding: 6px 10px; font-size: 11.5px;">
+                            <input type="radio" name="promptType" value="bimtek">
+                            <span>🎓 Bimbingan Teknis (Bimtek)</span>
+                        </label>
+                    </div>
+                </div>
+
                 <!-- AREA UNGGAH FILE TRANSKRIP -->
-                <div class="form-group">
-                    <label style="font-size: 13px;">Pilihan 1: Unggah Berkas Transkrip (.txt, .docx, .pdf, .csv)</label>
-                    <div class="upload-area" id="aiUploadArea" style="padding: 15px 10px; background: #f8fafc;"
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; margin-bottom: 4px;">Pilihan 1: Unggah Berkas Transkrip (.txt, .docx, .pdf, .csv)</label>
+                    <div class="upload-area" id="aiUploadArea" style="padding: 10px; background: #f8fafc;"
                         onclick="document.getElementById('aiTranscriptFile').click()">
-                        <div style="font-size: 20px; margin-bottom: 4px;">📂</div>
-                        <div style="font-size: 12px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini
-                        </div>
+                        <div style="font-size: 18px; margin-bottom: 2px;">📂</div>
+                        <div style="font-size: 11.5px; font-weight: 600; color: #1d355e;">Pilih atau Tarik File Ke Sini</div>
                     </div>
                     <input type="file" id="aiTranscriptFile" accept=".txt,.csv,.docx,.pdf" style="display:none"
                         onchange="bacaFileTranskrip(this.files[0])">
                     <div id="aiFileFeedback"
-                        style="display: none; font-size: 12px; color: #27ae60; margin-top: 5px; font-weight: 600;">
+                        style="display: none; font-size: 11.5px; color: #27ae60; margin-top: 4px; font-weight: 600;">
                     </div>
                 </div>
 
                 <!-- INPUT COPAST MANUAL -->
-                <div class="form-group" style="margin-top: 15px;">
-                    <label for="transkripRapat" style="font-size: 13px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar
-                        Manual</label>
+                <div class="form-group" style="margin-top: 10px; margin-bottom: 10px;">
+                    <label for="transkripRapat" style="font-size: 12px; margin-bottom: 4px;">Pilihan 2: Atau Tempel Teks Transkrip Kasar Manual</label>
                     <textarea id="transkripRapat" placeholder="Paste transkrip rapat Anda di sini..."
-                        style="min-height: 120px; font-size: 12px;"></textarea>
+                        style="min-height: 90px; height: 90px; font-size: 11.5px; padding: 8px;"></textarea>
                 </div>
 
                 <button type="button" class="btn-open-link"
-                    style="background:#1d355e; margin-top:10px; text-align: center;" onclick="submitRapatDenganAI()">⚡
+                    style="background:#1d355e; margin-top:5px; padding: 10px; text-align: center; font-size: 13px;" onclick="submitRapatDenganAI()">⚡
                     Mulai Proses & Kirim</button>
-                <button type="button" class="btn-close-modal" onclick="closeModal()">Batal</button>
+                <button type="button" class="btn-close-modal" style="padding: 8px; font-size: 12px; margin-top: 6px;" onclick="closeModal()">Batal</button>
             </div>
 
             <!-- Tampilan Saat Sukses -->
@@ -957,7 +1036,6 @@
         }
 
 
-
         // ── CONFIGURATION ──
         const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
         const FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e2cc75598f1f4d419248737790517523/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=i4q61lejZS-RWxirrlcPmqcv-3zqzpbk4AYlJh4zf4A';
@@ -981,27 +1059,43 @@
                 "Dian Puspitasari",
                 "M. Naufal Ammar N."
             ],
-            systemPrompt: '',
+            systemPrompts: {
+                reguler: '',
+                bimtek: ''
+            },
             meetingId: '',
             meetingPasscode: ''
         };
 
-        async function loadSystemPrompt() {
+        // MULTI-PROMPT LOAD LOGIC (Rapat Biasa & Bimtek)
+        async function loadSystemPrompts() {
             try {
-                const response = await fetch('prompt_notulensi.txt');
-                if (response.ok) {
-                    const rawText = await response.text();
-                    state.systemPrompt = rawText.replace(/\\n/g, '\n');
-                    console.log("📝 Panduan Prompt Notulensi berhasil dimuat secara dinamis.");
+                const [resReguler, resBimtek] = await Promise.all([
+                    fetch('prompt_notulensi.txt').catch(() => null),
+                    fetch('prompt_bimtek.txt').catch(() => null)
+                ]);
+
+                if (resReguler && resReguler.ok) {
+                    const rawText = await resReguler.text();
+                    state.systemPrompts.reguler = rawText.replace(/\\n/g, '\n');
+                    console.log("📝 Prompt Rapat Biasa berhasil dimuat.");
                 } else {
-                    throw new Error("Respons jaringan tidak OK saat membaca prompt.");
+                    state.systemPrompts.reguler = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan...";
                 }
+
+                if (resBimtek && resBimtek.ok) {
+                    const rawText = await resBimtek.text();
+                    state.systemPrompts.bimtek = rawText.replace(/\\n/g, '\n');
+                    console.log("🎓 Prompt Bimbingan Teknis (Bimtek) berhasil dimuat.");
+                } else {
+                    state.systemPrompts.bimtek = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan untuk acara Bimbingan Teknis (Bimtek)...";
+                }
+
             } catch (err) {
                 console.warn("⚠️ Gagal memuat prompt luar, menggunakan draf cadangan:", err.message);
-                state.systemPrompt = "Bertindaklah sebagai Notulis Eksekutif Pemerintahan yang Profesional...";
             }
         }
-        window.addEventListener('load', loadSystemPrompt);
+        window.addEventListener('load', loadSystemPrompts);
 
         // Get elements
         const form = document.getElementById('activityForm');
@@ -1160,7 +1254,11 @@
                 return;
             }
 
-            if (!state.systemPrompt) {
+            // DETEKSI PROMPT AKTIF BERDASARKAN RADIO BUTTON
+            const selectedType = document.querySelector('input[name="promptType"]:checked')?.value || 'reguler';
+            const activePrompt = state.systemPrompts[selectedType];
+
+            if (!activePrompt) {
                 alert("Sistem sedang memuat berkas panduan prompt. Harap tunggu beberapa detik lalu coba lagi.");
                 return;
             }
@@ -1172,12 +1270,12 @@
 
             document.getElementById('modalAITranscript').style.display = 'none';
             document.getElementById('modalLoading').style.display = 'block';
-            document.getElementById('loadingDynamicText').textContent = "Asisten AI sedang menganalisis transkrip...";
+            document.getElementById('loadingDynamicText').textContent = `Asisten AI sedang menganalisis transkrip (${selectedType === 'bimtek' ? 'Format Bimtek' : 'Format Regular'})...`;
 
             try {
                 const payload = {
                     systemInstruction: {
-                        parts: [{ text: state.systemPrompt }]
+                        parts: [{ text: activePrompt }]
                     },
                     contents: [{
                         parts: [{ text: transkrip }]
@@ -1206,7 +1304,7 @@
                     throw new Error(`Gagal membaca struktur JSON hasil AI: ${parseError.message}. Silakan coba kirim ulang.`);
                 }
 
-                console.log("=== INI ADALAH HASIL GENERATE DARI GEMINI AI ===");
+                console.log(`=== HASIL GENERATE GEMINI AI (${selectedType.toUpperCase()}) ===`);
                 console.log("Judul Rapat :", parsedAI.judulRapat);
                 console.log("Tujuan Rapat:", parsedAI.tujuanRapat);
                 console.log("Pembukaan   :\n", JSON.stringify(parsedAI.grupPembukaan, null, 2));
@@ -1412,9 +1510,8 @@
             for (const model of models) {
                 for (const apiKey of GEMINI_API_KEYS) {
                     let response;
-                    // Lakukan deep clone pada payload agar payload asli tidak rusak saat dimutasi
-                    let currentPayload = JSON.parse(JSON.stringify(payload)); 
-                    
+                    let currentPayload = JSON.parse(JSON.stringify(payload));
+
                     try {
                         response = await fetch(
                             `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
@@ -1425,13 +1522,10 @@
                             }
                         );
 
-                        // ANTISIPASI LIMIT GOOGLE SEARCH GROUNDING:
-                        // Jika model mengembalikan error 429/400 dan request menggunakan "tools" (Google Search),
-                        // kita coba panggil kembali model yang sama secara instan TANPA fitur Google Search.
                         if ((response.status === 429 || response.status === 400) && currentPayload.tools) {
                             console.warn(`⚠️ Model ${model} membatasi akses dengan Google Search (Status ${response.status}). Mencoba kembali tanpa Search Grounding...`);
-                            delete currentPayload.tools; // Hapus fitur Google Search dari payload
-                            
+                            delete currentPayload.tools;
+
                             response = await fetch(
                                 `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
                                 {
@@ -1855,7 +1949,6 @@
             const file = fileInput.files[0];
             if (!file) return showMessage('Silakan upload Surat Undangan (PDF/JPG/PNG)', 'error');
 
-            // Menyusun tampilan rincian HTML di dalam modal konfirmasi custom
             let warningHeader = '';
             if (isDuplicate) {
                 warningHeader = `<div style="color: #e74c3c; font-weight: bold; margin-bottom: 10px; border-bottom: 2px solid #ef5350; padding-bottom: 8px;">⚠️ PERINGATAN: Rapat serupa sudah terdaftar di sistem!</div>`;

@@ -1108,7 +1108,7 @@
                             </div>
                         </div>
 
-                        <!-- 1. AREA UPLOAD FILE -->
+                        <!-- 1. AREA UPLOAD FILE (SUDAH BISA KLIK & DROP) -->
                         <div class="filter-group" style="margin-bottom: 15px;">
                             <label style="font-size: 13px; font-weight: 700; color: #1d355e;">Unggah File Berkas Final
                                 (PDF/Word bertanda tangan)</label>
@@ -1116,7 +1116,7 @@
                                 onclick="document.getElementById('modalFileFinal').click()">
                                 <span style="font-size: 24px; display:block; margin-bottom: 4px;">📂</span>
                                 <span style="font-size: 12px; font-weight: 600; color:#1d355e;"
-                                    id="modalUploadLabel">Pilih file final...</span>
+                                    id="modalUploadLabel">Pilih atau tarik file final ke sini...</span>
                             </div>
                             <input type="file" id="modalFileFinal" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                 style="display:none;" onchange="window.handleFileFinalSelect(this.files[0])">
@@ -2389,6 +2389,43 @@
                         alert("Gagal membaca file. Silakan coba lagi.");
                     }
                 };
+
+
+                // Tambahan Fitur Drag & Drop untuk Upload File Final di Modal
+                const modalUploadArea = document.getElementById('modalUploadArea');
+                const modalFileInput = document.getElementById('modalFileFinal');
+
+                if (modalUploadArea && modalFileInput) {
+                    modalUploadArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        modalUploadArea.style.borderColor = '#1d355e';
+                        modalUploadArea.style.background = '#e2e8f0';
+                    });
+
+                    modalUploadArea.addEventListener('dragleave', () => {
+                        modalUploadArea.style.borderColor = '#cbd5e1';
+                        modalUploadArea.style.background = '#f8fafc';
+                    });
+
+                    modalUploadArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        modalUploadArea.style.borderColor = '#cbd5e1';
+                        modalUploadArea.style.background = '#f8fafc';
+
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            const droppedFile = e.dataTransfer.files[0];
+
+                            // Masukkan file ke input elemen
+                            const dt = new DataTransfer();
+                            dt.items.add(droppedFile);
+                            modalFileInput.files = dt.files;
+
+                            // Jalankan fungsi penanganan file
+                            window.handleFileFinalSelect(droppedFile);
+                        }
+                    });
+                }
+
 
                 function setOcrStatus(message, type) {
                     const box = document.getElementById('ocrStatusBox');

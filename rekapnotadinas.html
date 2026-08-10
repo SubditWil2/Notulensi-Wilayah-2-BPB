@@ -1357,8 +1357,8 @@
                 const CONFIG = {
                     getDataFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k',
                     deleteNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/d1888b0e6e184990a9230c47d0d28e9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Xi_eOEnHeXrb3Ut8yWL8oxN13cKqKOU5q5JQ8z96vAU',
-                    updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/ffd07244a37a4f2bb999472b2e5f61c1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GE4Av5hFskT3u42oH8PpFzkjYhTRGJFBNe8uuOCxDVA',
-                    archiveNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1b0fc73a4f38432c8f481d6a922f4f93/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=PoSnJc1Ydcsc740fUzfbHlOn88sD7NNJjBUlG_W_LCU'
+                    updateNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/71187e0e0c7140ca99fdb50501e44798/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3VY6zne63QpysYCpL0iauxs6DR7gYGGNap1TQN_cs9k',
+                    archiveNDFlowUrl: 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/13/workflows/7f7e7c447fc24c8aac7d6886f2a06b74/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LBXjw_H1OWr_CSZJ0FbltXBjnYMKGNUQUKByBB2BhUA'
                 };
 
                 let databaseND = [];
@@ -2889,7 +2889,7 @@
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
                             });
-                            if (!res.ok) throw new Error('Gagal memperbarui data.');
+                            if (!res.ok) throw new Error('Gagal menyimpan berkas di server. Pastikan nama file yang diunggah tidak terlalu panjang dan tidak mengandung karakter ilegal (\\  /  :  *  ?  "  <  >  |).');
                             clearCachedData();
                             await loadDashboardData();
                             selectedSupportingFiles = [];

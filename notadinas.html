@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Nota Dinas / Surat</title>
+    <title>Form Nota Dinas / Surat / Laporan Monev</title>
     <style>
         * {
             margin: 0;
@@ -188,6 +188,7 @@
 
         .toggle-group {
             display: flex;
+            flex-wrap: wrap; /* Memastikan responsif jika ada 3 pilihan atau lebih */
             gap: 20px;
             background: #f1f5f9;
             padding: 15px 20px;
@@ -198,6 +199,7 @@
 
         .toggle-option {
             flex: 1;
+            min-width: 120px; /* Batas lebar minimum untuk kerapihan */
             text-align: center;
         }
 
@@ -511,7 +513,7 @@
                     <img src="logo-pu.png" alt="Logo PU">
                 </div>
                 <div class="header-content">
-                    <h1>Form Nota Dinas / Surat</h1>
+                    <h1>Form Nota Dinas / Surat / Laporan Monev</h1>
                     <p>Subdit Wil 2 - Direktorat Bina Penataan Bangunan - Ditjen Cipta Karya - Kementerian Pekerjaan
                         Umum</p>
                 </div>
@@ -539,6 +541,10 @@
                     <div class="toggle-option">
                         <input type="radio" name="jenisDokumen" id="surat" value="Surat">
                         <label for="surat">✉️ Surat</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="radio" name="jenisDokumen" id="laporanMonev" value="Laporan Monev">
+                        <label for="laporanMonev">📈 Laporan Monev</label>
                     </div>
                 </div>
 
@@ -726,7 +732,7 @@
 
         // ========== KONFIGURASI ==========
         const GET_DATA_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adaa001b7e3843219b41e66e7a033049/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=K14G3WH5mC6A8ljNyPnKBwPq5ZIz4CX06ZqEesR220k';
-        const FLOW_NOTADINAS_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/052e45dd6d074b06b21a33078bf88d06/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GiilzR8CN-Kh3S808iyGtNm6_XfhVo1qfgBIr8XfUjE';
+        const FLOW_NOTADINAS_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/4fef318156ee426b88330d9cf0ee284d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=u7_Pv_Mw-QYhjHCgUGJGbZLyO4TfT2x29zG3FGiLrjM';
 
         // ========== DATA FALLBACK (dari response sukses sebelumnya) ==========
         const FALLBACK_PROVINSI = [
@@ -1273,11 +1279,13 @@
             await loadMasterData();
             populatePembuatDropdown();
 
-            // --- BARU: DETEKSI URL PARAMETER (?type=surat) UNTUK INTEGRASI LANDING PAGE ---
+            // --- DETEKSI URL PARAMETER (?type=surat / ?type=monev) UNTUK INTEGRASI LANDING PAGE ---
             const urlParams = new URLSearchParams(window.location.search);
             const docType = urlParams.get('type');
             if (docType === 'surat') {
                 document.getElementById('surat').checked = true;
+            } else if (docType === 'monev' || docType === 'laporan_monev') {
+                document.getElementById('laporanMonev').checked = true;
             } else {
                 document.getElementById('notaDinas').checked = true;
             }

@@ -33,9 +33,17 @@ ATURAN KETAT PENULISAN & GAYA BAHASA
   * jawaban;
   * arahan;
   * dukungan;
-  * penambahan informasi;
+  * penambahan informasi yang LULUS UJI KEMANDIRIAN di bawah (lihat penjelasan);
 
-  terhadap isu yang sama, maka substansi tersebut harus ditempatkan pada bagian akhir pembahasan isu tersebut dan tidak dibuat sebagai blok pembahasan tersendiri. Namun, jika pembicara yang lain tidak secara eksplisit menanggapi maka dianggap sebagai pembicara tersendiri pada blok pembahasan.
+  terhadap isu yang sama, maka substansi tersebut harus ditempatkan pada bagian akhir pembahasan isu tersebut dan tidak dibuat sebagai objek grupPembahasan tersendiri.
+
+* PERBEDAAN "TANGGAPAN" VS "OBJEK grupPembahasan BARU" (WAJIB DIPATUHI — UJI KEMANDIRIAN SUBSTANSI, INI SERING JADI SUMBER KESALAHAN):
+  Penambahan informasi dari peserta lain HANYA boleh diperlakukan sebagai "Tanggapan" apabila secara substansi terikat/bergantung pada poin yang baru disampaikan pembicara sebelumnya — yaitu berupa jawaban atas pertanyaan, koreksi/klarifikasi atas pernyataan spesifik, persetujuan dengan catatan tambahan, atau elaborasi langsung yang tidak bisa dipahami tanpa merujuk poin sebelumnya.
+  Jika seorang peserta menyampaikan poin substantif baru yang BERDIRI SENDIRI — artinya poin tersebut tetap bisa dipahami dan tetap relevan sebagai kontribusi teknis independen sekalipun seluruh poin pembicara sebelumnya dihapus dari notulensi — maka peserta tersebut WAJIB dijadikan objek grupPembahasan baru (huruf abjad baru pada "namaPembicara": B., C., dst.), BUKAN "Tanggapan [Nama]:" di dalam "teksPembahasan" objek pembicara sebelumnya. Ini berlaku meskipun disampaikan tepat setelah pembicara lain dan membahas unit topik yang sama.
+  UJI KEMANDIRIAN (WAJIB DITERAPKAN PADA SETIAP KONTRIBUSI PESERTA LAIN SEBELUM DIPUTUSKAN JADI "TANGGAPAN" ATAU OBJEK BARU): tanyakan — "Apakah poin ini bisa berdiri sendiri sebagai temuan/masukan teknis yang independen, TANPA perlu merujuk pada apa yang baru saja disampaikan pembicara sebelumnya?" Jika JAWABANNYA YA, ini WAJIB menjadi objek grupPembahasan baru. Jika jawabannya TIDAK (poin ini hanya masuk akal sebagai reaksi/rujukan terhadap poin spesifik sebelumnya), maka ini sah sebagai "Tanggapan".
+  AMBANG BATAS ANGKA (WAJIB, MENGALAHKAN KESAMAAN UNIT TOPIK — INI ATURAN PALING TEGAS DI BAGIAN INI): Apabila kontribusi seorang peserta lain berisi LEBIH DARI 2 (dua) poin baru (huruf a, b, c, dst. atau kalimat terpisah dalam "teksPembahasan") yang TIDAK masing-masing merujuk secara spesifik ke poin tertentu dari pembicara sebelumnya (bukan menjawab pertanyaan, bukan mengoreksi klaim spesifik, bukan elaborasi langsung atas satu poin tertentu), maka SELURUH kontribusi tersebut WAJIB dijadikan objek grupPembahasan baru — TIDAK ADA PENGECUALIAN, SEKALIPUN kontribusi itu masih membahas unit topik/dokumen yang sama (misalnya sama-sama mereviu KAK). Kesamaan unit topik TIDAK PERNAH cukup sebagai alasan untuk menjadikannya "Tanggapan" jika ambang batas ini terlampaui. Sebaliknya, kontribusi 1-2 poin singkat yang murni reaksi/rujukan terhadap poin sebelumnya tetap sah sebagai "Tanggapan" meski jumlahnya di bawah ambang batas.
+  CONTOH — HARUS JADI OBJEK BARU: Pembicara A memaparkan pemutakhiran dasar hukum KAK (dasar hukum, kewajiban pelaporan SIMBG, dst.). Pembicara B kemudian menyampaikan koreksi redaksional KAK pada poin lain, evaluasi kualifikasi tenaga ahli, dan penambahan lingkup pengawasan pembongkaran — poin-poin ini SAMA SEKALI TIDAK bergantung pada apa yang disampaikan Pembicara A (tidak menjawab, mengoreksi, atau merujuk poin spesifik A), melainkan kontribusi teknis independen atas bagian KAK yang berbeda. Ini WAJIB menjadi objek dengan "namaPembicara": "B. ..." tersendiri, BUKAN "Tanggapan [Nama B]:" di dalam objek A.
+  CONTOH — SAH SEBAGAI TANGGAPAN: Pembicara B menyampaikan "terkait dasar hukum yang disebutkan tadi, perlu ditambahkan juga SE Menteri PU No. X" — ini bergantung langsung pada poin spesifik yang baru disampaikan A, sehingga tetap sah sebagai "Tanggapan [Nama B]:" di dalam objek A.
 
 * Gunakan format berikut secara konsisten:
 
@@ -43,7 +51,7 @@ ATURAN KETAT PENULISAN & GAYA BAHASA
 a. ...
 b. ...
 
-* Apabila terdapat lebih dari satu peserta yang menanggapi isu yang sama, seluruh tanggapan ditempatkan secara berurutan pada blok pembahasan yang sama.
+* Apabila terdapat lebih dari satu peserta yang menanggapi isu yang sama, seluruh tanggapan ditempatkan secara berurutan pada objek grupPembahasan yang sama.
 
 * CONTOH WAJIB — PENANGANAN DIALOG BOLAK-BALIK (SANGAT PENTING, INI SUMBER KESALAHAN PALING SERING TERJADI):
   Jika transkrip menunjukkan pola dialog bolak-balik antara moderator/penanya dan satu narasumber mengenai satu unit topik yang sama — misalnya: moderator membuka topik → narasumber memaparkan progres → moderator menanggapi soal jadwal → narasumber menjelaskan kendala izin → moderator mengonfirmasi keputusan pergeseran termin — SELURUH rangkaian dialog tersebut WAJIB digabung menjadi SATU objek grupPembahasan (topik: misalnya "BPBPK Jakarta Metropolitan - Progres Gedung KBRI"), dengan struktur:
@@ -63,6 +71,46 @@ b. ...
   DILARANG KERAS menggabungkan beberapa unit topik berbeda (misalnya sesi tanya-jawab bergilir untuk banyak satker/wilayah, atau beberapa agenda berbeda dalam rapat umum) ke dalam satu objek pembicara tunggal hanya karena dibuka oleh moderator yang sama. Pelanggaran ini dianggap pelanggaran paling kritis dalam penyusunan notulensi ini dan harus dihindari mutlak.
 
 
+1A. DETEKSI DAN PENGELOMPOKAN BERDASARKAN TOPIK MAKRO (WAJIB DICEK DI AWAL, SEBELUM MENYUSUN grupPembahasan):
+
+Sebelum menyusun "grupPembahasan", Model WAJIB memeriksa apakah rapat memiliki topik makro — yaitu pembagian agenda besar yang eksplisit dan terpisah tegas secara substansi (bukan sekadar sub-isu di dalam satu agenda). Contoh topik makro: "Reviu KAK" vs "Reviu HPS", "Pembahasan Arsitektur" vs "Pembahasan Struktur", "Evaluasi Kontrak Paket A" vs "Evaluasi Kontrak Paket B".
+
+Indikator topik makro yang WAJIB dicek:
+a. Pernyataan eksplisit dari pembicara pembuka/pemimpin rapat yang membagi agenda menjadi tahap-tahap terpisah.
+b. Jika tidak ada pernyataan eksplisit, tetap boleh dikenali jika transkrip menunjukkan jeda substansi yang tegas dan tidak tumpang tindih (seluruh pembicara berhenti total membahas topik pertama sebelum topik kedua dimulai).
+
+Jika salah satu indikator terpenuhi, gunakan topik makro sebagai pengelompokan tingkat atas (lihat Aturan 1B untuk format field JSON-nya). Jika rapat TIDAK menunjukkan pembagian topik makro yang tegas, JANGAN paksakan — gunakan struktur datar seperti Aturan 1 semula, dan field "topikMakro" (lihat Aturan 1B) TIDAK disertakan sama sekali pada objek grupPembahasan. DILARANG membuat topik makro hanya dari pergantian pembicara/sub-isu ringan.
+
+CONTOH PENERAPAN (WAJIB DIPATUHI):
+* BENAR — topik makro dipakai: Moderator pembuka berkata "Baik, agenda hari ini kita bagi dua: pertama reviu KAK, setelah itu baru reviu HPS." Transkrip lalu menunjukkan seluruh pembicara membahas KAK secara tuntas dulu, baru berpindah total ke HPS. → Gunakan dua topik makro: "Reviu KAK" dan "Reviu HPS", masing-masing dengan penomoran abjad namaPembicara sendiri.
+* SALAH — topik makro dipaksakan: Dalam satu rapat evaluasi kontrak tunggal, satu pembicara membahas progres fisik lalu beralih ke isu administrasi kontrak yang sama. → JANGAN dijadikan dua topik makro ("Progres Fisik" vs "Administrasi Kontrak") karena ini sub-isu dalam satu agenda yang sama, bukan pembagian agenda besar yang eksplisit. Gunakan struktur datar seperti Aturan 1 semula, tanpa field "topikMakro".
+
+1B. FORMAT FIELD "topikMakro" — LARANGAN DUPLIKASI PEMBICARA DALAM SATU TOPIK MAKRO (WAJIB):
+
+* Jika rapat memiliki topik makro (Aturan 1A), setiap objek pada "grupPembahasan" WAJIB menyertakan field tambahan "topikMakro" berisi nama topik makro yang menaungi objek tersebut, contoh:
+  {
+    "topikMakro": "Reviu Kerangka Acuan Kerja (KAK)",
+    "namaPembicara": "A. Teuku Zaqirul Haq – Perwakilan Direktorat Bina Penataan Bangunan, Direktorat Jenderal Cipta Karya, Kementerian PU",
+    "teksPembahasan": "1. [poin]\\n2. [poin]"
+  }
+  Jika rapat TIDAK memiliki topik makro, field "topikMakro" TIDAK disertakan sama sekali pada objek manapun (bukan diisi string kosong atau null — dihilangkan sepenuhnya dari objek).
+* DILARANG KERAS 1 pembicara muncul lebih dari satu kali sebagai objek grupPembahasan terpisah DI DALAM "topikMakro" yang sama (nilai field "topikMakro" identik) — seluruh substansinya digabung jadi 1 objek meski disampaikan di titik waktu berjauhan dalam rapat.
+* Pembicara yang sama DIIZINKAN muncul lagi sebagai objek grupPembahasan baru HANYA jika nilai field "topikMakro" pada objek tersebut berbeda dari objek sebelumnya.
+* Penomoran abjad pada "namaPembicara" (A., B., C., ...) di-reset ke "A." pada setiap kelompok objek yang memiliki nilai "topikMakro" baru.
+* "daftarSegmenTopik" berisi nama topik makro (bukan lagi daftar per pembicara/sub-isu), dan verifikasi "jumlah objek grupPembahasan = jumlah item daftarSegmenTopik" (lihat Aturan 2) dihitung PER nilai "topikMakro", bukan lagi ketat 1:1 dengan jumlah objek grupPembahasan total.
+
+1C. PENGGABUNGAN SUBSTANSI YANG TERPISAH WAKTU DALAM SATU TOPIK MAKRO (WAJIB):
+
+Substansi dari pembicara yang sama pada 1 nilai "topikMakro" yang muncul di titik waktu berjauhan dalam rapat (disisipi objek dengan "topikMakro" lain di antaranya) tetap WAJIB digabung sebagai poin lanjutan pada "teksPembahasan" objek yang sama. Di dalam objek tersebut, urutan poin TIDAK wajib kronologis — boleh disusun berdasarkan keterkaitan substansi/tematik, selama masih dalam "topikMakro" dan pembicara yang sama.
+
+1D. FILTER SUBSTANSI TANGGAPAN — HAPUS PERSETUJUAN TANPA SUBSTANSI (WAJIB):
+
+* DIPERTAHANKAN sebagai poin "Tanggapan [Nama]:" pada "teksPembahasan": pertanyaan/klarifikasi, konfirmasi/koreksi, informasi tambahan baru, atau persetujuan yang disertai komitmen konkret (siapa mengerjakan apa, kapan).
+* DIHAPUS sepenuhnya dari "teksPembahasan": persetujuan murni tanpa tambahan substansi atau komitmen baru (contoh: "diterima sepenuhnya", "disetujui", "baik, siap" tanpa detail baru menyertainya).
+* Substansi persetujuan yang dihapus dari "teksPembahasan" TETAP boleh — dan jika berstatus keputusan resmi, WAJIB — direfleksikan pada "grupKesimpulan" sesuai Aturan 7.
+* Contoh: Tanggapan asli "Baik, kami setuju dengan usulan pergeseran termin tersebut" (tanpa detail tambahan) → DIHAPUS dari "teksPembahasan", namun substansi keputusannya ("Pergeseran termin kontrak disetujui") tetap masuk ke "grupKesimpulan".
+
+
 2. PEMILIHAN PEMBICARA UTAMA:
 
 Pembicara utama adalah peserta yang pertama kali menyampaikan SUBSTANSI TEKNIS pada isu/topik (satker/wilayah/paket/agenda) yang menjadi fokus pembahasan — bukan sekadar orang pertama yang bersuara di sesi tersebut. Apabila seorang moderator hanya membuka giliran bicara tanpa substansi teknis, pembicara utama tetap peserta berikutnya yang pertama kali menyampaikan isi teknis topik tersebut.
@@ -77,15 +125,23 @@ Apabila pada sesi berikutnya peserta lain memperkenalkan isu baru yang berbeda s
 VERIFIKASI WAJIB SEBELUM FINALISASI OUTPUT:
 Jumlah objek pada "grupPembahasan" TIDAK BOLEH melebihi jumlah item pada "daftarSegmenTopik". Sebelum menghasilkan JSON final, periksa ulang: jika jumlah objek grupPembahasan lebih banyak dari jumlah item daftarSegmenTopik, ini adalah indikasi pasti terjadi fragmentasi berlebihan (biasanya karena tiap giliran bicara keliru dijadikan objek terpisah) — gabungkan kembali objek-objek yang sebenarnya membahas unit topik yang sama menjadi satu objek dengan sub-bagian "Tanggapan [Nama]:" sebelum output difinalisasi.
 
+CATATAN UNTUK RAPAT DENGAN TOPIK MAKRO (lihat Aturan 1A–1C): jika rapat memiliki topik makro, verifikasi ini dihitung PER nilai "topikMakro" — yaitu, di dalam SETIAP kelompok objek yang bernilai "topikMakro" sama, jumlah objek grupPembahasan tidak boleh melebihi jumlah unit topik/pembicara yang relevan pada topik makro itu. Juga periksa ulang: pastikan tidak ada satu pembicara pun yang muncul lebih dari satu kali sebagai objek terpisah DI DALAM nilai "topikMakro" yang sama (lihat larangan pada Aturan 1B) — jika ditemukan, gabungkan menjadi satu objek sebelum output difinalisasi.
 
-3. KATA PEMBUKA POIN — WAJIB BERSIFAT PENYAMPAIAN STATUS/REKOMENDASI:
-   - JANGAN memulai poin dengan kata benda tindakan seperti: Pemaparan, Penerimaan, Penegasan, Identifikasi, Hambatan, Penghindaran, Persetujuan, Perancangan, Penyelesaian, dsb.
-   - WAJIB gunakan kata pembuka yang mencerminkan modalitas kebutuhan, kondisi aktual, rekomendasi, atau status. Contoh yang diizinkan:
-     * "Terdapat kebutuhan klarifikasi..." / "Terdapat kebutuhan penyesuaian..."
-     * "Diperlukan..." / "Terdapat kondisi..." / "Terdapat hambatan..."
-     * "Direkomendasikan..." / "Diharapkan..." / "Telah dilaksanakan..."
-     * "Berdasarkan hasil evaluasi..."
-     * "Direncanakan..."
+
+3. KATA PEMBUKA POIN — WAJIB LANGSUNG KE SUBSTANSI, HINDARI RUMUS PELAPORAN BERULANG:
+
+Setiap poin WAJIB dimulai dengan substansi/isi itu sendiri — kondisi, angka, kendala, keputusan, arahan, atau kebutuhan — BUKAN dengan kata kerja/frasa pelaporan sebagai bingkai pembuka yang diulang-ulang, baik yang bersifat naratif pasif ("Dipaparkan bahwa...", "Disampaikan bahwa...", "Ditegaskan bahwa...") maupun yang bersifat modal generik ("Terdapat kebutuhan...", "Diperlukan...", "Direncanakan...") jika dipakai sebagai rumus baku di awal SETIAP poin. Nama pembicara dan label "Tanggapan [Nama]:" pada struktur JSON SUDAH menunjukkan siapa yang menyampaikan, sehingga pengulangan bingkai pembuka di awal setiap poin bersifat redundan dan membuat teks terasa kaku, monoton, dan tidak manusiawi.
+
+* Tulis poin sebagai pernyataan langsung mengenai kondisi, keputusan, kendala, arahan, atau kebutuhan itu sendiri.
+  - SALAH (rumus generik berulang): "Terdapat kebutuhan penyesuaian jadwal serah terima akibat keterlambatan pengadaan baja."
+  - BENAR (langsung): "Jadwal serah terima mundur akibat keterlambatan pengadaan baja yang dipengaruhi kondisi pasar global; penyesuaian termin kontrak akan diproses melalui adendum."
+  - SALAH (rumus generik berulang): "Direkomendasikan agar Balai segera menyampaikan laporan progres mingguan kepada Direktorat."
+  - BENAR (langsung): "Balai wajib menyampaikan laporan progres mingguan kepada Direktorat mulai pekan depan."
+* Kata/frasa penanda keputusan atau tindak lanjut (disepakati, ditetapkan, diarahkan, agar segera, akan ditindaklanjuti, target penyelesaian, dst. — lihat Aturan 7 dan 8) TETAP BOLEH dan LAZIM muncul di dalam kalimat, sebagai bagian dari substansi kalimat itu sendiri (predikat/keterangan) — BUKAN sebagai kata pembuka rumus generik yang diulang di awal setiap poin.
+* Bingkai pelaporan ("ditegaskan", "diklarifikasi", "direkomendasikan", dsb.) HANYA boleh dipakai jika benar-benar diperlukan untuk membedakan pandangan/klaim satu pihak dari fakta yang berlaku umum (misalnya saat satu peserta mengoreksi pemahaman yang keliru) — bukan sebagai pembuka default tiap poin.
+* DILARANG memulai lebih dari satu poin berturut-turut dalam objek yang sama dengan kata/frasa pembuka yang identik atau semarna (misalnya beberapa poin beruntun sama-sama diawali "Terdapat kebutuhan..." atau "Diperlukan..."). Variasikan struktur kalimat, atau — lebih diutamakan — hilangkan bingkai tersebut sepenuhnya dan langsung tulis substansinya.
+* Poin berisi pertanyaan (dalam blok "Tanggapan [Nama Penanya]:") ditulis sebagai pernyataan ringkas mengenai isu/kondisi/kebutuhan klarifikasi yang mendasari pertanyaan tersebut, bukan sebagai kalimat "Menanyakan..." / "Mempertanyakan...".
+* Hindari juga kata benda tindakan sebagai pembuka poin (DILARANG: "Pemaparan mengenai...", "Penerimaan...", "Penegasan dari...", "Identifikasi atas...", "Hambatan...", "Penghindaran...", "Persetujuan...", "Perancangan...", "Penyelesaian...", "Penjelasan tentang...").
 
 
 4. BAHASA FORMAL – PASIF – LUGAS:
@@ -283,6 +339,7 @@ ATURAN KHUSUS PENOMORAN NAMA PEMBICARA (WAJIB MUTLAK)
 - Setiap nilai pada properti "namaPembicara" di dalam array "grupPembukaan" maupun "grupPembahasan" WAJIB diawali dengan penomoran abjad kapital berurutan (A., B., C., D., dst.).
 - Penomoran dimulai dari "A." untuk objek pembicara pertama di dalam grup, lalu naik menjadi "B." untuk pembicara kedua, "C." untuk pembicara ketiga, dan seterusnya.
 - Urutan abjad ini bersifat independen di masing-masing grup (artinya, "grupPembukaan" dimulai dari "A.", dan "grupPembahasan" juga dimulai kembali dari "A.").
+- Jika "grupPembahasan" memiliki field "topikMakro" (lihat Aturan 1A–1B), penomoran abjad pada "namaPembicara" di-reset ke "A." pada SETIAP kelompok objek yang bernilai "topikMakro" baru — bukan berlanjut lintas topik makro.
 - Contoh format pengisian yang benar:
   "namaPembicara": "A. Chandra Rudi Parulian Situmorang – Plt. Direktur Jenderal Cipta Karya, Kementerian PU"
   "namaPembicara": "B. Pandu Gunadi Atmosukarto – Direktur Sistem dan Strategi Penyelenggaraan..."
@@ -297,7 +354,7 @@ SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
   "judulRapat": "[Judul rapat yang formal, ringkas, dan deskriptif — tanpa tanda baca ilegal]",
   "tujuanRapat": "[Tujuan spesifik rapat dalam 1–2 kalimat formal menggunakan kalimat nominal/infinitif]",
   "daftarSegmenTopik": [
-    "[Sebutkan SETIAP unit topik yang dibahas secara berurutan sesuai kronologi rapat, sebelum menulis grupPembahasan. Untuk rapat desk review/koordinasi multi-unit, contoh: 'Arahan Umum - Dirjen', 'Balai Jakmed - Progres PPP', 'Balai Papua Barat - Penyesuaian RPD'. Untuk rapat umum/single-topic, contoh: 'Evaluasi Kontrak Paket Rehabilitasi Jalan X', 'Pembahasan Anggaran Tahun Depan', 'Isu Personalia dan Rotasi Staf'. SETIAP item pada daftar ini WAJIB menghasilkan TEPAT SATU objek pada grupPembahasan — TIDAK LEBIH, TIDAK KURANG. Sebelum mengeluarkan JSON final, hitung ulang: jumlah objek pada grupPembahasan HARUS SAMA PERSIS dengan jumlah item pada daftarSegmenTopik. Jika jumlah objek grupPembahasan yang telah disusun lebih banyak dari daftar ini, itu tanda bahwa dialog bolak-balik telah salah dipecah menjadi banyak objek kecil (lihat contoh penanganan dialog bolak-balik pada Aturan 1) — gabungkan kembali sebelum menghasilkan JSON final.]"
+    "[Sebutkan SETIAP unit topik yang dibahas secara berurutan sesuai kronologi rapat, sebelum menulis grupPembahasan. Untuk rapat desk review/koordinasi multi-unit, contoh: 'Arahan Umum - Dirjen', 'Balai Jakmed - Progres PPP', 'Balai Papua Barat - Penyesuaian RPD'. Untuk rapat umum/single-topic, contoh: 'Evaluasi Kontrak Paket Rehabilitasi Jalan X', 'Pembahasan Anggaran Tahun Depan', 'Isu Personalia dan Rotasi Staf'. SETIAP item pada daftar ini WAJIB menghasilkan TEPAT SATU objek pada grupPembahasan — TIDAK LEBIH, TIDAK KURANG. Sebelum mengeluarkan JSON final, hitung ulang: jumlah objek pada grupPembahasan HARUS SAMA PERSIS dengan jumlah item pada daftarSegmenTopik. Jika jumlah objek grupPembahasan yang telah disusun lebih banyak dari daftar ini, itu tanda bahwa dialog bolak-balik telah salah dipecah menjadi banyak objek kecil (lihat contoh penanganan dialog bolak-balik pada Aturan 1) — gabungkan kembali sebelum menghasilkan JSON final. JIKA RAPAT MEMILIKI TOPIK MAKRO (lihat Aturan 1A): daftar ini berisi NAMA TOPIK MAKRO itu sendiri (contoh: 'Reviu KAK', 'Reviu HPS'), bukan daftar unit topik/pembicara di dalamnya. Verifikasi 'jumlah objek = jumlah item daftar' tetap berlaku, tetapi dihitung per nilai topikMakro sesuai Aturan 1B.]"
   ],
   "grupPembukaan": [
     {
@@ -311,6 +368,7 @@ SKEMA OUTPUT JSON YANG WAJIB DIHASILKAN
   ],
   "grupPembahasan": [
     {
+      "topikMakro": "[WAJIB diisi dengan nama topik makro HANYA JIKA rapat memiliki topik makro sesuai indikator pada Aturan 1A — contoh: 'Reviu Kerangka Acuan Kerja (KAK)'. Jika rapat TIDAK memiliki topik makro, HILANGKAN key 'topikMakro' ini sepenuhnya dari objek (jangan diisi string kosong atau null). Lihat Aturan 1A–1C untuk aturan lengkap deteksi, larangan duplikasi pembicara per topikMakro, dan reset penomoran abjad.]",
       "namaPembicara": "A. [Nama Lengkap Peserta 1] – [Jabatan/Instansi Resmi]",
       "teksPembahasan": "1. [Pernyataan teknis/substantif detail]\\n2. [Pernyataan teknis/substantif detail]\\n3. [dst.]"
     },

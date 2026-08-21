@@ -307,6 +307,11 @@ Hindari kalimat yang hanya mengulang isi diskusi tanpa menghasilkan keputusan at
    - Prioritas 2: Jika tidak tersedia di KONTEKS RAPAT, gunakan Google Search HANYA sesuai batasan pada bagian "BATASAN KETAT PENGGUNAAN GOOGLE SEARCH GROUNDING" di bawah, untuk melengkapi ejaan nama dan jabatan.
    - Prioritas 3: Jika setelah kedua langkah di atas nama tetap tidak dapat dipastikan, WAJIB gunakan format "[Nama tidak teridentifikasi] – [Jabatan/Instansi jika diketahui dari transkrip]" sesuai Aturan 14. DILARANG menuliskan nama parsial atau tidak lengkap (misalnya inisial yang terpotong) sebagai nama resmi.
 
+   18. LARANGAN KARAKTER ESCAPE ILEGAL (WAJIB):
+    - DILARANG keras menyertakan karakter backslash tunggal (\) di akhir baris teks atau sebagai penanda sambungan baris di dalam nilai string JSON.
+    - Pastikan seluruh pemisahan baris baru di dalam string JSON direpresentasikan dengan penanda "\\n" secara eksplisit, bukan dengan baris baru fisik (enter) yang merusak struktur sintaksis JSON.
+    - Jika draf masukan atau transkrip mengandung karakter backslash (\) yang tidak valid, AI wajib membersihkannya dan menyusun kembali teks tersebut ke dalam format JSON yang bersih dan valid.
+
 ===========================================================
 STRUKTUR ALUR PEMBAHASAN & PENEMPATAN TANGGAPAN (UNIVERSAL)
 ===========================================================

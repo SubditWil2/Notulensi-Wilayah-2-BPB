@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Editor Notulensi - Subdit Wilayah II BPB</title>
+
+    <!-- CDN RESMI TINYMCE COMMUNITY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #525659;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* CONTAINER EDITOR FULL-VIEW DI BAWAH NAVBAR */
+        .editor-full-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tox-tinymce {
+            border: none !important;
+            border-radius: 0 !important;
+            flex: 1 !important;
+            height: 100% !important;
+        }
+
+        /* MODAL POP-UP */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 34, 63, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 440px;
+            padding: 30px 24px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-spinner {
+            border: 4px solid #f1f5f9;
+            border-top: 4px solid #f5b016;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-modal {
+            background: #1d355e;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-block;
+            width: 100%;
+            text-decoration: none;
+            transition: 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .btn-modal:hover {
+            opacity: 0.9;
+        }
+
+        .btn-modal-pdf {
+            background: #27ae60;
+        }
+
+        .btn-modal-back {
+            background: #94a3b8;
+            margin-bottom: 0;
+        }
+
+        @media print {
+
+            #navbar,
+            .tox-tinymce,
+            .modal-overlay {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. NAVBAR UTAMA -->
+    <div id="navbar"></div>
+
+    <!-- 2. CONTAINER TINYMCE FULL-VIEW -->
+    <div class="editor-full-container">
+        <textarea id="notulensiEditor"></textarea>
+    </div>
+
+    <!-- 3. MODAL POP-UP (LOADING, SUCCESS, ERROR) -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box">
+
+            <div id="modalLoading" style="display: none;">
+                <div class="modal-spinner"></div>
+                <div style="font-weight: 700; color: #1d355e; font-size: 15px; margin-bottom: 6px;">Sedang Memproses...
+                </div>
+                <div id="loadingText" style="color: #64748b; font-size: 13px;">Menghubungkan ke OneDrive...</div>
+            </div>
+
+            <div id="modalSuccess" style="display: none;">
+                <div style="font-size: 45px; margin-bottom: 10px;">✅</div>
+                <div style="font-weight: 700; color: #1d355e; font-size: 16px; margin-bottom: 6px;">Perubahan Berhasil
+                    Disimpan!</div>
+                <div id="successSubText"
+                    style="color: #64748b; font-size: 13px; margin-bottom: 20px; line-height: 1.4;">
+                    File HTML draf telah ditimpa di OneDrive dan file PDF resmi telah otomatis diperbarui.
+                </div>
+                <a href="#" target="_blank" id="btnLihatPdfFinal" class="btn-modal btn-modal-pdf">📄 Buka PDF Hasil
+                    Update</a>
+                <a href="rekap.html" class="btn-modal btn-modal-back">⬅️ Kembali ke Dashboard Rekap</a>
+            </div>
+
+            <div id="modalError" style="display: none;">
+                <div style="font-size: 45px; margin-bottom: 10px;">❌</div>
+                <div style="font-weight: 700; color: #e74c3c; font-size: 16px; margin-bottom: 6px;">Terjadi Kesalahan
+                </div>
+                <div id="errorDetailText"
+                    style="color: #991b1b; font-size: 13px; margin-bottom: 20px; line-height: 1.4;"></div>
+                <button type="button" class="btn-modal btn-modal-back" onclick="hideAllModals()">Tutup</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 4. CONTROLLER JAVASCRIPT -->
+    <script>
+        // ── CONFIG URL FLOW POWER AUTOMATE ──
+        const READ_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/63b68e5bc71e415e9de4995bd33926b8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LhN36PCAlzBk2Cn5sjrR_zH4ec_CCce2Z35_DpHh7Dg';
+        const SAVE_FLOW_URL = 'https://default7a697bb285cb4005b6b2f0bda687be.52.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/27/workflows/8583e6ee73ad42cdaffd2e0205442560/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=KHGmx7eozXkN9L212SikzUz3hiacTN0NXYMbtHaSk8U';
+
+        const MASTER_DOCUMENT_CSS = `
+    /* 1. PAKSA SEMUA ELEMEN MENGGUNAKAN FONT ARIAL */
+    * {
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+    html, body, table, tbody, tr, td, th, p, div, span, ol, li, b, strong {
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    @page { 
+        size: A4; 
+        margin: 10mm; 
+    }
+    
+    @media print {
+        html, body {
+            background-color: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+        .doc-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    @media screen {
+        html {
+            background-color: #525659 !important;
+            padding: 25px 0 !important;
+            min-height: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-size: 10pt;
+            line-height: 1.35;
+            color: #000;
+            background-color: #ffffff !important;
+            width: 210mm !important;
+            max-width: 210mm !important;
+            min-height: 297mm !important;
+            padding: 10mm !important;
+            margin: 0 auto 30px auto !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
+            box-sizing: border-box !important;
+        }
+        .doc-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    table.tabel-header {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border: 1.5px solid #000 !important;
+        table-layout: fixed !important;
+        margin-bottom: 0 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+    table.tabel-header td {
+        border: 1px solid #000 !important;
+        padding: 6px 8px !important;
+        vertical-align: top !important;
+        box-sizing: border-box !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    table.tabel-isi {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border: 1.5px solid #000 !important;
+        border-top: none !important;
+        margin-top: -1.5px !important;
+        table-layout: fixed !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+    table.tabel-isi td {
+        border: 1px solid #000 !important;
+        padding: 6px 8px !important;
+        vertical-align: top !important;
+        box-sizing: border-box !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    table.tabel-isi thead { display: table-header-group; }
+    table.tabel-isi thead tr th { border: none; border-top: 1.5px solid #000; padding: 0; height: 0; }
+    table.tabel-isi tfoot { display: table-footer-group; }
+    table.tabel-isi tfoot tr td { border: none; border-top: 1.5px solid #000; padding: 0; height: 0; }
+
+    .col-nomor-kunci {
+        width: 30px !important;
+        max-width: 30px !important;
+        min-width: 30px !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        font-size: 10pt !important;
+        padding: 6px 2px !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .header-title { text-align: center !important; font-weight: bold !important; font-size: 11pt !important; text-transform: uppercase !important; padding: 6px !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .header-subtitle { text-align: center !important; font-weight: bold !important; font-size: 10pt !important; padding: 6px !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .meta-label { font-weight: bold !important; text-transform: uppercase !important; font-size: 9.5pt !important; margin-bottom: 3px !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .section-header-cell { text-align: center !important; font-weight: bold !important; font-size: 10pt !important; text-transform: uppercase !important; padding: 5px !important; letter-spacing: 0.5px; font-family: Arial, Helvetica, sans-serif !important; }
+    
+    .topik-makro-text { text-align: center !important; font-weight: bold !important; text-transform: uppercase !important; font-size: 10pt !important; margin: 14px 0 6px 0 !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .topik-makro-text:first-child { margin-top: 0 !important; }
+    .pembicara-text { font-weight: bold !important; font-size: 10pt !important; margin: 8px 0 4px 0 !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .tanggapan-text { font-weight: bold !important; margin: 8px 0 3px 0 !important; font-family: Arial, Helvetica, sans-serif !important; }
+    .speaker-group { margin-bottom: 14px; }
+    .speaker-group:last-child { margin-bottom: 0; }
+
+    ol { margin: 0 !important; padding-left: 20px !important; font-family: Arial, Helvetica, sans-serif !important; }
+    ol li { margin-bottom: 3px !important; text-align: justify !important; font-family: Arial, Helvetica, sans-serif !important; }
+    ol ol { padding-left: 18px !important; list-style-type: lower-alpha !important; font-family: Arial, Helvetica, sans-serif !important; }
+    p { margin: 0 0 3px 0 !important; text-align: justify !important; font-family: Arial, Helvetica, sans-serif !important; }
+
+    .page-break { page-break-before: always; break-before: page; margin-top: 30px; }
+    .lampiran-container { text-align: center; padding-top: 20px; font-family: Arial, Helvetica, sans-serif !important; }
+    .lampiran-title { font-weight: bold; font-size: 12pt; text-transform: uppercase; margin-bottom: 6px; font-family: Arial, Helvetica, sans-serif !important; }
+    .lampiran-subtitle { font-weight: bold; font-size: 11pt; margin-bottom: 15px; font-family: Arial, Helvetica, sans-serif !important; }
+    .lampiran-img { max-width: 95% !important; height: auto !important; border: 1px solid #000; display: block; margin: 10px auto; }
+`;
+
+        // ── DRAF SAMPEL TEST 3 ──
+        const SAMPLE_TEST_3_HTML = `
+            <table class="tabel-header">
+                <tbody>
+                    <tr><td colspan="6" class="header-title">RISALAH RAPAT</td></tr>
+                    <tr><td colspan="6" class="header-subtitle">Test 3 (Mode Pratinjau Demo)</td></tr>
+                    <tr>
+                        <td colspan="2" style="width: 34%;">
+                            <div class="meta-label">HARI/TANGGAL</div>
+                            Kamis<br>20 Agustus 2026
+                        </td>
+                        <td colspan="2" style="width: 33%;">
+                            <div class="meta-label">TEMPAT</div>
+                            Zoom Meeting<br>Meeting ID: 123 456 789<br>Passcode: PU2026
+                        </td>
+                        <td colspan="2" style="width: 33%;">
+                            <div class="meta-label">PEMIMPIN RAPAT</div>
+                            Direktorat Jenderal Imigrasi
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="width: 50%;">
+                            <p style="text-align: center; margin-bottom: 4px;"><strong>UNDANGAN</strong></p>
+                            (Terlampir)
+                        </td>
+                        <td colspan="3" style="width: 50%;">
+                            <p style="text-align: center; margin-bottom: 4px;"><strong>DAFTAR HADIR</strong></p>
+                            (Terlampir)
+                        </td>
+                    </tr>
+                    <tr><td colspan="6"><strong>LINK REKAMAN ZOOM</strong><br>-</td></tr>
+                    <tr>
+                        <td colspan="6">
+                            <strong>Tujuan Rapat :</strong><br>
+                            <p>Melakukan penelaahan dan penyempurnaan teknis terhadap dokumen Kerangka Acuan Kerja (KAK) dan Harga Perkiraan Sendiri (HPS) paket pekerjaan pengawasan renovasi ruang kerja Gedung Ditjen Imigrasi TA 2026 agar selaras dengan regulasi teknis bangunan gedung negara dan pengadaan jasa konstruksi yang berlaku.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="tabel-isi">
+                <colgroup><col style="width: 30px;"><col style="width: auto;"></colgroup>
+                <thead><tr><th colspan="2"></th></tr></thead>
+                <tfoot><tr><td colspan="2"></td></tr></tfoot>
+                <tbody>
+                    <tr><td colspan="2" class="section-header-cell">PEMBUKAAN</td></tr>
+                    <tr>
+                        <td class="col-nomor-kunci">1.</td>
+                        <td>
+                            <p class="pembicara-text">A. Tim Teknis – Direktorat Jenderal Imigrasi</p>
+                            <ol>
+                                <li>Rapat reviu dokumen persiapan pengadaan jasa konsultansi pengawasan renovasi ruang kerja Gedung Ditjen Imigrasi TA 2026 dibuka untuk mewakili Pejabat Pembuat Komitmen (PPK) yang berhalangan hadir.</li>
+                                <li>Asistensi teknis dari Tim Kementerian PU sangat dibutuhkan agar pelaksanaan pekerjaan berjalan sesuai regulasi.</li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" class="section-header-cell">POIN – POIN PEMBAHASAN</td></tr>
+                    <tr>
+                        <td class="col-nomor-kunci">2.</td>
+                        <td>
+                            <p class="topik-makro-text">REVIU KERANGKA ACUAN KERJA (KAK)</p>
+                            <div class="speaker-group">
+                                <p class="pembicara-text">A. Teuku Zaqirul Haq – Perwakilan Direktorat Bina Penataan Bangunan, Ditjen Cipta Karya, Kementerian PU</p>
+                                <ol>
+                                    <li>Pemutakhiran dasar hukum KAK mencakup Permen PUPR No. 22/PRT/M/2018 serta SE Dirjen Bina Konstruksi No. 47 Tahun 2026.</li>
+                                    <li>Kewajiban pelaporan berkala pengawasan konstruksi melalui SIMBG dicantumkan sesuai PP No. 16 Tahun 2021 Pasal 59 Ayat (9) sebagai tindak lanjut penerbitan SLF.</li>
+                                    <li>Penambahan tanggung jawab penyedia jasa dalam penerbitan Surat Pernyataan Kelaikan Fungsi sesuai Pasal 60 Ayat (6).</li>
+                                </ol>
+                                <p class="tanggapan-text">Tanggapan Tim Teknis – Ditjen Imigrasi:</p>
+                                <ol style="list-style-type: lower-alpha;">
+                                    <li>Seluruh catatan koreksi dasar hukum dan lingkup pengawasan diterima untuk disempurnakan dalam KAK final.</li>
+                                </ol>
+                            </div>
+                            <div class="speaker-group">
+                                <p class="pembicara-text">B. Yoseph – Perwakilan Direktorat Bina Penataan Bangunan, Kementerian PU</p>
+                                <ol>
+                                    <li>Sistematika penulisan KAK dirapikan untuk mengeliminasi duplikasi ruang lingkup fisik dan pelaporan berkala.</li>
+                                    <li>Pengawasan metode pembongkaran (demolition method) komponen eksisting wajib dicantumkan guna mencegah kerusakan struktur lama.</li>
+                                </ol>
+                            </div>
+                            <p class="topik-makro-text">REVIU HARGA PERKIRAAN SENDIRI (HPS) DAN KETENTUAN KONTRAK</p>
+                            <div class="speaker-group">
+                                <p class="pembicara-text">A. Tim Teknis – Direktorat Jenderal Imigrasi</p>
+                                <ol>
+                                    <li>Jangka waktu pengawasan disesuaikan maksimal 3 bulan (75–90 hari kalender) mengikuti jadwal kontrak konstruksi fisik.</li>
+                                    <li>Perhitungan HPS biaya langsung personil disajikan rinci berbasis Orang-Bulan (billing rate).</li>
+                                </ol>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" class="section-header-cell">KESIMPULAN DAN TINDAK LANJUT</td></tr>
+                    <tr>
+                        <td class="col-nomor-kunci">3.</td>
+                        <td>
+                            <ol>
+                                <li>Penyempurnaan Dokumen KAK: Tim Teknis Ditjen Imigrasi memperbarui dasar hukum dan lingkup pengawasan teknis.</li>
+                                <li>Penyelarasan Durasi & HPS: Durasi ditetapkan 3 bulan dengan HPS berbasis Orang-Bulan terinci pada SPSE.</li>
+                            </ol>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-break"></div>
+            <div class="lampiran-container">
+                <div class="lampiran-title">LAMPIRAN</div>
+                <div class="lampiran-subtitle">A. Surat Undangan</div>
+                <p style="font-size: 10pt; color: #64748b; font-style: italic;">(Tekan Ctrl + V di baris ini untuk menempelkan screenshot gambar surat undangan)</p>
+            </div>
+        `;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const FILE_PATH = decodeURIComponent(urlParams.get('path') || '');
+        const IS_DEMO_MODE = !FILE_PATH;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (IS_DEMO_MODE) {
+                initTinyMCE(SAMPLE_TEST_3_HTML);
+            } else {
+                loadDokumenDariOneDrive();
+            }
+        });
+
+        // ── 1. LOAD FILE DARI ONEDRIVE ──
+        async function loadDokumenDariOneDrive() {
+            showLoading("Menghubungkan ke OneDrive & mengambil draf risalah...");
+
+            try {
+                const response = await fetch(READ_FLOW_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: FILE_PATH })
+                });
+
+                if (!response.ok) throw new Error(`HTTP Status ${response.status}: Gagal membaca berkas.`);
+
+                const data = await response.json();
+                const htmlContent = data.htmlContent || data.body || '';
+
+                if (!htmlContent) throw new Error("Berkas di OneDrive kosong.");
+
+                initTinyMCE(htmlContent);
+                hideLoading();
+
+            } catch (err) {
+                hideLoading();
+                showErrorModal("Gagal memuat draf notulensi dari OneDrive: " + err.message);
+            }
+        }
+
+        // ── 2. INISIALISASI TINYMCE ──
+        function initTinyMCE(initialHtml) {
+            document.getElementById('notulensiEditor').value = initialHtml;
+
+            tinymce.init({
+                selector: '#notulensiEditor',
+                height: 'calc(100vh - 65px)',
+                menubar: 'file edit view insert format tools table',
+                menu: {
+                    file: {
+                        title: 'File',
+                        items: 'saveOnline printPdf | backToDashboard | newdocument'
+                    }
+                },
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'help', 'wordcount', 'pagebreak'
+                ],
+                toolbar: 'saveQuick printPdf | undo redo | fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | ' +
+                    'table image pagebreak | removeformat | fullscreen',
+                toolbar_sticky: true,
+                paste_data_images: true,
+                content_style: MASTER_DOCUMENT_CSS,
+
+                setup: function (editor) {
+                    editor.ui.registry.addIcon('backArrow', '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg>');
+
+                    editor.ui.registry.addMenuItem('saveOnline', {
+                        text: IS_DEMO_MODE ? 'Simpan / Unduh HTML Lokal (Demo)' : 'Simpan Perubahan & Update PDF',
+                        icon: 'save',
+                        onAction: () => simpanPerubahanKeOneDrive()
+                    });
+
+                    editor.ui.registry.addMenuItem('printPdf', {
+                        text: '👁️ Pratinjau Cetak / PDF Asli (1:1)',
+                        icon: 'print',
+                        onAction: () => editor.execCommand('mcePrint')
+                    });
+
+                    editor.ui.registry.addMenuItem('backToDashboard', {
+                        text: 'Kembali ke Dashboard Rekap',
+                        icon: 'backArrow',
+                        onAction: () => window.location.href = 'rekap.html'
+                    });
+
+                    editor.ui.registry.addButton('saveQuick', {
+                        icon: 'save',
+                        tooltip: IS_DEMO_MODE ? 'Simpan Demo' : 'Simpan ke OneDrive & Update PDF',
+                        onAction: () => simpanPerubahanKeOneDrive()
+                    });
+
+                    editor.ui.registry.addButton('printPdf', {
+                        icon: 'print',
+                        tooltip: '👁️ Pratinjau Cetak / PDF Asli (1:1)',
+                        onAction: () => editor.execCommand('mcePrint')
+                    });
+                }
+            });
+        }
+
+        // ── 3. SIMPAN PERUBAHAN ──
+        async function simpanPerubahanKeOneDrive() {
+            const editor = tinymce.get('notulensiEditor');
+            if (!editor) return;
+
+            const bodyHtml = editor.getContent();
+            if (!bodyHtml.trim()) {
+                alert("Dokumen tidak boleh kosong!");
+                return;
+            }
+
+            const fullHtmlDocument = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Risalah Rapat</title>
+    <style>
+        ${MASTER_DOCUMENT_CSS}
+    </style>
+</head>
+<body>
+    <div class="doc-container">
+        ${bodyHtml}
+    </div>
+</body>
+</html>`;
+
+            if (IS_DEMO_MODE) {
+                const blob = new Blob([fullHtmlDocument], { type: 'text/html;charset=utf-8' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'Demo_Hasil_Editan_Notulensi.html';
+                a.click();
+
+                document.getElementById('successSubText').textContent = 'Mode Demo: File HTML hasil editan lengkap dengan CSS telah diunduh ke komputer Anda.';
+                document.getElementById('btnLihatPdfFinal').style.display = 'none';
+                document.getElementById('modalSuccess').style.display = 'block';
+                document.getElementById('modalOverlay').classList.add('active');
+                return;
+            }
+
+            showLoading("Menimpa file HTML di OneDrive & memperbarui PDF...");
+
+            try {
+                const response = await fetch(SAVE_FLOW_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        path: FILE_PATH,
+                        htmlContent: fullHtmlDocument
+                    })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`(Status ${response.status}) ${errText}`);
+                }
+
+                const resData = await response.json().catch(() => ({}));
+                hideLoading();
+
+                sessionStorage.removeItem('subdit_wil2_master_cache');
+                sessionStorage.removeItem('subdit_wil2_master_cache_time');
+
+                const pdfLink = resData.linkPdf || resData.linkBerkas || '';
+                showSuccessModal(pdfLink);
+
+            } catch (err) {
+                hideLoading();
+                showErrorModal("Gagal menyimpan perubahan: " + err.message);
+            }
+        }
+
+        // ── HELPER MODAL ──
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function showSuccessModal(pdfLink) {
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalError').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+
+            const btnPdf = document.getElementById('btnLihatPdfFinal');
+            if (pdfLink) {
+                btnPdf.href = pdfLink;
+                btnPdf.style.display = 'inline-block';
+            } else {
+                btnPdf.style.display = 'none';
+            }
+
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function showErrorModal(errorMsg) {
+            document.getElementById('modalLoading').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'none';
+            document.getElementById('modalError').style.display = 'block';
+            document.getElementById('errorDetailText').textContent = errorMsg;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function hideAllModals() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+    </script>
+    <script src="navbar.js"></script>
+</body>
+
+</html>

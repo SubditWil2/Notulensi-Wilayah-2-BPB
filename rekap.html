@@ -83,7 +83,7 @@
             justify-content: center !important;
             padding: 5px !important;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
-            flex-shrink: 0 !important; /* Mengunci logo agar tidak gepeng di mobile */
+            flex-shrink: 0 !important;
         }
         .logo-container img {
             width: 100% !important;
@@ -142,6 +142,7 @@
             cursor: pointer;
             display: inline-flex;
             align-items: center;
+            justify-content: space-between;
             gap: 8px;
             transition: 0.2s;
             width: auto;
@@ -243,6 +244,19 @@
             text-decoration: underline;
         }
 
+        .badge-ai {
+            display: inline-block;
+            font-size: 10.5px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
         .action-cell {
             display: flex;
             gap: 8px;
@@ -268,7 +282,7 @@
         }
 
         .btn-action:hover {
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .btn-undangan {
@@ -277,14 +291,14 @@
         }
 
         .btn-kelola {
-            background-color: #2980b9 !important;
+            background-color: #1d355e !important;
         }
 
         .btn-delete {
             background-color: #e74c3c;
         }
 
-        /* ========= RESPONSIVE MOBILE ========= */
+        /* ========= RESPONSIVE MOBILE (CARD VIEW) ========= */
         @media (max-width: 900px) {
             .filter-section {
                 grid-template-columns: repeat(2, 1fr);
@@ -293,12 +307,12 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 0 !important; /* Menghilangkan gap sekeliling di HP */
+                padding: 0 !important;
             }
 
             .container {
-                border-radius: 0 !important; /* Membuat container rata mulus ke pinggir layar */
-                border: none !important; /* Menghilangkan border pinggir */
+                border-radius: 0 !important;
+                border: none !important;
             }
 
             .dashboard-content {
@@ -326,7 +340,6 @@
 
             .btn-toggle-filter {
                 width: 100%;
-                justify-content: space-between;
             }
 
             table,
@@ -422,8 +435,8 @@
         .modal-box {
             background: white;
             width: 100%;
-            max-width: 400px;
-            padding: 24px;
+            max-width: 440px;
+            padding: 26px 24px;
             border-radius: 16px;
             text-align: center;
         }
@@ -439,22 +452,20 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: #1d355e;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .modal-sub {
             font-size: 13px;
             color: #64748b;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             line-height: 1.4;
         }
 
@@ -464,22 +475,13 @@
             padding: 12px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13.5px;
             text-align: center;
             border: none;
             cursor: pointer;
             margin-bottom: 10px;
             text-decoration: none;
-        }
-
-        .btn-delete-excel {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn-delete-all {
-            background: #e74c3c;
-            color: white;
+            transition: 0.2s;
         }
 
         .btn-close-modal {
@@ -487,6 +489,7 @@
             color: #334155;
             margin-bottom: 0;
         }
+        .btn-close-modal:hover { background: #cbd5e1; }
 
         /* UTILITY */
         .message {
@@ -496,16 +499,6 @@
             display: none;
             font-size: 13px;
             font-weight: 600;
-        }
-
-        .message.info {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .message.error {
-            background: #fee2e2;
-            color: #991b1b;
         }
 
         .loading {
@@ -521,7 +514,7 @@
 <body>
 
     <div id="navbar"></div>
-    <div class="page-wrapper-rekap"> <!-- ← wrapper rekap -->
+    <div class="page-wrapper-rekap">
         <div class="container">
             <div class="header">
                 <div class="header-left">
@@ -541,20 +534,19 @@
                     <p>Memuat data dari server...</p>
                 </div>
 
-                <!-- Tombol Toggle Filter -->
-                <div class="filter-toggle-container" id="filterToggleContainer">
+                <!-- 1. TOMBOL TOGGLE FILTER (SEMBUNYI SAAT AWAL LOAD) -->
+                <div class="filter-toggle-container" id="filterToggleContainer" style="display: none;">
                     <button class="btn-toggle-filter" onclick="toggleFilter()">
                         <span>🔍 Filter & Pencarian</span>
                         <span id="filterIcon">▲</span>
                     </button>
                 </div>
 
-                <!-- Filter Section -->
+                <!-- 2. FILTER SECTION (TERSEMBUNYI SAAT AWAL LOAD DENGAN inline style) -->
                 <div class="filter-section" id="filterArea" style="display: none;">
                     <div class="filter-group">
                         <label>🔍 Cari</label>
-                        <input type="text" id="searchBar" placeholder="Judul / Kegiatan / Instansi"
-                            oninput="applyFilters()">
+                        <input type="text" id="searchBar" placeholder="Judul / Kegiatan / Instansi" oninput="applyFilters()">
                     </div>
                     <div class="filter-group">
                         <label>📍 Provinsi</label>
@@ -578,7 +570,7 @@
                     </div>
                 </div>
 
-                <!-- Tabel -->
+                <!-- 3. TABEL DATA (TERSEMBUNYI SAAT AWAL LOAD) -->
                 <div class="table-container" id="tableArea" style="display: none;">
                     <table id="rekapTable">
                         <thead>
@@ -589,7 +581,7 @@
                                 <th>Nama Kegiatan</th>
                                 <th>Judul Rapat</th>
                                 <th>Notulis</th>
-                                <th style="width:150px; text-align:center;">Aksi</th>
+                                <th style="width:140px; text-align:center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -598,19 +590,23 @@
             </div>
         </div>
 
-        <!-- MODAL KELOLA -->
+        <!-- MODAL KELOLA (DINAMIS: WEB EDITOR VS WORD) -->
         <div id="kelolaModal" class="modal-overlay">
             <div class="modal-box">
                 <div id="kelolaMenuState">
-                    <div style="font-size:48px; margin-bottom: 10px;">⚙️</div>
+                    <div style="font-size:42px; margin-bottom: 8px;">⚙️</div>
                     <div class="modal-title" id="kelolaTitle">Kelola Berkas</div>
                     <div class="modal-sub" id="kelolaSub">Pilih tindakan</div>
-                    <a href="#" target="_blank" id="btnBukaWord" class="btn-modal-action"
-                        style="background:#1d355e;color:white;">📝 Edit Draf Word</a>
-                    <a href="#" target="_blank" id="btnBukaPdf" class="btn-modal-action"
-                        style="background:#27ae60;color:white;">📄 Buka PDF</a>
-                    <button class="btn-modal-action" id="btnGeneratePdf" style="background:#f5b016;color:#11223f;">⚡
-                        Generate PDF Baru</button>
+                    
+                    <!-- Tombol 1: Dinamis (Web Editor jika AI, Word jika Manual) -->
+                    <a href="#" id="btnEditDraf" class="btn-modal-action" style="background:#1d355e; color:white;">✏️ Edit di Web Editor</a>
+                    
+                    <!-- Tombol 2: Buka PDF Resmi -->
+                    <a href="#" target="_blank" id="btnBukaPdf" class="btn-modal-action" style="background:#27ae60; color:white;">📄 Buka PDF Resmi</a>
+                    
+                    <!-- Tombol 3: Generate PDF Manual (Hanya untuk Rapat Word) -->
+                    <button class="btn-modal-action" id="btnGeneratePdf" style="background:#f5b016; color:#11223f;">⚡ Generate PDF Baru</button>
+                    
                     <button class="btn-close-modal btn-modal-action" onclick="closeKelolaModal()">Tutup</button>
                 </div>
                 <div id="kelolaLoadingState" style="display: none;">
@@ -625,14 +621,11 @@
         <div id="deleteModal" class="modal-overlay">
             <div class="modal-box">
                 <div id="modalConfirmState">
-                    <div style="font-size:48px; margin-bottom: 10px;">⚠️</div>
+                    <div style="font-size:42px; margin-bottom: 8px;">⚠️</div>
                     <div class="modal-title">Konfirmasi Hapus</div>
-                    <div class="modal-sub">Hapus data rapat berikut?<br><strong id="deleteTargetText"
-                            style="color:#1d355e; display:block; margin-top:8px;"></strong></div>
-                    <button class="btn-delete-excel btn-modal-action" onclick="executeDelete('excel')">🗂️ Hapus Excel
-                        Saja</button>
-                    <button class="btn-delete-all btn-modal-action" onclick="executeDelete('all')">🔥 Hapus Excel &
-                        Berkas</button>
+                    <div class="modal-sub">Hapus data rapat berikut?<br><strong id="deleteTargetText" style="color:#1d355e; display:block; margin-top:8px;"></strong></div>
+                    <button class="btn-modal-action" style="background:#f39c12; color:white;" onclick="executeDelete('excel')">🗂️ Hapus Excel Saja</button>
+                    <button class="btn-modal-action" style="background:#e74c3c; color:white;" onclick="executeDelete('all')">🔥 Hapus Excel & Berkas</button>
                     <button class="btn-close-modal btn-modal-action" onclick="closeDeleteModal()">Batal</button>
                 </div>
                 <div id="modalLoadingState" style="display: none;">
@@ -641,14 +634,13 @@
                     <div class="modal-sub" id="loadingDeleteSub">Menghubungi server</div>
                 </div>
                 <div id="modalSuccessState" style="display: none;">
-                    <div style="font-size:48px; margin-bottom: 10px;">✅</div>
+                    <div style="font-size:42px; margin-bottom: 8px;">✅</div>
                     <div class="modal-title">Berhasil!</div>
                     <div class="modal-sub" id="successDeleteSub">Data telah dihapus.</div>
-                    <button class="btn-close-modal btn-modal-action" style="background:#27ae60;color:white;"
-                        onclick="closeDeleteModal()">OK</button>
+                    <button class="btn-close-modal btn-modal-action" style="background:#27ae60; color:white;" onclick="closeDeleteModal()">OK</button>
                 </div>
                 <div id="modalErrorState" style="display: none;">
-                    <div style="font-size:48px; margin-bottom: 10px;">❌</div>
+                    <div style="font-size:42px; margin-bottom: 8px;">❌</div>
                     <div class="modal-title" style="color:#e74c3c;">Gagal</div>
                     <div class="modal-sub" id="deleteErrorText" style="color:#c0392b;"></div>
                     <button class="btn-close-modal btn-modal-action" onclick="resetDeleteModal()">Kembali</button>
@@ -657,20 +649,17 @@
         </div>
 
         <script>
-            // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
+            // ========== KONTROL CACHE DATA MASTER ==========
             const CACHE_KEY = 'subdit_wil2_master_cache';
             const CACHE_TIME_KEY = 'subdit_wil2_master_cache_time';
-            const CACHE_DURATION = 5 * 60 * 1000; // 5 Menit kedalwarsa otomatis
+            const CACHE_DURATION = 5 * 60 * 1000;
 
             function getCachedData() {
                 const cached = sessionStorage.getItem(CACHE_KEY);
                 const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
                 if (cached && cachedTime) {
                     const age = Date.now() - parseInt(cachedTime, 10);
-                    if (age < CACHE_DURATION) {
-                        console.log("⚡ Menggunakan data master dari CACHE (Instant)");
-                        return JSON.parse(cached);
-                    }
+                    if (age < CACHE_DURATION) return JSON.parse(cached);
                 }
                 return null;
             }
@@ -678,16 +667,12 @@
             function setCachedData(data) {
                 sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-                console.log("💾 Data master baru disimpan ke cache browser.");
             }
 
             function clearCachedData() {
                 sessionStorage.removeItem(CACHE_KEY);
                 sessionStorage.removeItem(CACHE_TIME_KEY);
-                console.log("🧹 Cache dibersihkan karena ada perubahan data.");
             }
-
-
 
             (function () {
                 const CONFIG = {
@@ -698,8 +683,9 @@
 
                 let databaseRekap = [];
                 let activeDeleteData = { powerAppsId: '', provinsi: '', namaKegiatan: '', tanggalRapat: '', judulRapat: '', rowElement: null };
-                let activeKelolaData = { powerAppsId: '', provinsi: '', namaKegiatan: '', tanggalRapat: '', judulRapat: '', linkFile: '', linkGabungan: '', pathNotulensi: '', rowElement: null };
+                let activeKelolaData = { powerAppsId: '', provinsi: '', namaKegiatan: '', tanggalRapat: '', judulRapat: '', linkFile: '', linkGabungan: '', pathNotulensi: '', pathHtml: '', rowElement: null };
 
+                // Status tampilan filter
                 let filterIsVisible = window.innerWidth > 768;
 
                 function getValue(row, keys) {
@@ -712,6 +698,7 @@
                     return null;
                 }
 
+                // ── FUNGSI TOGGLE FILTER (DESKTOP & MOBILE) ──
                 window.toggleFilter = function () {
                     filterIsVisible = !filterIsVisible;
                     updateFilterView();
@@ -729,18 +716,18 @@
                     }
                 }
 
+                // ── LOAD DATA DARI SERVER / CACHE ──
                 async function loadDashboardData() {
-                    // 1. Cek apakah ada data di cache
                     let rawData = getCachedData();
                     if (rawData) {
-                        prosesDashboardData(rawData); // Tampilkan instan
+                        prosesDashboardData(rawData);
                         return;
                     }
 
-                    // 2. Jika tidak ada cache, fetch dari server
+                    // 1. Sembunyikan filter dan tabel saat proses loading aktif
                     document.getElementById('loading').style.display = 'block';
-                    document.getElementById('filterArea').style.display = 'none';
                     document.getElementById('tableArea').style.display = 'none';
+                    document.getElementById('filterArea').style.display = 'none';
                     document.getElementById('filterToggleContainer').style.display = 'none';
 
                     try {
@@ -749,20 +736,20 @@
                         rawData = await resp.json();
                         if (typeof rawData === 'string') rawData = JSON.parse(rawData);
 
-                        setCachedData(rawData); // Simpan ke cache
+                        setCachedData(rawData);
                         prosesDashboardData(rawData);
-                        hideMessage();
                     } catch (e) {
-                        showMessage('Peringatan: ' + e.message, 'error');
+                        document.getElementById('message').textContent = 'Peringatan: ' + e.message;
+                        document.getElementById('message').style.display = 'block';
                     } finally {
                         document.getElementById('loading').style.display = 'none';
                     }
                 }
 
-                // Fungsi pengolahan visual tabel & filter
+                // ── PROSES DATA & TAMPILKAN FILTER ──
                 function prosesDashboardData(rawData) {
                     databaseRekap = rawData.kegiatan || rawData.RekapData || rawData['Rekap - 2026'] || [];
-                    if (databaseRekap.length === 0) throw new Error('Database kosong atau format tidak sesuai.');
+                    if (databaseRekap.length === 0) return;
 
                     databaseRekap.sort((a, b) => (getValue(b, ['Tanggal Rapat', 'tanggalRapat']) || '').localeCompare(getValue(a, ['Tanggal Rapat', 'tanggalRapat']) || ''));
 
@@ -770,6 +757,7 @@
                     buildNotulisFilter();
                     applyFilters();
 
+                    // Tampilkan kembali tombol toggle filter & update tampilan filter
                     document.getElementById('filterToggleContainer').style.display = 'flex';
                     updateFilterView();
                     document.getElementById('tableArea').style.display = 'block';
@@ -822,8 +810,9 @@
                     if (notulis) filtered = filtered.filter(row => (getValue(row, ['Notulis', 'notulis', 'Dibuat Oleh']) || '') === notulis);
 
                     renderTable(filtered);
-                }
+                };
 
+                // ── RENDER TABEL UTAMA (PRIORITAS LINK: AI KE EDITOR, MANUAL KE WORD) ──
                 function renderTable(data) {
                     let tbody = document.getElementById('tableBody');
                     tbody.innerHTML = '';
@@ -843,59 +832,122 @@
                         let linkUndangan = getValue(row, ['Link Undangan', 'linkUndangan']) || '';
                         let powerAppsId = getValue(row, ['__PowerAppsId__', 'powerappsid', 'ItemInternalId']) || '';
                         let pathNotulensi = getValue(row, ['Path Notulensi', 'pathNotulensi']) || '';
-                        let linkGabungan = getValue(row, ['Link Gabungan', 'linkGabungan', 'Link PDF', 'linkPdf']) || '';
+                        let pathHtml = getValue(row, ['Path HTML', 'pathHtml']) || '';
+                        let linkPdf = getValue(row, ['Link Gabungan', 'linkGabungan', 'Link PDF', 'linkPdf']) || '';
 
                         let formatted = tgl;
                         if (tgl.includes('.')) { let parts = tgl.split('.'); if (parts.length === 3) formatted = `${parts[2]}/${parts[1]}/${parts[0]}`; }
+                        
                         let safeJudul = judul.replace(/'/g, "\\'");
                         let safePath = pathNotulensi.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+                        let safePathHtml = pathHtml.replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+
+                        const isAi = pathHtml && pathHtml.trim() !== '' && pathHtml !== 'null' && pathHtml !== '-';
+
+                        // ── LOGIKA LINK JUDUL TEGAS ──
+                        let primaryLink = '';
+                        if (isAi) {
+                            // 1. Rapat AI: Langsung buka Web Editor TinyMCE
+                            primaryLink = `editor.html?path=${encodeURIComponent(pathHtml)}&id=${encodeURIComponent(powerAppsId)}`;
+                        } else {
+                            // 2. Rapat Manual: Buka Word (.docx)
+                            primaryLink = linkFile || linkPdf || '';
+                        }
+
+                        let judulHtml = primaryLink 
+                            ? `<a href="${primaryLink}" target="_blank" class="meeting-title-link" title="${isAi ? 'Klik untuk Edit di Web Editor' : 'Klik untuk Buka Draf Word'}">${judul}</a>` 
+                            : judul;
+
+                        if (isAi) {
+                            judulHtml += `<span class="badge-ai" title="Disusun menggunakan AI (Web Editable)">⚡ AI</span>`;
+                        }
 
                         let tr = document.createElement('tr');
                         tr.innerHTML = `
-                    <td data-label="No" style="text-align:center;">${idx + 1}</td>
-                    <td data-label="Tanggal">${formatted}</td>
-                    <td data-label="Provinsi">${prov}</td>
-                    <td data-label="Kegiatan">${keg}</td>
-                    <td data-label="Judul">${linkFile ? `<a href="${linkFile}" target="_blank" class="meeting-title-link">${judul}</a>` : judul}</td>
-                    <td data-label="Notulis">${notulis}</td>
-                    <td data-label="Aksi">
-                        <div class="action-cell">
-                            ${linkUndangan ? `<a href="${linkUndangan}" target="_blank" class="btn-action btn-undangan" title="Buka Undangan">✉️</a>` : ``}
-                            <button onclick="window.openKelolaModal('${powerAppsId}','${prov}','${keg}','${tgl}','${safeJudul}','${linkFile}','${linkGabungan}','${safePath}',this)" class="btn-action btn-kelola" title="Kelola Berkas">⚙️</button>
-                            <button onclick="window.confirmDelete('${powerAppsId}','${prov}','${keg}','${tgl}','${safeJudul}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
-                        </div>
-                    </td>
-                `;
+                            <td data-label="No" style="text-align:center;">${idx + 1}</td>
+                            <td data-label="Tanggal">${formatted}</td>
+                            <td data-label="Provinsi">${prov}</td>
+                            <td data-label="Kegiatan">${keg}</td>
+                            <td data-label="Judul">${judulHtml}</td>
+                            <td data-label="Notulis">${notulis}</td>
+                            <td data-label="Aksi">
+                                <div class="action-cell">
+                                    ${linkUndangan ? `<a href="${linkUndangan}" target="_blank" class="btn-action btn-undangan" title="Buka Undangan">✉️</a>` : ``}
+                                    <button onclick="window.openKelolaModal('${powerAppsId}','${prov}','${keg}','${tgl}','${safeJudul}','${linkFile}','${linkPdf}','${safePath}','${safePathHtml}',this)" class="btn-action btn-kelola" title="Kelola Berkas">⚙️</button>
+                                    <button onclick="window.confirmDelete('${powerAppsId}','${prov}','${keg}','${tgl}','${safeJudul}',this)" class="btn-action btn-delete" title="Hapus Data">🗑️</button>
+                                </div>
+                            </td>
+                        `;
                         tbody.appendChild(tr);
                     });
                 }
 
-                // FUNGSI MODAL KELOLA
-                window.openKelolaModal = function (id, prov, keg, tgl, judul, linkWord, linkPdf, path, btn) {
-                    activeKelolaData = { powerAppsId: id, provinsi: prov, namaKegiatan: keg, tanggalRapat: tgl, judulRapat: judul, linkFile: linkWord, linkGabungan: linkPdf, pathNotulensi: path, rowElement: btn.closest('tr') };
+                // ── FUNGSI MODAL KELOLA (DINAMIS SESUAI PATH HTML) ──
+                window.openKelolaModal = function (id, prov, keg, tgl, judul, linkWord, linkPdf, pathDocx, pathHtml, btn) {
+                    activeKelolaData = { 
+                        powerAppsId: id, 
+                        provinsi: prov, 
+                        namaKegiatan: keg, 
+                        tanggalRapat: tgl, 
+                        judulRapat: judul, 
+                        linkFile: linkWord, 
+                        linkGabungan: linkPdf, 
+                        pathNotulensi: pathDocx, 
+                        pathHtml: pathHtml, 
+                        rowElement: btn.closest('tr') 
+                    };
+
                     document.getElementById('kelolaTitle').innerHTML = 'Kelola: ' + (judul.length > 35 ? judul.substring(0, 35) + '...' : judul);
                     document.getElementById('kelolaSub').innerHTML = `${tgl}<br><span style="color:#1d355e; font-weight:600;">${keg}</span>`;
-                    document.getElementById('btnBukaWord').href = linkWord || '#';
 
-                    let pdfBtn = document.getElementById('btnBukaPdf');
-                    if (linkPdf && linkPdf !== 'null' && linkPdf !== '') {
-                        pdfBtn.href = linkPdf;
-                        pdfBtn.style.background = '#27ae60';
-                        pdfBtn.style.pointerEvents = 'auto';
-                        pdfBtn.textContent = '📄 Buka PDF';
+                    const btnEdit = document.getElementById('btnEditDraf');
+                    const btnPdf = document.getElementById('btnBukaPdf');
+                    const btnGenerate = document.getElementById('btnGeneratePdf');
+
+                    const isAi = pathHtml && pathHtml.trim() !== '' && pathHtml !== 'null' && pathHtml !== '-';
+
+                    // 1. Logika Tombol Edit (Web Editor vs Word)
+                    if (isAi) {
+                        btnEdit.innerHTML = '✏️ Edit di Web Editor';
+                        btnEdit.style.background = '#1d355e';
+                        btnEdit.href = `editor.html?path=${encodeURIComponent(pathHtml)}&id=${encodeURIComponent(id)}`;
+                        btnEdit.target = '_blank';
+                        btnEdit.style.display = 'block';
+
+                        // Sembunyikan tombol generate manual untuk rapat AI (karena PDF update dari editor)
+                        btnGenerate.style.display = 'none';
                     } else {
-                        pdfBtn.href = '#';
-                        pdfBtn.style.background = '#94a3b8';
-                        pdfBtn.style.pointerEvents = 'none';
-                        pdfBtn.textContent = '📄 PDF Belum Tersedia';
+                        btnEdit.innerHTML = '📝 Edit Draf Word';
+                        btnEdit.style.background = '#1d355e';
+                        btnEdit.href = linkWord || '#';
+                        btnEdit.target = '_blank';
+                        btnEdit.style.display = 'block';
+
+                        // Tampilkan tombol generate manual untuk rapat Word
+                        btnGenerate.style.display = 'block';
                     }
+
+                    // 2. Logika Tombol Buka PDF
+                    if (linkPdf && linkPdf !== 'null' && linkPdf !== '') {
+                        btnPdf.href = linkPdf;
+                        btnPdf.style.background = '#27ae60';
+                        btnPdf.style.pointerEvents = 'auto';
+                        btnPdf.innerHTML = '📄 Buka PDF Resmi';
+                    } else {
+                        btnPdf.href = '#';
+                        btnPdf.style.background = '#94a3b8';
+                        btnPdf.style.pointerEvents = 'none';
+                        btnPdf.innerHTML = '📄 PDF Belum Tersedia';
+                    }
+
                     document.getElementById('kelolaModal').classList.add('active');
                     document.getElementById('kelolaMenuState').style.display = 'block';
                     document.getElementById('kelolaLoadingState').style.display = 'none';
                 };
+
                 window.closeKelolaModal = function () { document.getElementById('kelolaModal').classList.remove('active'); };
 
-                // UPDATE LOGIKA: MENGUBAH TOMBOL LANGSUNG SAAT PDF SELESAI
+                // GENERATE PDF MANUAL (UNTUK RAPAT WORD EKSISTING)
                 window.triggerGeneratePdf = async function () {
                     document.getElementById('kelolaMenuState').style.display = 'none';
                     document.getElementById('kelolaLoadingState').style.display = 'block';
@@ -907,7 +959,6 @@
                     }, 2500);
 
                     try {
-                        // 1. Panggil server Power Automate
                         let res = await fetch(CONFIG.generatePdfFlowUrl, {
                             method: 'POST', headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -922,16 +973,12 @@
 
                         if (!res.ok) throw new Error(await res.text());
 
-                        // Coba ambil respons JSON (jika flow mengembalikan link langsung)
                         let flowResponse = {};
                         try { flowResponse = await res.json(); } catch (e) { }
 
                         clearCachedData();
-
-                        // 2. Load ulang database di background
                         await loadDashboardData();
 
-                        // 3. Cari link PDF baru
                         let newPdf = flowResponse.linkPdf || flowResponse.linkGabungan || flowResponse.pdfUrl || '';
                         if (!newPdf) {
                             let updatedRow = databaseRekap.find(r => {
@@ -945,30 +992,24 @@
                         document.getElementById('kelolaLoadingState').style.display = 'none';
                         document.getElementById('kelolaMenuState').style.display = 'block';
 
-                        // 4. Ubah tampilan tombol PDF saat itu juga!
                         if (newPdf && newPdf !== 'null') {
                             let pdfBtn = document.getElementById('btnBukaPdf');
                             pdfBtn.href = newPdf;
                             pdfBtn.style.background = '#27ae60';
                             pdfBtn.style.pointerEvents = 'auto';
-                            pdfBtn.textContent = '📄 Buka PDF';
-
-                            activeKelolaData.linkGabungan = newPdf; // simpan sementara
-                            document.getElementById('kelolaSub').innerHTML += '<br><br><span style="color:#27ae60; font-weight:bold; background:#e8f8f5; padding:4px 8px; border-radius:4px;">✅ PDF Berhasil Di-generate!</span>';
-                        } else {
-                            document.getElementById('kelolaSub').innerHTML += '<br><br><span style="color:#f39c12; font-weight:bold; background:#fef5e7; padding:4px 8px; border-radius:4px;">⏳ Proses selesai, menunggu link sinkron dari OneDrive.</span>';
+                            pdfBtn.textContent = '📄 Buka PDF Resmi';
+                            activeKelolaData.linkGabungan = newPdf;
                         }
-
                     } catch (err) {
                         clearInterval(interval);
-                        alert('Gagal generate PDF: Server Sibuk atau Terjadi Kesalahan.');
+                        alert('Gagal generate PDF: Terjadi kesalahan.');
                         document.getElementById('kelolaLoadingState').style.display = 'none';
                         document.getElementById('kelolaMenuState').style.display = 'block';
                     }
                 };
                 document.getElementById('btnGeneratePdf').onclick = () => window.triggerGeneratePdf();
 
-                // FUNGSI MODAL DELETE
+                // FUNGSI DELETE
                 window.confirmDelete = function (id, prov, keg, tgl, judul, btn) {
                     activeDeleteData = { powerAppsId: id, provinsi: prov, namaKegiatan: keg, tanggalRapat: tgl, judulRapat: judul, rowElement: btn.closest('tr') };
                     document.getElementById('deleteTargetText').innerHTML = `"${judul}"<br><span style="font-size:12px; font-weight:normal; color:#64748b;">(${tgl})</span>`;
@@ -989,7 +1030,6 @@
                 window.executeDelete = async function (opt) {
                     document.getElementById('modalConfirmState').style.display = 'none';
                     document.getElementById('modalLoadingState').style.display = 'block';
-                    document.getElementById('loadingDeleteSub').innerText = opt === 'all' ? 'Menghapus data Excel & berkas di OneDrive...' : 'Menghapus baris pada Excel...';
                     try {
                         let res = await fetch(CONFIG.deleteFlowUrl, {
                             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1000,31 +1040,18 @@
 
                         document.getElementById('modalLoadingState').style.display = 'none';
                         document.getElementById('modalSuccessState').style.display = 'block';
-                        document.getElementById('successDeleteSub').innerHTML = opt === 'all' ? 'Baris Excel & Berkas OneDrive telah terhapus permanen.' : 'Baris Excel telah terhapus.';
                         clearCachedData();
                         await loadDashboardData();
                     } catch (err) {
                         document.getElementById('modalLoadingState').style.display = 'none';
                         document.getElementById('modalErrorState').style.display = 'block';
-                        document.getElementById('deleteErrorText').innerText = "Gagal memproses ke server.";
                     }
                 };
-
-                function showMessage(msg, type) {
-                    let d = document.getElementById('message');
-                    d.textContent = msg;
-                    d.className = 'message ' + type;
-                    d.style.display = 'block';
-                    setTimeout(() => d.style.display = 'none', 5000);
-                }
-                function hideMessage() { document.getElementById('message').style.display = 'none'; }
 
                 window.addEventListener('load', loadDashboardData);
             })();
         </script>
-
-    </div> <!-- tutup .page-wrapper-rekap -->
+    </div>
     <script src="navbar.js"></script>
 </body>
-
 </html>

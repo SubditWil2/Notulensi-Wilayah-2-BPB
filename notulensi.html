@@ -700,6 +700,7 @@
             cursor: not-allowed !important;
         }
     </style>
+    <script src="templateNotulensi.js"></script>
 </head>
 
 <body>
@@ -772,12 +773,12 @@
                     onclick="closeModal()">Batal</button>
             </div>
 
-            <!-- Tampilan Saat Sukses -->
+            <!-- Tampilan Saat Sukses di notulensi.html (Biarkan Aslinya) -->
             <div id="modalSuccess" style="display: none;">
                 <span class="modal-icon-success">✅</span>
                 <div class="modal-loading-text">Notulensi Berhasil Dibuat!</div>
-                <div class="modal-sub">Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di
-                    dalam file Word.</div>
+                <div class="modal-sub" id="modalSuccessSub">Dokumen dan folder telah tersusun rapi di server. Silakan
+                    edit dan finalisasi di dalam file Word.</div>
 
                 <!-- KOTAK SALIN WHATSAPP -->
                 <div id="waShareContainer"
@@ -793,8 +794,10 @@
                         WA</button>
                 </div>
 
+                <!-- Hanya tombol bawaan ini yang kita pakai & kita ubah-ubah fungsinya lewat JS -->
                 <a href="#" target="_blank" id="btnLinkBerkas" class="btn-open-link" style="background: #1d355e;">📄
                     Buka File Notulensi (Word)</a>
+
                 <button type="button" class="btn-close-modal" onclick="closeModal()">Selesai</button>
             </div>
 
@@ -1010,6 +1013,26 @@
     </div>
 
     <script>
+        // Fungsi pembantu untuk membongkar respon Power Automate secara aman
+        function extractResponseData(raw) {
+            let data = raw;
+            if (typeof data === 'string') {
+                try { data = JSON.parse(data); } catch (e) { }
+            }
+            // Jika respon terbungkus di dalam objek 'body'
+            if (data && data.body) {
+                if (typeof data.body === 'string') {
+                    try { data = JSON.parse(data.body); } catch (e) { }
+                } else {
+                    data = data.body;
+                }
+            }
+
+            const link = data?.linkBerkas || data?.linkPdf || data?.fileLink || data?.LinkBerkas || '';
+            const path = data?.filePath || data?.path || data?.FilePath || data?.Path || '';
+
+            return { link, path };
+        }
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // ========== KONTROL CACHE DATA MASTER (SHARED) ==========
@@ -1261,7 +1284,6 @@
                 return;
             }
 
-            // DETEKSI PROMPT AKTIF BERDASARKAN RADIO BUTTON
             const selectedType = document.querySelector('input[name="promptType"]:checked')?.value || 'reguler';
             const activePrompt = state.systemPrompts[selectedType];
 
@@ -1288,10 +1310,10 @@
                         parts: [{ text: transkrip }]
                     }],
                     tools: [{
-                        google_search: {} // Mengaktifkan pencarian Google secara real-time
+                        google_search: {}
                     }],
                     generationConfig: {
-                        temperature: 0.2 // Sedikit dinaikkan untuk hasil yang lebih luwes
+                        temperature: 0.2
                     }
                 };
                 const resData = await geminiRequest(payload);
@@ -1299,39 +1321,49 @@
                 let rawText = resData.candidates[0].content.parts[0].text;
                 let cleanText = rawText.replace(/```json|```/g, '').trim();
 
-                cleanText = cleanText.replace(/\\b/g, '\\n ');
+                const firstBrace = cleanText.indexOf('{');
+                const lastBrace = cleanText.lastIndexOf('}');
+                if (firstBrace !== -1 && lastBrace !== -1) {
+                    cleanText = cleanText.substring(firstBrace, lastBrace + 1);
+                }
+
                 cleanText = cleanText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
-                cleanText = cleanText.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
 
                 let parsedAI;
                 try {
                     parsedAI = JSON.parse(cleanText);
                 } catch (parseError) {
-                    console.error("Gagal melakukan parsing JSON. Raw Text:", rawText);
+                    console.error("Gagal melakukan parsing JSON:", rawText);
                     throw new Error(`Gagal membaca struktur JSON hasil AI: ${parseError.message}. Silakan coba kirim ulang.`);
                 }
 
-                console.log(`=== HASIL GENERATE GEMINI AI (${selectedType.toUpperCase()}) ===`);
-                console.log("Judul Rapat :", parsedAI.judulRapat);
-                console.log("Tujuan Rapat:", parsedAI.tujuanRapat);
-                console.log("Pembukaan   :\n", JSON.stringify(parsedAI.grupPembukaan, null, 2));
-                console.log("Pembahasan  :\n", JSON.stringify(parsedAI.grupPembahasan, null, 2));
-                console.log("Kesimpulan  :\n", JSON.stringify(parsedAI.grupKesimpulan, null, 2));
-                console.log("================================================");
-
-                document.getElementById('loadingDynamicText').textContent = "Mengunggah data rangkuman ke OneDrive...";
+                document.getElementById('loadingDynamicText').textContent = "Menyusun draf dokumen & mengunggah ke OneDrive...";
                 const file = fileInput.files[0];
                 const fileBase64 = await toBase64(file);
+
+                const renderedHtml = generateNotulensiHtml(parsedAI, {
+                    provinsi: state.selectedProvinsi,
+                    namaKegiatan: namaKegiatanSelect.value,
+                    judulRapat: document.getElementById('judulRapat').value.trim() || parsedAI.judulRapat || '',
+                    instansiPengundang: document.getElementById('instansiPengundang').value,
+                    tanggalRapat: document.getElementById('tanggalRapat').value,
+                    meetingId: state.meetingId,
+                    meetingPasscode: state.meetingPasscode,
+                    suratBase64: fileBase64,
+                    suratTipe: file.type
+                });
 
                 const formData = {
                     provinsi: state.selectedProvinsi,
                     namaKegiatan: namaKegiatanSelect.value,
-                    judulRapat: document.getElementById('judulRapat').value,
+                    judulRapat: document.getElementById('judulRapat').value.trim() || parsedAI.judulRapat || '',
                     instansiPengundang: document.getElementById('instansiPengundang').value,
                     tanggalRapat: document.getElementById('tanggalRapat').value.replace(/-/g, '.'),
                     namaNotulis: document.getElementById('namaNotulis').value.trim(),
                     transkripTeks: transkrip,
-                    hasilAiJSON: cleanText,
+                    tipeInput: 'AI',
+                    htmlContent: renderedHtml,
+                    hasilAiJSON: JSON.stringify(parsedAI),
                     tujuanRapat: parsedAI.tujuanRapat || '',
                     grupPembukaan: parsedAI.grupPembukaan || [],
                     grupPembahasan: parsedAI.grupPembahasan || [],
@@ -1344,11 +1376,18 @@
                     meetingPasscode: state.meetingPasscode
                 };
 
+                // 4. KIRIM KE POWER AUTOMATE
                 const responseData = await submitToFlow(formData);
-                const documentLink = responseData.linkBerkas || '';
+                console.log("Respon Utuh dari Flow:", responseData);
+
+                // Ekstraksi path & link secara otomatis
+                const { link: documentLink, path: filePath } = extractResponseData(responseData);
+                console.log("Berhasil ekstrak -> Link:", documentLink, "| Path:", filePath);
+
                 clearCachedData();
 
-                showModalSuccess(documentLink);
+                // Tampilkan modal sukses
+                showModalSuccess(documentLink, filePath);
                 resetSeluruhForm();
 
             } catch (err) {
@@ -1509,9 +1548,8 @@
         }
 
         const MODELS_FALLBACK = [
-            'gemini-3.7-flash',
-            'gemini-3.6-flash',
-            'gemini-3.5-flash'
+            'gemini-3.5-flash',
+            'gemini-3.6-flash'
         ];
 
         async function geminiRequest(payload, models = MODELS_FALLBACK) {
@@ -1718,15 +1756,15 @@
             mainUploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 mainUploadArea.classList.remove('dragover');
-                
+
                 if (e.dataTransfer.files && e.dataTransfer.files[0]) {
                     const droppedFile = e.dataTransfer.files[0];
-                    
+
                     // Masukkan file ke input elemen
                     const dataTransfer = new DataTransfer();
                     dataTransfer.items.add(droppedFile);
                     fileInput.files = dataTransfer.files;
-                    
+
                     // Jalankan fungsi penanganan file
                     handleFileSelect(droppedFile);
                 }
@@ -1843,7 +1881,7 @@
             }, 3500);
         }
 
-        function showModalSuccess(link) {
+        function showModalSuccess(link, filePath = '') {
             clearInterval(loadingInterval);
             document.getElementById('modalLoading').style.display = 'none';
             document.getElementById('modalAITranscript').style.display = 'none';
@@ -1852,32 +1890,58 @@
             const judulRapat = document.getElementById('judulRapat').value;
             const shortLink = link || 'Link tidak tersedia';
 
-            const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
-            document.getElementById('waTextTemplate').innerHTML = `Berikut link notulensi Rapat <strong>"${judulRapat}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
-
+            const waContainer = document.getElementById('waShareContainer');
             const btnLink = document.getElementById('btnLinkBerkas');
-            if (link) {
-                btnLink.href = link;
-                btnLink.style.display = 'inline-block';
+            const successSub = document.getElementById('modalSuccessSub');
+
+            if (filePath) {
+                // === MODE AI (Buka di Web Editor) ===
+                if (waContainer) waContainer.style.display = 'none'; // Sembunyikan Kotak WA
+                if (successSub) successSub.textContent = "Dokumen baru berhasil disusun. Silakan klik tombol di bawah untuk mengedit risalah menggunakan Web Editor.";
+
+                if (btnLink) {
+                    btnLink.href = `editor.html?path=${encodeURIComponent(filePath)}`;
+                    btnLink.innerHTML = "✍️ Edit di Web Editor (HTML)";
+                    btnLink.style.background = "#f5b016"; // Warna Kuning Emas PUPR
+                    btnLink.style.color = "#11223f";
+                    btnLink.style.display = 'inline-block';
+                }
+            } else if (link) {
+                // === MODE MANUAL (Buka File Word) ===
+                if (waContainer) {
+                    waContainer.style.display = 'block'; // Tampilkan Kotak WA
+                    const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
+                    document.getElementById('waTextTemplate').innerHTML = `Berikut link notulensi Rapat <strong>"${judulRapat}"</strong> : <a href="${shortLink}" target="_blank" style="color:#27ae60; font-weight:bold;">${shortLink}</a>`;
+                }
+                if (successSub) successSub.textContent = "Dokumen dan folder telah tersusun rapi di server. Silakan edit dan finalisasi di dalam file Word.";
+
+                if (btnLink) {
+                    btnLink.href = link;
+                    btnLink.innerHTML = "📄 Buka File Notulensi (Word)";
+                    btnLink.style.background = "#1d355e"; // Warna Navy Asli
+                    btnLink.style.color = "white";
+                    btnLink.style.display = 'inline-block';
+                }
             } else {
-                btnLink.style.display = 'none';
+                if (waContainer) waContainer.style.display = 'none';
+                if (btnLink) btnLink.style.display = 'none';
             }
 
             const btnCopy = document.getElementById('btnCopyWA');
-            btnCopy.onclick = function () {
-                navigator.clipboard.writeText(waText).then(() => {
-                    const originalText = btnCopy.innerHTML;
-                    btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
-                    btnCopy.style.background = "#219653";
-
-                    setTimeout(() => {
-                        btnCopy.innerHTML = originalText;
-                        btnCopy.style.background = "#27ae60";
-                    }, 2500);
-                }).catch(err => {
-                    console.error("Gagal menyalin teks: ", err);
-                });
-            };
+            if (btnCopy) {
+                btnCopy.onclick = function () {
+                    const waText = `Berikut link notulensi Rapat *${judulRapat}* : ${shortLink}`;
+                    navigator.clipboard.writeText(waText).then(() => {
+                        const originalText = btnCopy.innerHTML;
+                        btnCopy.innerHTML = "✓ Tersalin ke Clipboard!";
+                        btnCopy.style.background = "#219653";
+                        setTimeout(() => {
+                            btnCopy.innerHTML = originalText;
+                            btnCopy.style.background = "#27ae60";
+                        }, 2500);
+                    }).catch(err => console.error("Gagal menyalin:", err));
+                };
+            }
         }
 
         function showModalError(errorMsg) {
@@ -1890,6 +1954,15 @@
 
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
+
+            // Reset rupa tombol sukses HANYA setelah modal ditutup oleh user
+            const btnLink = document.getElementById('btnLinkBerkas');
+            if (btnLink) {
+                btnLink.href = '#';
+                btnLink.innerHTML = "📄 Buka File Notulensi (Word)";
+                btnLink.style.background = "#1d355e";
+                btnLink.style.color = "white";
+            }
         }
 
         function dapatkanKataKunci(teks) {
@@ -2043,8 +2116,9 @@
 
                 const responseData = await submitToFlow(formData);
                 const documentLink = responseData.linkBerkas || '';
+                const filePath = bodyData.filePath || bodyData.path || '';
                 clearCachedData();
-                showModalSuccess(documentLink);
+                showModalSuccess(documentLink, filePath);
 
                 resetSeluruhForm();
 
